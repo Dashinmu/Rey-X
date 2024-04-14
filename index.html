@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website Title</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles_test.css">
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <div class="user-info" onclick="toggleMenu()">
+                <img src="img/avatar.png" alt="User Avatar" class="avatar">
+                <span class="username">User Name</span>
+            </div>
+            <div class="menu-content" id="menuContent">
+                <div class="user-info">
+                    <img src="img/avatar.png" alt="User Avatar" class="avatar">
+                    <div class = "user-detail">
+                        <span class="username">User Name</span>
+                        <span class="user-role">Student</span>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <img src="img/avatar.png" alt="User Avatar" class="avatar">
+                    <div class = "user-detail">
+                        <span class="username">User Name</span>
+                        <span class="user-role">Tutor</span>
+                        <span class="user-phone">+7-999-604-42-71</span>
+                    </div>
+                </div>
+                <ul class="menu-list">
+                    <li class="menu-item first"><a href="#" class="menu-link">Главная</a></li>
+                    <li class="menu-item"><a href="#" class="menu-link">Задания</a></li>
+                    <li class="menu-item"><a href="#" class="menu-link" data-toggle="modal" data-target="#settingsModal">Изменить пароль</a></li>
+                    <li class="menu-item last"><a href="#" class="menu-link">Выйти</a></li>
+                </ul>
+            </div>
+            <div class="pages_link">
+                <a href="index.html" class="btn btn-outline-light active btn-sm" aria-current="page">Главная</a>
+                <a href="tasks.html" class="btn btn-outline-light btn-sm">Задания</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <!-- Main content goes here -->
+    </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Изменить пароль</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="oldPassword" placeholder="Введите старый пароль">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="newPassword" placeholder="Введите новый пароль">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Подтвердите новый пароль">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-block">Подтвердить</button>
+                    <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menuContent = document.getElementById("menuContent");
+            menuContent.classList.toggle("show-menu");
+        }
+
+        // Закрытие меню при клике вне его области
+        window.addEventListener('click', function(event) {
+            var menuContent = document.getElementById("menuContent");
+            var menuToggler = document.querySelector(".user-info");
+            var menuToggler1 = document.querySelector(".user-info img");
+            var menuToggler2 = document.querySelector(".user-info span");
+            if (
+                !menuContent.contains(event.target) 
+                && event.target !== menuToggler
+                && event.target !== menuToggler1
+                && event.target !== menuToggler2
+            ) {
+                menuContent.classList.remove("show-menu");
+            }
+        });
+    </script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

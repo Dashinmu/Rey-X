@@ -1,0 +1,168 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #111b1e;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.personal-info {
+    background-color: #2f4c58;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.form {
+    background-color: #2f4c58;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.input-container {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.input-container input[type="text"],
+.input-container input[type="email"],
+.input-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #6e93d6;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #333;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #63a583;
+    border-radius: 10px;
+    background-color: #63a583;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+    background-color: #3BB273;
+}
+
+button:focus {
+    outline: none;
+}
+
+.register-text {
+    color: #dcdddd;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.register-text a {
+    color: #53E88B;
+    text-decoration: none;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
+}
+
+.login-text {
+    color: #dcdddd; /* Updated color */
+    margin-top: 10px; /* Added margin to separate from the input field */
+    font-size: 12px; /* Reduced font size */
+}
+
+.login-text a {
+    color: #53E88B; /* Updated color */
+    text-decoration: none;
+}
+
+.login-text a:hover {
+    text-decoration: underline;
+}
+
+.notification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #a5402f; /* Красный цвет */
+    color: #fff; /* Белый цвет */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none; /* Скрыть изначально */
+}
+
+.notification::before {
+    display: inline-block;
+    color: #fff;
+    background-color: #a5402f;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.notification button {
+    background-color: #fff;
+    color: #a5402f;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.notification button:hover {
+    background-color: #eee;
+}
+
+.personal-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+}
+
+.avatar {
+    float: left; /* Выравниваем аватар по левому краю */
+    width: 100px; /* Задаем ширину блока */
+    height: 100px; /* Задаем высоту блока */
+    border-radius: 50%; /* Делаем круглый аватар */
+    overflow: hidden; /* Обрезаем лишнее, если изображение больше круга */
+    margin-right: 20px; /* Отступ справа от аватара */
+}
+
+.avatar img {
+    width: 100%; /* Заполняем всю ширину блока изображением */
+    height: auto; /* Высота подстраивается автоматически */
+}
+
+
+.user-details {
+    color: #fff; /* Белый цвет текста */
+}
+
+.lime-text {
+    color: lime; /* Цвет текста для заголовков */
+}
