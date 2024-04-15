@@ -12,20 +12,20 @@
         <div class="menu">
             <div class="user-info" onclick="toggleMenu()">
                 <img src="img/avatar.png" alt="User Avatar" class="avatar">
-                <span class="username">User Name</span>
+                <span class="text">User Name</span>
             </div>
             <div class="menu-content" id="menuContent">
                 <div class="user-info">
                     <img src="img/avatar.png" alt="User Avatar" class="avatar">
                     <div class = "user-detail">
-                        <span class="username">User Name</span>
+                        <span class="text">User Name</span>
                         <span class="user-role">Student</span>
                     </div>
                 </div>
                 <div class="user-info">
                     <img src="img/avatar.png" alt="User Avatar" class="avatar">
                     <div class = "user-detail">
-                        <span class="username">User Name</span>
+                        <span class="text">User Name</span>
                         <span class="user-role">Tutor</span>
                         <span class="user-phone">+7-999-604-42-71</span>
                     </div>
@@ -44,18 +44,97 @@
         </div>
     </header>
     <main>
-        <!-- Main content goes here -->
+        <!-- Личные данные и оценка -->
         <div class="personal-info">
-            <img src="img/avatar.png" alt="User Avatar" class="personal-avatar" height="290">
-            <span class="personal-name">User Name</span>
+            <div class = "personal-avatar">
+                <img src="img/avatar.png" alt="User Avatar">
+            </div>
+            <div class = 'div-personal-name'>
+                <span>User Name</span>
+            </div>
             <div class="tutor-detail">
-                <p class="tutor-name">Руководитель: Tutor Name</p>
-                <p class="tutor-phone">Телефон: +1234567890</p>
+                <span class="text"><b>Руководитель:</b> Tutor Name Name Name</span>
+                <span class="text"><b>Телефон:</b> +1234567890</span>
             </div>
             <div class="user-rating">
-                <p class="rating-label">Текущая оценка</p>
+                <span class="rating-label">Текущая оценка</span>
                 <div class="rating-ellipse">
                     <p>N/A</p>
+                </div>
+            </div>
+        </div>
+        <!-- Этапы и история заданий -->
+        <div class = "personal-history">
+            <div class = "label">
+                <span>Последние этапы практики</span>
+            </div>
+            <div class = "stages">
+                <div class = "stage">
+                    <div class = "stage-info">
+                        <span class = "stage-name">Stage #2</span>
+                        <span class = "stage-desc">Stage description Stage description Stage description</span>
+                        <span class = "stage-tasks">Complete tasks: 3/13</span>
+                        <div class = "stage-note">
+                            <span class = "note-text">PL/SQL</span>
+                            <span class = "note-text">Newbie</span>
+                        </div>
+                    </div>
+                    <div class = "stage-progress-circle">
+                        <span>1<span class = "stage-num-tasks">/13</span></span>
+                    </div>
+                </div>
+                <div class = "stage">
+                    <div class = "stage-info">
+                        <span class = "stage-name">Stage #1</span>
+                        <span class = "stage-desc">Stage description Stage description Stage description</span>
+                        <span class = "stage-tasks">Complete tasks: 10/10</span>
+                        <div class = "stage-note">
+                            <span class = "note-text">Ознакомление</span>
+                        </div>
+                    </div>
+                    <div class = "stage-progress-circle">
+                        <span>10<span class = "stage-num-tasks">/10</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class = "label last">
+                <span>Последние задания</span>
+            </div>
+            <div class = "tasks">
+                <div class = "task wrong">
+                    <span class = "task-stage-name">Stage #2<span class = "task-num"> - 3</span></span>
+                    <span class = "task-descrip">Task 2-3 description</span>
+                    <span class = "task-rating">Status:<span class = "task-rating-score wrong">Wrong Answer</span></span>
+                </div>
+                <div class = "task wrong">
+                    <span class = "task-stage-name">Stage #2<span class = "task-num"> - 2</span></span>
+                    <span class = "task-descrip">Task 2-2 description</span>
+                    <span class = "task-rating">Status:<span class = "task-rating-score wrong">Wrong Answer</span></span>
+                </div>
+                <div class = "task">
+                    <span class = "task-stage-name">Stage #2<span class = "task-num"> - 1</span></span>
+                    <span class = "task-descrip">Task 2-1 description</span>
+                    <span class = "task-rating">Status:<span class = "task-rating-score">Correct Answer</span></span>
+                </div>
+                <div class = "task">
+                    <span class = "task-stage-name">Stage #1<span class = "task-num"> - 10</span></span>
+                    <span class = "task-descrip">Task 1-10 description</span>
+                    <span class = "task-rating">Status:<span class = "task-rating-score">Correct Answer</span></span>
+                </div>
+                <div class = "task">
+                    <span class = "task-stage-name">Stage #1<span class = "task-num"> - 9</span></span>
+                    <span class = "task-descrip">Task 1-9 description</span>
+                    <span class = "task-rating">Status:<span class = "task-rating-score">Correct Answer</span></span>
+                </div>
+                <div class = "task">
+                    <span class = "task-stage-name">Stage #1<span class = "task-num"> - 8</span></span>
+                    <span class = "task-descrip">Task 1-8 description</span>
+                    <span class = "task-rating">Status:<span class = "task-rating-score">Correct Answer</span></span>
+                </div>
+                <div class = "task">
+                    <span class = "task-stage-name">Stage #1<span class = "task-num"> - 7</span></span>
+                    <span class = "task-descrip">Task 1-7 description</span>
+                    <span class = "task-rating">Status:<span class = "task-rating-score">Correct Answer</span></span>
                 </div>
             </div>
         </div>
