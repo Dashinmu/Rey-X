@@ -333,9 +333,77 @@ main {
     min-height: 100px;
     max-width: 100px;
     max-height: 100px;
+    margin-left: 10px;
+    line-height: 100px;
+    position: relative;
+    box-shadow: none;
+}
+
+.stage-progress-circle::after {
+    content: "";
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     border: 12px solid #CC2B2B;
-    margin-left: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.stage-progress-circle > span {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+
+.stage-progress-circle .progress-circle-left {
+    left: 0;
+}
+
+.stage-progress-circle .progress-circle {
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: 12px solid #3BB273;
+    position: absolute;
+    top: 0;
+}
+
+.stage-progress-circle .progress-circle-left .progress-circle {
+    left: 100%;
+    border-left: 0;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    -webkit-transform-origin: center left;
+    transform-origin: center left;
+}
+
+.stage-progress-circle .progress-circle-right {
+    right: 0;
+}
+
+.stage-progress-circle .progress-circle-right .progress-circle {
+    left: -100%;
+    border-right: 0;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    -webkit-transform-origin: center right;
+    transform-origin: center right;
+}
+
+.stage-progress-value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
 }
 
 .tasks {

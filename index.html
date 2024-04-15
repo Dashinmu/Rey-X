@@ -6,6 +6,9 @@
     <title>Your Website Title</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles_test.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
     <header>
@@ -79,8 +82,16 @@
                             <span class = "note-text">Newbie</span>
                         </div>
                     </div>
-                    <div class = "stage-progress-circle">
-                        <span>1<span class = "stage-num-tasks">/13</span></span>
+                    <div class = "stage-progress-circle" data-correct-task = '1' data-all-task = '13'>
+                        <span class = "progress-circle-left">
+                            <span class = "progress-circle"></span>
+                        </span>
+                        <span class = "progress-circle-right">
+                            <span class = "progress-circle"></span>
+                        </span>
+                        <div class = "stage-progress-value">
+                            <span>1<span class = "stage-num-tasks">/13</span></span>
+                        </div>
                     </div>
                 </div>
                 <div class = "stage">
@@ -92,8 +103,16 @@
                             <span class = "note-text">Ознакомление</span>
                         </div>
                     </div>
-                    <div class = "stage-progress-circle">
-                        <span>10<span class = "stage-num-tasks">/10</span></span>
+                    <div class = "stage-progress-circle" data-correct-task = '10' data-all-task = '10'>
+                        <span class = "progress-circle-left">
+                            <span class = "progress-circle"></span>
+                        </span>
+                        <span class = "progress-circle-right">
+                            <span class = "progress-circle"></span>
+                        </span>
+                        <div class = "stage-progress-value">
+                            <span>10<span class = "stage-num-tasks">/10</span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -192,11 +211,31 @@
                 menuContent.classList.remove("show-menu");
             }
         });
-    </script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        $(function() {
+            $(".stage-progress-circle").each(function() {
+                var v_cnt = $(this).attr('data-correct-task');
+                var v_all = $(this).attr('data-all-task');
+                var value = getpercentageToTask(v_cnt, v_all);
+                var left = $(this).find('.progress-circle-left .progress-circle');
+                var right = $(this).find('.progress-circle-right .progress-circle');
+                if (value > 0) {
+                    if (value <= 0.5) {
+                        right.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)')
+                    } else {
+                        right.css('transform', 'rotate(180deg)')
+                        left.css('transform', 'rotate(' + percentageToDegrees(value - 0.5) + 'deg)')
+                    }
+                }
+            })
+            function getpercentageToTask(v_cnt, v_all) {
+                return v_cnt / v_all
+            }
+            function percentageToDegrees(percentage) {
+                return percentage * 360
+            }
+        });
+    </script>
 
 </body>
 </html>
