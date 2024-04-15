@@ -212,29 +212,6 @@
             }
         });
 
-        $(function() {
-            $(".stage-progress-circle").each(function() {
-                var v_cnt = $(this).attr('data-correct-task');
-                var v_all = $(this).attr('data-all-task');
-                var value = getpercentageToTask(v_cnt, v_all);
-                var left = $(this).find('.progress-circle-left .progress-circle');
-                var right = $(this).find('.progress-circle-right .progress-circle');
-                if (value > 0) {
-                    if (value <= 0.5) {
-                        right.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)')
-                    } else {
-                        right.css('transform', 'rotate(180deg)')
-                        left.css('transform', 'rotate(' + percentageToDegrees(value - 0.5) + 'deg)')
-                    }
-                }
-            })
-            function getpercentageToTask(v_cnt, v_all) {
-                return v_cnt / v_all
-            }
-            function percentageToDegrees(percentage) {
-                return percentage * 360
-            }
-        });
     </script>
 
 </body>
