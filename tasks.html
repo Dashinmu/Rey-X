@@ -41,8 +41,8 @@
                 </ul>
             </div>
             <div class="pages_link">
-                <a href="index.html" class="btn btn-outline-light active btn-sm" aria-current="page">Главная</a>
-                <a href="tasks.html" class="btn btn-outline-light btn-sm">Задания</a>
+                <a href="index.html" class="btn btn-outline-light btn-sm" aria-current="page">Главная</a>
+                <a href="tasks.html" class="btn btn-outline-light active btn-sm">Задания</a>
             </div>
         </div>
     </header>
@@ -53,7 +53,7 @@
                 <img src="img/student.jpg" alt="User Avatar">
             </div>
             <div class = 'div-personal-name'>
-                <span>User Name</span>
+                <span>Аврора Мясникова</span>
             </div>
             <div class="tutor-detail">
                 <span class="text"><b>Руководитель:</b> Daniil Dashinmu</span>
@@ -69,91 +69,110 @@
         <!-- Этапы и история заданий -->
         <div class = "personal-history">
             <div class = "label">
-                <span>Последние этапы практики</span>
+                <span>Этапы практики</span>
             </div>
-            <div class = "stages">
+            <div class = "stages-item">
                 <div class = "stage">
                     <div class = "stage-info">
-                        <span class = "stage-name">Stage #2</span>
-                        <span class = "stage-desc">Введение в работу с PL/SQL</span>
-                        <span class = "stage-tasks">Выполнено заданий: 3/13</span>
                         <div class = "stage-note">
                             <span class = "note-text">PL/SQL</span>
                             <span class = "note-text">Новичок</span>
                         </div>
-                    </div>
-                    <div class = "stage-progress-circle" data-correct-task = '1' data-all-task = '13'>
-                        <span class = "progress-circle-left">
-                            <span class = "progress-circle"></span>
-                        </span>
-                        <span class = "progress-circle-right">
-                            <span class = "progress-circle"></span>
-                        </span>
-                        <div class = "stage-progress-value">
-                            <span>1<span class = "stage-num-tasks">/13</span></span>
+                        <div class = "stage-info-2">
+                            <span class = "stage-name">Stage #2</span>
+                            <span class = "stage-desc">Введение в работу с PL/SQL</span>
+                            <span class = "stage-tasks">Выполнено заданий: 3/13</span>
                         </div>
                     </div>
+                    <div 
+                        class = "progress"
+                        role = "progressbar"
+                        data-correct-task = "1"
+                        data-all-task = "13"
+                    >
+                        <div class = "progress-bar"></div>
+                    </div>
                 </div>
+                <div class = "tasks">
+                    <div class = "task wrong">
+                        <span class = "task-stage-name">Stage #2<span class = "task-num"> - 3</span></span>
+                        <span class = "task-descrip">Task 2-3 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score wrong"> Не решено</span></span>
+                    </div>
+                    <div class = "task wrong">
+                        <span class = "task-stage-name">Stage #2<span class = "task-num"> - 2</span></span>
+                        <span class = "task-descrip">Task 2-2 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score wrong"> Не решено</span></span>
+                    </div>
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #2<span class = "task-num"> - 1</span></span>
+                        <span class = "task-descrip">Task 2-1 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 10</span></span>
+                        <span class = "task-descrip">Task 1-10 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 9</span></span>
+                        <span class = "task-descrip">Task 1-9 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 8</span></span>
+                        <span class = "task-descrip">Task 1-8 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 7</span></span>
+                        <span class = "task-descrip">Task 1-7 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class = "stages-item">
                 <div class = "stage">
                     <div class = "stage-info">
-                        <span class = "stage-name">Stage #1</span>
-                        <span class = "stage-desc">Организация практики</span>
-                        <span class = "stage-tasks">Выполнено заданий: 10/10</span>
                         <div class = "stage-note">
                             <span class = "note-text">Ознакомление</span>
                         </div>
-                    </div>
-                    <div class = "stage-progress-circle" data-correct-task = '10' data-all-task = '10'>
-                        <span class = "progress-circle-left">
-                            <span class = "progress-circle"></span>
-                        </span>
-                        <span class = "progress-circle-right">
-                            <span class = "progress-circle"></span>
-                        </span>
-                        <div class = "stage-progress-value">
-                            <span>10<span class = "stage-num-tasks">/10</span></span>
+                        <div class = "stage-info-2">
+                            <span class = "stage-name">Stage #1</span>
+                            <span class = "stage-desc">Ознакомление с практикой</span>
+                            <span class = "stage-tasks">Выполнено заданий: 10/10</span>
                         </div>
                     </div>
+                    <div 
+                        class = "progress"
+                        role = "progressbar"
+                        data-correct-task = "10"
+                        data-all-task = "10"
+                    >
+                        <div class = "progress-bar"></div>
+                    </div>
                 </div>
-            </div>
-            <div class = "label last">
-                <span>Последние задания</span>
-            </div>
-            <div class = "tasks">
-                <div class = "task wrong">
-                    <span class = "task-stage-name">Stage #2<span class = "task-num"> - 3</span></span>
-                    <span class = "task-descrip">Task 2-3 description</span>
-                    <span class = "task-rating">Статус:<span class = "task-rating-score wrong"> Не решено</span></span>
-                </div>
-                <div class = "task wrong">
-                    <span class = "task-stage-name">Stage #2<span class = "task-num"> - 2</span></span>
-                    <span class = "task-descrip">Task 2-2 description</span>
-                    <span class = "task-rating">Статус:<span class = "task-rating-score wrong"> Не решено</span></span>
-                </div>
-                <div class = "task">
-                    <span class = "task-stage-name">Stage #2<span class = "task-num"> - 1</span></span>
-                    <span class = "task-descrip">Task 2-1 description</span>
-                    <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                </div>
-                <div class = "task">
-                    <span class = "task-stage-name">Stage #1<span class = "task-num"> - 10</span></span>
-                    <span class = "task-descrip">Task 1-10 description</span>
-                    <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                </div>
-                <div class = "task">
-                    <span class = "task-stage-name">Stage #1<span class = "task-num"> - 9</span></span>
-                    <span class = "task-descrip">Task 1-9 description</span>
-                    <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                </div>
-                <div class = "task">
-                    <span class = "task-stage-name">Stage #1<span class = "task-num"> - 8</span></span>
-                    <span class = "task-descrip">Task 1-8 description</span>
-                    <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                </div>
-                <div class = "task">
-                    <span class = "task-stage-name">Stage #1<span class = "task-num"> - 7</span></span>
-                    <span class = "task-descrip">Task 1-7 description</span>
-                    <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                <div class = "tasks">
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 10</span></span>
+                        <span class = "task-descrip">Task 1-10 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 9</span></span>
+                        <span class = "task-descrip">Task 1-9 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 8</span></span>
+                        <span class = "task-descrip">Task 1-8 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
+                    <div class = "task">
+                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 7</span></span>
+                        <span class = "task-descrip">Task 1-7 description</span>
+                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -210,6 +229,18 @@
             ) {
                 menuContent.classList.remove("show-menu");
             }
+        });
+
+        var v_cnt = document.querySelector(".stages-item .progress").getAttribute('data-correct-task');
+        var v_all = document.querySelector(".stages-item .progress").getAttribute('data-all-task');
+        var value = getpercentageToTask(v_cnt, v_all);
+        
+        function getpercentageToTask(v_cnt, v_all) {
+            return v_cnt / v_all * 100
+        }
+
+        $(".stages-item .progress .progress-bar").css({
+            width: value + "%"
         });
 
     </script>

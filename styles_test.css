@@ -449,3 +449,36 @@ main {
 .task-rating-score.wrong {
     color: #CC2B2B;
 }
+
+.stages-item .stage {
+    background: #6e92d654;
+    display: grid;
+    max-width: none;
+    min-width: 790px;
+}
+
+.stages-item .stage-info-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stages-item .progress {
+    background: #CC2B2B;
+}
+
+.stages-item .progress .progress-bar {
+    background: #53E88B;
+}
+
+.stages-item .tasks {
+    border-top: none;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    margin-top: -20px;
+}
+
+.stages-item .tasks .task {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
