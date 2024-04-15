@@ -341,8 +341,8 @@ main {
 
 .stage-progress-circle::after {
     content: "";
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     border: 12px solid #CC2B2B;
     position: absolute;
@@ -404,6 +404,9 @@ main {
     width: 100%;
     height: 100%;
     border-radius: 50%;
+    font-size: 36px;
+    font-weight: bolder;
+    margin-top: 3px;
 }
 
 .tasks {
