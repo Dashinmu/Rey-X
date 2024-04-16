@@ -72,9 +72,9 @@
                 <span>Этапы практики</span>
             </div>
             <div class = "stages-item">
-                <div class = "stage active">
+                <div class = "stage" id = "stage2" onclick="toggleStage('stage2', 'stage2-tasks')">
                     <div class = "stage-info">
-                        <div class = "stage-note">
+                        <div class = "stage-note-2">
                             <span class = "note-text">PL/SQL</span>
                             <span class = "note-text">Новичок</span>
                         </div>
@@ -93,7 +93,7 @@
                         <div class = "progress-bar"></div>
                     </div>
                 </div>
-                <div class = "tasks">
+                <div class = "tasks hidden" id = 'stage2-tasks'>
                     <div class = "task wrong">
                         <span class = "task-stage-name">Stage #2<span class = "task-num"> - 3</span></span>
                         <span class = "task-descrip">Task 2-3 description</span>
@@ -132,9 +132,9 @@
                 </div>
             </div>
             <div class = "stages-item">
-                <div class = "stage">
+                <div class = "stage" id = "stage1" onclick="toggleStage('stage1', 'stage1-tasks')">
                     <div class = "stage-info">
-                        <div class = "stage-note">
+                        <div class = "stage-note-2">
                             <span class = "note-text">Ознакомление</span>
                         </div>
                         <div class = "stage-info-2">
@@ -152,7 +152,7 @@
                         <div class = "progress-bar"></div>
                     </div>
                 </div>
-                <div class = "tasks hidden">
+                <div class = "tasks hidden" id = "stage1-tasks">
                     <div class = "task">
                         <span class = "task-stage-name">Stage #1<span class = "task-num"> - 10</span></span>
                         <span class = "task-descrip">Task 1-10 description</span>
@@ -244,6 +244,13 @@
                 return v_cnt / v_all * 100
             }
         });
+
+        function toggleStage(elementId, tasksId) {
+            var stageNum = document.getElementById(elementId);
+            var stageTasks = document.getElementById(tasksId);
+            stageNum.classList.toggle("active");
+            stageTasks.classList.toggle("hidden");
+        }
 
     </script>
 
