@@ -4,11 +4,107 @@ body {
     background-color: #111B1E;
     overflow-x: hidden;
     line-height: normal;
+    color: #FFFFFF;
 }
 
-header {
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form {
+    background-color: #2f4c58;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.form h2 {
+    margin-bottom: 20px;
+}
+
+.input-container {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.input-container input[type="text"],
+.input-container input[type="email"],
+.input-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #6e93d6;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.form button {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #63a583;
+    border-radius: 10px;
+    background-color: #63a583;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.form button:hover {
+    background-color: #3BB273;
+}
+
+.form button:focus {
+    outline: none;
+}
+
+.notification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #a5402f; /* Красный цвет */
+    color: #fff; /* Белый цвет */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none; /* Скрыть изначально */
+}
+
+.notification::before {
+    display: inline-block;
+    color: #fff;
+    background-color: #a5402f;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.notification button {
+    background-color: #fff;
+    color: #a5402f;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.notification button:hover {
+    background-color: #eee;
+}
+
+menu {
     background-color: #63A583;
     padding: 5px 5px;
+    margin: 0;
 }
 
 .menu {

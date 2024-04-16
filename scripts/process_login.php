@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     } else {
         // Иначе получаем введенные данные
-        $username = $_POST["username"];
+        $userlogin = $_POST["username"];
         $password = $_POST["password"];
 
         if (!$conn) {
@@ -22,20 +22,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Формируем запрос на проверку данных пользователя
-        $sql = "BEGIN diplom.fnd_user.valid_user( :username, :password, :flag ); END;";
+        $sql = "BEGIN diplom.fnd_user.valid_user( :username, :password, :usertype ); END;";
         $stmt = oci_parse($conn, $sql);
         // Ввод параметров
-        oci_bind_by_name($stmt, ':username', $username);
+        oci_bind_by_name($stmt, ':username', $userlogin);
         oci_bind_by_name($stmt, ':password', $password);
-        oci_bind_by_name($stmt, ':flag', $flag, 100, SQLT_CHR);
+        oci_bind_by_name($stmt, ':usertype', $usertype, 1, SQLT_INT);
 
         // Выполняем запрос
         if (oci_execute($stmt)) {
-            if ( is_null($flag) ) {
+            if ( $usertype != 0 ) {
                 // Если отсутствует ошибка - пользователь найден. Создаём сессию и перенаправляемся на главную
                 session_start();
-                $_SESSION["username"] = $username;
-                header("Location: /index.php");
+                $_SESSION["userlogin"] = $userlogin;
+                $_SESSION["usertype"] = $usertype;
+                header("Location: /index.php?access=$usertype");
                 exit();
             } else {
                 // Если пользователь не найден, перенаправляем обратно на страницу входа с ошибкой

@@ -76,7 +76,7 @@
         BEGIN
             :new.id := diplom.user_id_seq.nextval;
             :new.start_date := trunc(sysdate);
-            if :new.end_date is null then :new.end_date := TO_DATE(1, 'J'); end if;
+            if :new.end_date is null then :new.end_date := to_date('01013872','ddmmyyyy'); end if;
             begin
                 select id into :new.type from diplom.user_type where id = :new.type;
                 exception when others then raise_application_error(-20001, 'Не существует типа пользователя с id = '||:new.type);
@@ -120,7 +120,7 @@
         BEGIN
             :new.id := diplom.user_type_seq.nextval;
             :new.start_date := trunc(sysdate);
-            :new.inactive_date := TO_DATE(1, 'J');
+            :new.inactive_date := to_date('01013872','ddmmyyyy');
         END;
 
         /* Удалить таблицу */
@@ -217,7 +217,7 @@
         BEGIN
             :new.id := diplom.stages_seq.nextval;
             :new.creation_date := trunc(sysdate);
-            :new.inactive_date := to_date(1, 'J');
+            :new.inactive_date := to_date('01013872','ddmmyyyy');
             if :new.time_period is null then :new.time_period := -1; end if;
         END;
 
@@ -257,7 +257,7 @@
         BEGIN
             :new.id := diplom.stage_relations_seq.nextval;
             :new.start_date := trunc(sysdate);
-            :new.end_date := to_date(1, 'J');
+            :new.end_date := to_date('01013872','ddmmyyyy');
         END;
 
         /* Удалить таблицу */
@@ -299,7 +299,7 @@
         BEGIN
             :new.id := diplom.tasks_seq.nextval;
             :new.creation_date := trunc(sysdate);
-            :new.inactive_date := to_date(1, 'J');
+            :new.inactive_date := to_date('01013872','ddmmyyyy');
         END;
 
         /* Удалить таблицу */
@@ -372,7 +372,7 @@
         BEGIN
             :new.id := diplom.task_relations_seq.nextval;
             :new.start_date := trunc(sysdate);
-            :new.end_date := to_date(1, 'J');
+            :new.end_date := to_date('01013872','ddmmyyyy');
             select
                 nvl(max(num_task), 1)
             into

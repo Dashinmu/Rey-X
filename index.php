@@ -5,11 +5,41 @@ require_once "menu.php"; // Подключить meny.php
 require_once "./scripts/db_connect.php"; // Подключаем файл с подключением к базе данных
 
 // Проверяем, установлена ли сессия и существует ли имя пользователя в сессии
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['userlogin']) && !isset($_SESSION['usertype'])) {
     // Если сессия не установлена или имя пользователя отсутствует, перенаправляем на страницу авторизации
     header("Location: /login.php");
     exit();
+} else {
+    // Перенаправлять если хитрые хотят поменять права доступа
+    if (!str_contains($_SERVER['REQUEST_URI'],"?access=$usertype")) {
+        header("Location: /index.php?access=$usertype");
+        exit();
+    };
 }
+
+if ($usertype != 1 && $usertype != 2) {
+    $sql = "BEGIN diplom.fnd_user.get_personal_data(
+        p_login => :userlogin
+        , p_username => :user_fio
+        , p_type_meaning => :user_type_mean
+        , p_tutor_name => :tutor_fio
+        , p_tutor_type => :tutor_type_mean
+        , p_tutor_phone => :tutor_phone
+    ); END;";
+    $stmt = oci_parse($conn, $sql);
+    oci_bind_by_name($stmt, ":userlogin", $userlogin);
+    oci_bind_by_name($stmt, ":user_fio", $user_fio, 50, SQLT_CHR);
+    oci_bind_by_name($stmt, ":user_type_mean", $user_type_mean, 50, SQLT_CHR);
+    oci_bind_by_name($stmt, ":tutor_fio", $tutor_fio, 50, SQLT_CHR);
+    oci_bind_by_name($stmt, ":tutor_type_mean", $tutor_type_mean, 50, SQLT_CHR);
+    oci_bind_by_name($stmt, ":tutor_phone", $tutor_phone, 50, SQLT_CHR);
+
+    if (oci_execute($stmt)) {
+        if ($user_fio == '000') {
+            $user_fio = 'НЕОПРЕДЕЛЁН';
+            $user_type_mean = $user_fio;
+        }
+    }
 ?>
 
 <main>
@@ -19,11 +49,11 @@ if (!isset($_SESSION['username'])) {
             <img src="img/student.jpg" alt="User Avatar">
         </div>
         <div class = 'div-personal-name'>
-            <span>Аврора Мясникова</span>
+            <span><?php echo $user_fio?></span>
         </div>
         <div class="tutor-detail">
-            <span class="text"><b>Руководитель:</b> Daniil Dashinmu</span>
-            <span class="text"><b>Телефон:</b> +7-919-446-04-27</span>
+            <span class="text"><b>Руководитель:</b> <?php echo $tutor_fio?></span>
+            <span class="text"><b>Телефон:</b> <?php echo $tutor_phone?></span>
         </div>
         <div class="user-rating">
             <span class="rating-label">Текущая оценка</span>
@@ -127,6 +157,7 @@ if (!isset($_SESSION['username'])) {
 
 
 <?php
+}
 require_once "modal.php";
 require_once "footer.php"; // Подключаем footer.php
 ?>

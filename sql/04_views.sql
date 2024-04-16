@@ -1,7 +1,8 @@
 --Представление личной информации
 CREATE OR REPLACE VIEW DIPLOM.PERSONAL_INFO AS
     SELECT
-        u.NAME as USER_NAME
+        u.ID as USER_ID
+        , u.NAME as USER_NAME
         , u.CONTACT_INFO1 as USER_MAIL
         , u.CONTACT_INFO2 as USER_PHONE
         , to_char(u.END_DATE, 'dd.mm.yyyy') as USER_INACTIVE_DATE

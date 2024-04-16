@@ -52,7 +52,7 @@ begin
         P_USERNAME  => 'Дмитрий Соловьёв',
         P_EMAIL  => 'dm.solovey@gmail.com',
         P_PHONE  => '+7-912-101-01-48',
-        P_END_DATE => to_date('270624','ddmmyyyy')
+        P_END_DATE => to_date('27062024','ddmmyyyy')
         , p_error => p_error
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
@@ -96,3 +96,23 @@ where
     USER_LOGIN like upper('dashinmu')
 ;
 
+SELECT
+    pi.USER_NAME
+    , pi.USER_TYPE
+    , pi_t.USER_NAME as T_USER_NAME
+    , pi_t.USER_TYPE as T_USER_TYPE
+    , pi_t.USER_PHONE as T_USER_PHONE
+FROM
+    DIPLOM.PERSONAL_INFO pi
+    --Может быть такое, что руководитель не назначен
+    left join DIPLOM.PERSON_RELATIONS pr
+        on pr.CHILD = pi.USER_ID
+        and trunc(sysdate) between trunc(pr.START_DATE) and trunc(pr.END_DATE)
+    left join DIPLOM.PERSONAL_INFO pi_t
+        on pi_t.USER_ID = pr.PARENT
+WHERE 1 = 1
+    and pi.USER_LOGIN like upper('MYASNIKOVA_AV')
+    and trunc(sysdate) <= to_date(pi.USER_INACTIVE_DATE, 'dd.mm.yyyy')
+;
+
+select 1 from dual where sysdate >= to_date('08042024','ddmmyyyy') and sysdate <= to_date(1,'J');

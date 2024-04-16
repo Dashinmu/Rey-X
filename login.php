@@ -12,7 +12,6 @@ require_once "header.php"; // Подключаем header.php
         </div>
         <div class="input-container">
             <input type="password" name="password" placeholder="Пароль" required>
-            <p class="register-text">Нет аккаунта? <a href="/register.php">Зарегистрироваться</a></p>
         </div>
         <button type="submit">Войти</button>
         <?php

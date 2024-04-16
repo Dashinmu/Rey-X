@@ -30,7 +30,7 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
     PROCEDURE valid_user(
         p_login in VARCHAR2
         , p_password in VARCHAR2
-        , p_error out VARCHAR2
+        , p_user_type out NUMBER
     );
 
     --Ввести новый тип пользователя
@@ -49,6 +49,16 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
     FUNCTION is_admin(
         p_user in VARCHAR2
     ) RETURN BOOLEAN;
+
+    --Вернуть данные по login
+    PROCEDURE get_personal_data(
+        p_login in VARCHAR2
+        , p_username out VARCHAR2
+        , p_type_meaning out VARCHAR2
+        , p_tutor_name out VARCHAR2
+        , p_tutor_type out VARCHAR2
+        , p_tutor_phone out VARCHAR2
+    );
 
 END FND_USER;
 
@@ -162,23 +172,21 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
     PROCEDURE valid_user(
         p_login in VARCHAR2
         , p_password in VARCHAR2
-        , p_error out VARCHAR2
+        , p_user_type out NUMBER
     ) IS
-        ret NUMBER(1);
     BEGIN
         select
-            1
+            type
         into
-            ret
+            p_user_type
         from
             DIPLOM.USERS
         where 1 = 1
             and login = upper(p_login)
             and password = get_password(p_password)
         ;
-
-        --Если пользователь не найден
-        exception when others then p_error := 'Пользователь не найден';
+        --Если пользователь не найден возвращаем 0
+        exception when others then p_user_type := 0;
     END valid_user;
 
     --Ввести новый тип пользователя
@@ -221,5 +229,42 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         return true;
         exception when others then return false;
     END is_admin;
+
+    --Вернуть данные по login и usertype
+    PROCEDURE get_personal_data(
+        p_login in VARCHAR2
+        , p_username out VARCHAR2
+        , p_type_meaning out VARCHAR2
+        , p_tutor_name out VARCHAR2
+        , p_tutor_type out VARCHAR2
+        , p_tutor_phone out VARCHAR2
+    ) IS
+    BEGIN
+        SELECT
+            pi.USER_NAME
+            , pi.USER_TYPE
+            , pi_t.USER_NAME
+            , pi_t.USER_TYPE
+            , pi_t.USER_PHONE
+        INTO
+            p_username
+            , p_type_meaning
+            , p_tutor_name
+            , p_tutor_type
+            , p_tutor_phone
+        FROM
+            DIPLOM.PERSONAL_INFO pi
+            --Может быть такое, что руководитель не назначен
+            left join DIPLOM.PERSON_RELATIONS pr
+                on pr.CHILD = pi.USER_ID
+                and trunc(sysdate) between pr.START_DATE and pr.END_DATE
+            left join DIPLOM.PERSONAL_INFO pi_t
+                on pi_t.USER_ID = pr.PARENT
+        WHERE 1 = 1
+            and pi.USER_LOGIN like upper(p_login)
+            and trunc(sysdate) <= to_date(pi.USER_INACTIVE_DATE, 'dd.mm.yyyy')
+        ;
+        exception when others then p_username := '000';
+    END get_personal_data;
 
 END FND_USER;
