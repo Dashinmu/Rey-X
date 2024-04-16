@@ -451,7 +451,6 @@ main {
 }
 
 .stages-item .stage {
-    background: #6e92d654;
     display: grid;
     max-width: none;
     min-width: 790px;
@@ -481,4 +480,27 @@ main {
 .stages-item .tasks .task {
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.hidden {
+    display: none;
+}
+    
+.active {
+    background: #6e92d654;
+}
+    
+.stages-item .stage-info-2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+    
+.stage-info .stage-info-2 span{
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+    
+.stage-info .stage-note-2 {
+    display: flex;
 }

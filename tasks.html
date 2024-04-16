@@ -72,7 +72,7 @@
                 <span>Этапы практики</span>
             </div>
             <div class = "stages-item">
-                <div class = "stage">
+                <div class = "stage active">
                     <div class = "stage-info">
                         <div class = "stage-note">
                             <span class = "note-text">PL/SQL</span>
@@ -152,7 +152,7 @@
                         <div class = "progress-bar"></div>
                     </div>
                 </div>
-                <div class = "tasks">
+                <div class = "tasks hidden">
                     <div class = "task">
                         <span class = "task-stage-name">Stage #1<span class = "task-num"> - 10</span></span>
                         <span class = "task-descrip">Task 1-10 description</span>
@@ -231,17 +231,18 @@
             }
         });
 
-        //ПОМЕНЯТЬ!
-        var v_cnt = document.querySelector(".stages-item .progress").getAttribute('data-correct-task');
-        var v_all = document.querySelector(".stages-item .progress").getAttribute('data-all-task');
-        var value = getpercentageToTask(v_cnt, v_all);
-        
-        function getpercentageToTask(v_cnt, v_all) {
-            return v_cnt / v_all * 100
-        }
-
-        $(".stages-item .progress .progress-bar").css({
-            width: value + "%"
+        $(function() {
+            $(".stages-item .progress").each(function() {
+                var v_cnt = $(this).attr('data-correct-task');
+                var v_all = $(this).attr('data-all-task');
+                var bar = $(this).find('.progress-bar');
+                bar.css({
+                    width: getpercentageToTask(v_cnt, v_all) + "%"
+                })
+            })
+            function getpercentageToTask(v_cnt, v_all) {
+                return v_cnt / v_all * 100
+            }
         });
 
     </script>
