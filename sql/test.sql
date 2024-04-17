@@ -424,6 +424,7 @@ declare
         v_cols_student dbms_sql.desc_tab;
         v_rows_student integer;
 
+    wrong_answer exception;
 
     i NUMBER(3); --номер строки
     j NUMBER(3);
@@ -458,7 +459,7 @@ begin
 
     loop --сравним строки курсора препода с курсором студента
         if dbms_sql.FETCH_ROWS(v_cur_tutor_id) > 0 then
-            
+
         else
             exit;
         end if;
@@ -470,4 +471,6 @@ begin
     if flag then res := 1;
 
     DBMS_OUTPUT.PUT_LINE('Результат сравнения = '||res);
+
+    exception when wrong_answer then DBMS_OUTPUT.PUT_LINE('Ответ неверный прерван где-то при расчёте');;
 end;
