@@ -410,3 +410,64 @@ begin
     CLOSE r_tutor;
     DBMS_OUTPUT.PUT_LINE('Результат сравнения = '||res);
 end;
+
+--Проверка работы DBMS_SQL (СЛОЖНЫЙ, НО НАДЁЖНЫЙ!)
+declare
+    cursor_tutor VARCHAR2(4000); --верный запрос
+        v_cur_tutor_id integer;
+        v_col_tutor_cnt integer;
+        v_cols_tutor dbms_sql.desc_tab;
+        v_rows_tutor integer;
+    cursor_student VARCHAR2(4000); --запрос студента
+        v_cur_student_id integer;
+        v_col_student_cnt integer;
+        v_cols_student dbms_sql.desc_tab;
+        v_rows_student integer;
+
+
+    i NUMBER(3); --номер строки
+    j NUMBER(3);
+    res_tutor VARCHAR2(4000);
+    res_student VARCHAR2(4000);
+    flag boolean := false; --изначально допускаем, что ответ неверный
+    res NUMBER(1) := 0; --соответственно результат отрицательный
+begin
+    cursor_tutor := 'SELECT trunc(sysdate) FROM dual';
+    cursor_student := 'SELECT trunc(sysdate + 1) FROM dual';
+
+    v_cur_tutor_id := dbms_sql.open_cursor; --получить номер курсора
+    v_cur_student_id := dbms_sql.open_cursor;
+
+    dbms_sql.PARSE(v_cur_tutor_id, cursor_tutor, dbms_sql.native); --парсить курсор
+    dbms_sql.PARSE(v_cur_student_id, cursor_student, dbms_sql.native);
+
+    dbms_sql.DESCRIBE_COLUMNS(v_cur_tutor_id, v_col_tutor_cnt, v_cols_tutor); --получить столбцы запроса
+    dbms_sql.DESCRIBE_COLUMNS(v_cur_student_id, v_col_student_cnt, v_cols_student);
+
+    i := 0;
+    j := 0;
+
+    if v_col_tutor_cnt = v_col_student_cnt then flag := true; -- 1ое совпадение по количеству выводимых столбцов
+
+    for i in 1 .. v_col_tutor_cnt loop
+        if v_cols_tutor(i).col_name <> v_cols_student(i).col_name then flag := false; -- снимаем флаг если наименования столбцов разняться
+    end loop;
+
+    v_rows_tutor := dbms_sql.EXECUTE(v_cur_tutor_id); --выполнить
+    v_rows_student := dbms_sql.EXECUTE(v_cur_student_id);
+
+    loop --сравним строки курсора препода с курсором студента
+        if dbms_sql.FETCH_ROWS(v_cur_tutor_id) > 0 then
+            
+        else
+            exit;
+        end if;
+    end loop;
+
+    dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
+    dbms_sql.CLOSE_CURSOR(v_cur_student_id);
+    
+    if flag then res := 1;
+
+    DBMS_OUTPUT.PUT_LINE('Результат сравнения = '||res);
+end;
