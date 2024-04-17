@@ -47,7 +47,7 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
 
     --Проверка доступа пользователя
     FUNCTION is_admin(
-        p_user in VARCHAR2
+        p_user in NUMBER
     ) RETURN BOOLEAN;
 
     --Вернуть данные по login
@@ -134,6 +134,7 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
             when others then p_error := 'Пользовать '||p_login||' уже существует в системе';
     END add_user;
 
+    --Поменять пароль учётной записи.
     PROCEDURE change_password(
         p_login in VARCHAR2
         , p_password_old in VARCHAR2
@@ -221,11 +222,11 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
 
     --Проверка доступа пользователя
     FUNCTION is_admin(
-        p_user in VARCHAR2
+        p_user in NUMBER
     ) RETURN BOOLEAN IS
         admin NUMBER(1);
     BEGIN
-        select 1 into admin from DIPLOM.users where upper(p_user) = login and type in (1, 2);
+        select 1 into admin from DIPLOM.users where p_user = id and type in (1, 2);
         return true;
         exception when others then return false;
     END is_admin;
@@ -243,9 +244,9 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         SELECT
             pi.USER_NAME
             , pi.USER_TYPE
-            , pi_t.USER_NAME
-            , pi_t.USER_TYPE
-            , pi_t.USER_PHONE
+            , nvl(pi_t.USER_NAME, 'UNKNOWN')
+            , nvl(pi_t.USER_TYPE, 'UNKNOWN')
+            , nvl(pi_t.USER_PHONE, 'UNKNOWN')
         INTO
             p_username
             , p_type_meaning

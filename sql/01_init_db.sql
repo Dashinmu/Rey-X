@@ -79,7 +79,7 @@
             if :new.end_date is null then :new.end_date := to_date('01013872','ddmmyyyy'); end if;
             begin
                 select id into :new.type from diplom.user_type where id = :new.type;
-                exception when others then raise_application_error(-20001, 'Не существует типа пользователя с id = '||:new.type);
+                exception when others then raise_application_error(-20001, 'Не существует тип пользователя с id = '||:new.type);
             end;
             :new.password := DIPLOM.FND_USER.GET_PASSWORD(P_PASSWORD  => :new.password);
             :new.login := upper(:new.login);
@@ -219,6 +219,7 @@
             :new.creation_date := trunc(sysdate);
             :new.inactive_date := to_date('01013872','ddmmyyyy');
             if :new.time_period is null then :new.time_period := -1; end if;
+            if :new.stage_name is null then :new.stage_name := 'Stage #'||:new.id; end if;
         END;
 
         /* Удалить таблицу */
@@ -258,6 +259,14 @@
             :new.id := diplom.stage_relations_seq.nextval;
             :new.start_date := trunc(sysdate);
             :new.end_date := to_date('01013872','ddmmyyyy');
+            begin
+                select id into :new.parent from diplom.stages where id = :new.parent;
+                exception when others then raise_application_error(-20002, 'Не существует этапа с id = '||:new.parent);
+            end;
+            begin
+                select id into :new.child from diplom.stages where id = :new.child;
+                exception when others then raise_application_error(-20002, 'Не существует этапа с id = '||:new.child);
+            end;
         END;
 
         /* Удалить таблицу */
@@ -291,6 +300,7 @@
             --, answer NUMBER(6) --как правильно занести при первом объявлении задания? ответ ведь связан с заданием...
             -- ответ брать из таблицы ответов
             , CONSTRAINT tasks_pk PRIMARY KEY (id)
+            , CONSTRAINT tasks_uniq UNIQUE (created_by, type, meaning, descrip, inactive_date)
         );
 
         /* Создать триггер */
@@ -300,6 +310,10 @@
             :new.id := diplom.tasks_seq.nextval;
             :new.creation_date := trunc(sysdate);
             :new.inactive_date := to_date('01013872','ddmmyyyy');
+            begin
+                select id into :new.type from DIPLOM.TASK_TYPES where id = :new.type;
+                exception when others then raise_application_error(-20003, 'Не существует типа задания с id = '||:new.type);
+            end;
         END;
 
         /* Удалить таблицу */
@@ -326,6 +340,7 @@
             id NUMBER(2) not null
             , MEANING VARCHAR2(50) not null
             , CONSTRAINT task_types_pk PRIMARY KEY (id)
+            , CONSTRAINT task_types_uniq UNIQUE (MEANING)
         );
 
         /* Создать триггер */
@@ -371,18 +386,32 @@
         BEFORE INSERT ON diplom.task_relations FOR EACH ROW
         BEGIN
             :new.id := diplom.task_relations_seq.nextval;
-            :new.start_date := trunc(sysdate);
-            :new.end_date := to_date('01013872','ddmmyyyy');
-            select
-                nvl(max(num_task), 1)
-            into
-                :new.num_task
-            from
-                diplom.task_relations
-            where 1 = 1
-                and stage = :new.stage
-                and trunc(sysdate) between start_date and end_date
-            ;
+            if :new.start_date is null then
+                :new.start_date := trunc(sysdate);
+            end if;
+            if :new.end_date is null then
+                :new.end_date := to_date('01013872','ddmmyyyy');
+            end if;
+            begin
+                select id into :new.stage from DIPLOM.STAGES where id = :new.stage;
+                    exception when others then raise_application_error(-20004, 'Не существует этапа с id = '||:new.stage);
+            end;
+            begin
+                select id into :new.task from DIPLOM.TASKS where id = :new.task;
+                    exception when others then raise_application_error(-20004, 'Не существует задания с id = '||:new.task);
+            end;
+            if :new.num_task is null then
+                select
+                    count(NUM_TASK) + 1
+                into
+                    :new.num_task
+                from
+                    diplom.task_relations
+                where 1 = 1
+                    and stage = :new.stage
+                    and trunc(sysdate) between start_date and end_date
+                ;
+            end if;
         END;
 
         /* Удалить таблицу */
@@ -425,6 +454,10 @@
         BEGIN
             :new.id := diplom.answer_seq.nextval;
             :new.creation_date := trunc(sysdate);
+            begin
+                select id into :new.task from DIPLOM.TASKS where id = :new.task;
+                    exception when others then raise_application_error(-20005, 'Не существует задания с id = '||:new.task);
+            end;
             if diplom.fnd_user.is_admin(:new.person)
             then
                 :new.primary := 'Y';
