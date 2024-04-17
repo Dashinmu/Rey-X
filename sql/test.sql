@@ -418,23 +418,30 @@ declare
         v_col_tutor_cnt integer;
         v_cols_tutor dbms_sql.desc_tab;
         v_rows_tutor integer;
+        v_res_tutor_char VARCHAR2(1000);
+        v_res_tutor_number NUMBER;
+        v_res_tutor_date DATE;
+        v_res_tutor_clob CLOB;
+        v_res_tutor_time TIMESTAMP;
     cursor_student VARCHAR2(4000); --запрос студента
         v_cur_student_id integer;
         v_col_student_cnt integer;
         v_cols_student dbms_sql.desc_tab;
         v_rows_student integer;
+        v_res_student_char VARCHAR2(1000);
+        v_res_student_number NUMBER;
+        v_res_student_date DATE;
+        v_res_student_clob CLOB;
+        v_res_student_time TIMESTAMP;
 
     wrong_answer exception;
 
-    i NUMBER(3); --номер строки
-    j NUMBER(3);
-    res_tutor VARCHAR2(4000);
-    res_student VARCHAR2(4000);
-    flag boolean := false; --изначально допускаем, что ответ неверный
-    res NUMBER(1) := 0; --соответственно результат отрицательный
+    i integer; --столбцы
+    j NUMBER(3); --номер строки
+    res NUMBER(1) := 0; --соответствует верному результату
 begin
     cursor_tutor := 'SELECT trunc(sysdate) FROM dual';
-    cursor_student := 'SELECT trunc(sysdate + 1) FROM dual';
+    cursor_student := 'SELECT trunc(sysdate) FROM dual';
 
     v_cur_tutor_id := dbms_sql.open_cursor; --получить номер курсора
     v_cur_student_id := dbms_sql.open_cursor;
@@ -445,13 +452,16 @@ begin
     dbms_sql.DESCRIBE_COLUMNS(v_cur_tutor_id, v_col_tutor_cnt, v_cols_tutor); --получить столбцы запроса
     dbms_sql.DESCRIBE_COLUMNS(v_cur_student_id, v_col_student_cnt, v_cols_student);
 
-    i := 0;
     j := 0;
 
-    if v_col_tutor_cnt = v_col_student_cnt then flag := true; -- 1ое совпадение по количеству выводимых столбцов
+    if v_col_tutor_cnt <> v_col_student_cnt 
+        then raise wrong_answer; --выходим если нет, дальше проверять нет смысла
+    end if;
 
     for i in 1 .. v_col_tutor_cnt loop
-        if v_cols_tutor(i).col_name <> v_cols_student(i).col_name then flag := false; -- снимаем флаг если наименования столбцов разняться
+        if v_cols_tutor(i).col_name <> v_cols_student(i).col_name then -- снимаем флаг если наименования столбцов разняться
+            raise wrong_answer;
+        end if;
     end loop;
 
     v_rows_tutor := dbms_sql.EXECUTE(v_cur_tutor_id); --выполнить
@@ -459,7 +469,59 @@ begin
 
     loop --сравним строки курсора препода с курсором студента
         if dbms_sql.FETCH_ROWS(v_cur_tutor_id) > 0 then
-
+            if dbms_sql.FETCH_ROWS(v_cur_student_id) > 0 then --если записей меньше - ошибка
+                for i in 1 .. v_col_tutor_cnt loop --сравнить все столбцы в строке, количество столбцов уже проверили
+                    /* УСЛОВИЕ ПО РАБОТЕ С ТИПОМ СТОЛБЦОВ */
+                    IF v_cols_tutor(i).col_type in (1, 96, 11, 208) then /* IN VARCHAR2 */
+                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
+                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
+                        if  v_res_tutor_char <> v_res_student_char then
+                            raise wrong_answer;
+                        end if;
+                    ELSIF v_cols_tutor(i).col_type in (2) then /* IN NUMBER */
+                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_number);
+                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_number);
+                        if  v_res_tutor_number <> v_res_student_number then
+                            raise wrong_answer;
+                        end if;
+                    ELSIF v_cols_tutor(i).col_type in (12) then /* IN DATE */
+                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_date);
+                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_date);
+                        if  v_res_tutor_date <> v_res_student_date then
+                            raise wrong_answer;
+                        end if;
+                    ELSIF v_cols_tutor(i).col_type in (112) then /* IN CLOB */
+                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_clob);
+                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_clob);
+                        if  v_res_tutor_clob <> v_res_student_clob then
+                            raise wrong_answer;
+                        end if;
+                    ELSIF v_cols_tutor(i).col_type in (180) then /* IN TIMESTAMP */
+                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_time);
+                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_time);
+                        if  v_res_tutor_time <> v_res_student_time then
+                            raise wrong_answer;
+                        end if;
+--                    ELSIF v_cols_tutor(i).col_type in (181) then /* IN TIMESTAMP WITH TIME ZONE */
+--                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
+--                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
+--                    ELSIF v_cols_tutor(i).col_type in (182) then /* IN INTERVAL YEAR TO MONTH */
+--                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
+--                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
+--                    ELSIF v_cols_tutor(i).col_type in (183) then /* IN INTERVAL DAY TO SECOND */
+--                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
+--                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
+--                    ELSIF v_cols_tutor(i).col_type in (231) then /* IN TIMESTAMP WITH LOCAL TIME ZONE */
+--                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
+--                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
+                    ELSE 
+                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
+                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
+                    END IF;
+                end loop;
+            else
+                raise wrong_answer;
+            end if;
         else
             exit;
         end if;
@@ -467,10 +529,17 @@ begin
 
     dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
     dbms_sql.CLOSE_CURSOR(v_cur_student_id);
-    
-    if flag then res := 1;
 
     DBMS_OUTPUT.PUT_LINE('Результат сравнения = '||res);
-
-    exception when wrong_answer then DBMS_OUTPUT.PUT_LINE('Ответ неверный прерван где-то при расчёте');;
+    --хоть одна ошибка попадаем сюда
+    exception 
+        when wrong_answer then DBMS_OUTPUT.PUT_LINE('Ответ неверный прерван где-то при расчёте');
+        when others then
+            if dbms_sql.IS_OPEN(v_cur_tutor_id) then
+                dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
+            end if;
+            if dbms_sql.IS_OPEN(v_cur_student_id) then
+                dbms_sql.CLOSE_CURSOR(v_cur_student_id);
+            end if;
+            DBMS_OUTPUT.PUT_LINE('ERROR: Ошибка в теле процедуры - '||SQLERRM);
 end;
