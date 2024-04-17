@@ -438,7 +438,7 @@ declare
 
     i integer; --столбцы
     j NUMBER(3); --номер строки
-    res NUMBER(1) := 0; --соответствует верному результату
+    res NUMBER(1) := 1; --соответствует верному результату
 begin
     cursor_tutor := 'SELECT trunc(sysdate) FROM dual';
     cursor_student := 'SELECT trunc(sysdate) FROM dual';
@@ -460,6 +460,7 @@ begin
 
     for i in 1 .. v_col_tutor_cnt loop
         if v_cols_tutor(i).col_name <> v_cols_student(i).col_name then -- снимаем флаг если наименования столбцов разняться
+            DBMS_OUTPUT.PUT_LINE(v_cols_tutor(i).col_type);
             raise wrong_answer;
         end if;
     end loop;
@@ -473,30 +474,40 @@ begin
                 for i in 1 .. v_col_tutor_cnt loop --сравнить все столбцы в строке, количество столбцов уже проверили
                     /* УСЛОВИЕ ПО РАБОТЕ С ТИПОМ СТОЛБЦОВ */
                     IF v_cols_tutor(i).col_type in (1, 96, 11, 208) then /* IN VARCHAR2 */
+                        dbms_sql.DEFINE_COLUMN(v_cur_tutor_id, i, v_res_tutor_char, 1000);
+                        dbms_sql.DEFINE_COLUMN(v_cur_student_id, i, v_res_student_char, 1000);
                         dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
                         dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
                         if  v_res_tutor_char <> v_res_student_char then
                             raise wrong_answer;
                         end if;
                     ELSIF v_cols_tutor(i).col_type in (2) then /* IN NUMBER */
+                        dbms_sql.DEFINE_COLUMN(v_cur_tutor_id, i, v_res_tutor_number);
+                        dbms_sql.DEFINE_COLUMN(v_cur_student_id, i, v_res_student_number);
                         dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_number);
                         dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_number);
                         if  v_res_tutor_number <> v_res_student_number then
                             raise wrong_answer;
                         end if;
                     ELSIF v_cols_tutor(i).col_type in (12) then /* IN DATE */
+                        dbms_sql.DEFINE_COLUMN(v_cur_tutor_id, i, v_res_tutor_date);
+                        dbms_sql.DEFINE_COLUMN(v_cur_student_id, i, v_res_tutor_date);
                         dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_date);
                         dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_date);
                         if  v_res_tutor_date <> v_res_student_date then
                             raise wrong_answer;
                         end if;
                     ELSIF v_cols_tutor(i).col_type in (112) then /* IN CLOB */
+                        dbms_sql.DEFINE_COLUMN(v_cur_tutor_id, i, v_res_tutor_clob);
+                        dbms_sql.DEFINE_COLUMN(v_cur_student_id, i, v_res_student_clob);
                         dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_clob);
                         dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_clob);
                         if  v_res_tutor_clob <> v_res_student_clob then
                             raise wrong_answer;
                         end if;
                     ELSIF v_cols_tutor(i).col_type in (180) then /* IN TIMESTAMP */
+                        dbms_sql.DEFINE_COLUMN(v_cur_tutor_id, i, v_res_tutor_time);
+                        dbms_sql.DEFINE_COLUMN(v_cur_student_id, i, v_res_student_time);
                         dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_time);
                         dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_time);
                         if  v_res_tutor_time <> v_res_student_time then
@@ -514,7 +525,9 @@ begin
 --                    ELSIF v_cols_tutor(i).col_type in (231) then /* IN TIMESTAMP WITH LOCAL TIME ZONE */
 --                        dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
 --                        dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
-                    ELSE 
+                    ELSE
+                        dbms_sql.DEFINE_COLUMN(v_cur_tutor_id, i, v_res_tutor_char, 1000);
+                        dbms_sql.DEFINE_COLUMN(v_cur_student_id, i, v_res_student_char, 1000);
                         dbms_sql.COLUMN_VALUE(v_cur_tutor_id, i, v_res_tutor_char);
                         dbms_sql.COLUMN_VALUE(v_cur_student_id, i, v_res_student_char);
                     END IF;
