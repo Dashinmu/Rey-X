@@ -398,6 +398,7 @@ begin
                 exit;
             end case;
         END LOOP;
+        CLOSE r_student;
 
         if flag 
             then null;
@@ -407,5 +408,5 @@ begin
 
     END LOOP;
     CLOSE r_tutor;
-    DBMS_OUTPUT.PUT_LINE('Результат сравнения '||res);
+    DBMS_OUTPUT.PUT_LINE('Результат сравнения = '||res);
 end;
