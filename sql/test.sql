@@ -321,6 +321,27 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 end;
 
+/* Выдать этапы студентам */
+declare
+    p_error VARCHAR2(200);
+begin
+    DIPLOM.FND_TASKS.give_stage(
+        p_user => 1
+        , p_stage => 1
+        , p_student => 3
+        , p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+    p_error := null;
+    DIPLOM.FND_TASKS.give_stage(
+        p_user => 1
+        , p_stage => 2
+        , p_student => 3
+        , p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+end;
+
 /* Создать ответы студент*/
 declare
     p_error VARCHAR2(200);

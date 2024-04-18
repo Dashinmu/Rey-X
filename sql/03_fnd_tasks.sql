@@ -57,6 +57,14 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         , p_error out VARCHAR2
     ) RETURN NUMBER;
 
+    --Выдать этап студенту
+    PROCEDURE give_stage(
+        p_user in NUMBER
+        , p_stage in NUMBER
+        , p_student in NUMBER
+        , p_error out VARCHAR2
+    );
+
 END fnd_tasks;
 
 CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
@@ -441,6 +449,30 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
                 null;
         end case;
         return score;
+    END;
+
+    --Выдать этап студенту
+    PROCEDURE give_stage(
+        p_user in NUMBER
+        , p_stage in NUMBER
+        , p_student in NUMBER
+        , p_error out VARCHAR2
+    ) IS
+    BEGIN
+        begin
+            insert into DIPLOM.GIVE_STAGES(
+                ASSIGNED_BY
+                , STAGE
+                , STUDENT_ID
+            ) values (
+                p_user
+                , p_stage
+                , p_student
+            );
+        end;
+        commit;
+
+        EXCEPTION WHEN OTHERS THEN p_error := SQLERRM;
     END;
 
 END fnd_tasks;

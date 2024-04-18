@@ -514,6 +514,47 @@
 
 /* Блок работы */
 
+    /* ---- Таблица "Назначение этапа(ов) студенту" ---- */
+
+        /* Создать последовательность */
+        CREATE SEQUENCE DIPLOM.give_stages_seq
+        MINVALUE 1
+        MAXVALUE 9999999
+        START WITH 1
+        INCREMENT BY 1
+        ;
+
+        /* Удалить последовательность */
+        /* DROP SEQUENCE DIPLOM.give_stages_seq; */
+
+        /* Создать таблицу */
+        CREATE TABLE DIPLOM.give_stages
+        (
+            ID NUMBER(7)
+            , STUDENT_ID NUMBER(5) not null
+            , STAGE NUMBER(3) not null
+            , ASSIGNED_DATE DATE
+            , ASSIGNED_BY NUMBER(5) not null
+            , CONSTRAINT give_stages_pk PRIMARY KEY (id)
+            , CONSTRAINT give_stages_uniq UNIQUE (student_id, stage, assigned_date)
+        );
+
+        /* Создать триггер */
+        CREATE OR REPLACE TRIGGER DIPLOM.give_stages_trigger
+        BEFORE INSERT ON DIPLOM.give_stages FOR EACH ROW
+        BEGIN
+            :new.id := DIPLOM.give_stages_seq.nextval;
+            :new.ASSIGNED_DATE := trunc(sysdate);
+        END;
+
+        /* Удалить таблицу */
+        /* DROP TABLE DIPLOM.give_stages; */
+
+
+    /* ---- Таблица "Назначение этапа(ов) студенту" ---- */
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     /* ---- Таблица "Прогресс работы" ---- */
 
         /* Создать последовательность */

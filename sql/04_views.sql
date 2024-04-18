@@ -50,3 +50,34 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
             and a.PRIMARY like 'Y'
     WHERE 1 = 1
 ;
+
+--Представление прогресса выполнения заданий студентами
+CREATE OR REPLACE VIEW DIPLOM.PRACTICE_PROGRESS AS
+    SELECT
+        student.ID as STUDENT_ID
+        , student.LOGIN as STUDENT_NAME
+        , s.STAGE_NAME as STAGE_NAME
+        , to_char(gs.ASSIGNED_DATE, 'dd.mm.yyyy') as ASSIGNED_DATE
+        , u.LOGIN as ASSIGNED_BY
+        , t.MEANING as TASK_NAME
+        , tr.NUM_TASK as TASK_NUM
+        , a.RATING
+        , a.ANSWER
+    FROM
+        DIPLOM.USERS student
+        left join DIPLOM.GIVE_STAGES gs
+            on gs.STUDENT_ID = student.ID
+        left join DIPLOM.USERS u
+            on u.ID = gs.ASSIGNED_BY
+        left join DIPLOM.STAGES s
+            on s.ID = gs.STAGE
+        left join DIPLOM.TASK_RELATIONS tr
+            on tr.STAGE = gs.STAGE
+        left join DIPLOM.TASKS t
+            on t.ID = tr.TASK
+        left join DIPLOM.ANSWER a
+            on a.TASK = t.ID
+            and student.ID = a.PERSON
+    WHERE 1 = 1
+        and student.TYPE not in (1, 2)
+;
