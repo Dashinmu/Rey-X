@@ -307,7 +307,7 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
     diplom.fnd_tasks.add_answer(
         p_user => 1
-        , p_answer => 'SELECT trunc(sysdate) as sdb FROM dual'
+        , p_answer => 'SELECT trunc(sysdate) as "sdb" FROM dual'
         , p_task => 4
         , p_error => p_error
     );
@@ -331,35 +331,35 @@ begin
         , p_task => 1
         , p_error => p_error
     );
-    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('1 - '||p_error); end if;
     diplom.fnd_tasks.add_answer(
         p_user => 3
         , p_answer => '2 4'
         , p_task => 2
         , p_error => p_error
     );
-    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('2 - '||p_error); end if;
     diplom.fnd_tasks.add_answer(
         p_user => 3
         , p_answer => 'SELECT trunc(sysdate) FROM dual'
         , p_task => 3
         , p_error => p_error
     );
-    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('3 - '||p_error); end if;
     diplom.fnd_tasks.add_answer(
         p_user => 3
         , p_answer => 'SELECT trunc(sysdate) sd FROM dual'
         , p_task => 4
         , p_error => p_error
     );
-    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('4 - '||p_error); end if;
     diplom.fnd_tasks.add_answer(
         p_user => 3
-        , p_answer => '1 2'
+        , p_answer => '1 4'
         , p_task => 5
         , p_error => p_error
     );
-    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('5 - '||p_error); end if;
 end;
 
 

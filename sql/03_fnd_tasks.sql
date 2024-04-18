@@ -54,7 +54,7 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
     FUNCTION get_rating(
         p_answer in VARCHAR2
         , p_task in NUMBER
-        , p_error out NUMBER
+        , p_error out VARCHAR2
     ) RETURN NUMBER;
 
 END fnd_tasks;
@@ -313,7 +313,6 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
 
         for i in 1 .. v_col_tutor_cnt loop
             if v_cols_tutor(i).col_name <> v_cols_student(i).col_name then -- снимаем флаг если наименования столбцов разняться
-                DBMS_OUTPUT.PUT_LINE(v_cols_tutor(i).col_type);
                 raise wrong_answer;
             else
                 IF v_cols_tutor(i).col_type in (1, 96, 11, 208) then --IN VARCHAR2
@@ -419,7 +418,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
     FUNCTION get_rating(
         p_answer in VARCHAR2
         , p_task in NUMBER
-        , p_error out NUMBER
+        , p_error out VARCHAR2
     ) RETURN NUMBER IS
         curr_answer VARCHAR2(4000);
         task_type NUMBER(2);

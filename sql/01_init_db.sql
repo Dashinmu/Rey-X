@@ -451,9 +451,11 @@
         /* Создать триггер */
         CREATE OR REPLACE TRIGGER diplom.answer_trigger
         BEFORE INSERT ON diplom.answer FOR EACH ROW
+        DECLARE
+            p_error VARCHAR2(400);
         BEGIN
             :new.id := diplom.answer_seq.nextval;
-            :new.creation_date := trunc(sysdate);
+            :new.creation_date := sysdate;
             begin
                 select id into :new.task from DIPLOM.TASKS where id = :new.task;
                     exception when others then raise_application_error(-20005, 'Не существует задания с id = '||:new.task);
@@ -462,9 +464,9 @@
             then
                 :new.primary := 'Y';
             else
-                :new.rating := DIPLOM.fnd_tasks.get_rating(:new.answer, :new.task);
+                :new.rating := DIPLOM.fnd_tasks.get_rating(:new.answer, :new.task, p_error);
                 if :new.rating < 0 then
-                    raise_application_error(-20006, SQLERRM);
+                    raise_application_error(-20006, p_error);
                 end if;
             end if;
         END;
