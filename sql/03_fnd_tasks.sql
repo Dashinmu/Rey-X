@@ -194,6 +194,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
     BEGIN
         if p_task_type = 1 then res := 'ACCEPT';
         elsif p_task_type = 2 then res := upper(replace(trim(p_answer), ' ', ';'));
+        elsif p_task_type = 3 then res := upper(replace(trim(p_answer), chr(39), ''''));
         else res := upper(trim(p_answer));
         end if;
         return res;

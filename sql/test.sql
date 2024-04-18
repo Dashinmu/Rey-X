@@ -1,5 +1,7 @@
 set SERVEROUTPUT on;
 
+select chr(39) from dual;
+
 declare
 begin
     dbms_output.put_line('Hi');
@@ -359,6 +361,40 @@ begin
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 --Проверка работы DBMS_SQL (СЛОЖНЫЙ, НО НАДЁЖНЫЙ!)
 declare
