@@ -463,6 +463,9 @@
                 :new.primary := 'Y';
             else
                 :new.rating := DIPLOM.fnd_tasks.get_rating(:new.answer, :new.task);
+                if :new.rating < 0 then
+                    raise_application_error(-20006, SQLERRM);
+                end if;
             end if;
         END;
 
