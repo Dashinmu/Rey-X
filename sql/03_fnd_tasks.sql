@@ -65,6 +65,30 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         , p_error out VARCHAR2
     );
 
+    --Всего заданий в этапе
+    FUNCTION get_stage_tasks(
+        p_stage in NUMBER
+        , p_date in DATE
+    ) RETURN NUMBER;
+
+    --Узнать есть ли у студента верный ответ на задание
+    FUNCTION get_student_true_answer(
+        p_task in NUMBER
+        , p_student in NUMBER
+    ) RETURN NUMBER; --вернуть ид ответа
+
+    --Прогресс студента в этапе
+    FUNCTION get_student_progress_stage(
+        p_stage in NUMBER
+        , p_student in NUMBER
+    ) RETURN NUMBER;
+
+    --Всего начато заданий
+    FUNCTION get_student_all_progress_stage(
+        p_stage in NUMBER
+        , p_student in NUMBER
+    ) RETURN NUMBER;
+
 END fnd_tasks;
 
 CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
@@ -473,6 +497,95 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         commit;
 
         EXCEPTION WHEN OTHERS THEN p_error := SQLERRM;
+    END;
+
+    --Всего заданий в этапе
+    FUNCTION get_stage_tasks(
+        p_stage in NUMBER
+        , p_date in DATE
+    ) RETURN NUMBER IS
+        res NUMBER(2);
+    BEGIN
+        select
+            max(NUM_TASK)
+        into
+            res
+        from
+            DIPLOM.TASK_RELATIONS
+        where 1 = 1
+            and STAGE = p_stage
+            and p_date between START_DATE and END_DATE
+        ;
+        return res;
+    END;
+
+    --Узнать есть ли у студента верный ответ на задание
+    FUNCTION get_student_true_answer(
+        p_task in NUMBER
+        , p_student in NUMBER
+    ) RETURN NUMBER IS --вернуть ид ответа
+        res NUMBER(6);
+    BEGIN
+        select
+            ID
+        into
+            res
+        from
+            DIPLOM.ANSWER
+        where 1 = 1
+            and PERSON = p_student
+            and TASK = p_task
+            and RATING in (1)
+            and ROWNUM = 1
+        ;
+        return res;
+
+        EXCEPTION WHEN OTHERS THEN return -1;
+    END;
+
+    --Прогресс студента в этапе
+    FUNCTION get_student_progress_stage(
+        p_stage in NUMBER
+        , p_student in NUMBER
+    ) RETURN NUMBER IS
+        res NUMBER(2);
+    BEGIN
+        select
+            count(distinct a.TASK)
+        into
+            res
+        from
+            DIPLOM.ANSWER a
+            join DIPLOM.TASK_RELATIONS tr
+                on tr.STAGE = p_stage
+                and a.TASK = tr.TASK
+        where 1 = 1
+            and a.PERSON = p_student
+            and a.RATING in (1)
+        ;
+        return res;
+    END;
+
+    --Всего начато заданий
+    FUNCTION get_student_all_progress_stage(
+        p_stage in NUMBER
+        , p_student in NUMBER
+    ) RETURN NUMBER IS
+        res NUMBER(2);
+    BEGIN
+        select
+            count(distinct a.TASK)
+        into
+            res
+        from
+            DIPLOM.ANSWER a
+            join DIPLOM.TASK_RELATIONS tr
+                on tr.STAGE = p_stage
+                and a.TASK = tr.TASK
+        where 1 = 1
+            and a.PERSON = p_student
+        ;
+        return res;
     END;
 
 END fnd_tasks;

@@ -544,7 +544,7 @@
         BEFORE INSERT ON DIPLOM.give_stages FOR EACH ROW
         BEGIN
             :new.id := DIPLOM.give_stages_seq.nextval;
-            :new.ASSIGNED_DATE := trunc(sysdate);
+            :new.ASSIGNED_DATE := sysdate;
         END;
 
         /* Удалить таблицу */

@@ -51,18 +51,38 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
     WHERE 1 = 1
 ;
 
---Представление прогресса выполнения заданий студентами
-CREATE OR REPLACE VIEW DIPLOM.PRACTICE_PROGRESS AS
+--Представление прогресса выполнения заданий студентами #1
+CREATE OR REPLACE VIEW DIPLOM.PRACTICE_PROGRESS_INFO AS
     SELECT
         student.ID as STUDENT_ID
         , student.LOGIN as STUDENT_NAME
+        , s.ID as STAGE_ID
         , s.STAGE_NAME as STAGE_NAME
-        , to_char(gs.ASSIGNED_DATE, 'dd.mm.yyyy') as ASSIGNED_DATE
+        , s.MEANING as STAGE_MEANING
+        , DIPLOM.FND_TASKS.GET_STAGE_TASKS(
+            p_stage => s.ID
+            , p_date => student.START_DATE
+        ) as STAGE_NUM_TASKS
+        , to_char(gs.ASSIGNED_DATE, 'dd.mm.yyyy hh24:mm') as STAGE_ASSIGNED_DATE
         , u.LOGIN as ASSIGNED_BY
-        , t.MEANING as TASK_NAME
+        , null as TO_TASK
+        , t.ID as TASK_ID
         , tr.NUM_TASK as TASK_NUM
-        , a.RATING
-        , a.ANSWER
+        , t.MEANING as TASK_NAME
+        , t.DESCRIP as TASK_DESC
+        , true_a.ANSWER as FIRST_TRUE_ANSWER
+        , true_a.CREATION_DATE as FIRST_TRUE_ANSWER_DATE
+        , last_a.RATING as LAST_RATING
+        , last_a.ANSWER as LAST_ANSWER
+        , last_a.CREATION_DATE as LAST_DATE
+        , DIPLOM.FND_TASKS.GET_STUDENT_PROGRESS_STAGE(
+            p_stage => s.ID
+            , p_student => student.ID
+        ) as TASK_COMPLETE_IN_STAGE
+        , DIPLOM.FND_TASKS.GET_STUDENT_ALL_PROGRESS_STAGE(
+            p_stage => s.ID
+            , p_student => student.ID
+        ) as TASK_ANSWER_IN_STAGE
     FROM
         DIPLOM.USERS student
         left join DIPLOM.GIVE_STAGES gs
@@ -75,9 +95,14 @@ CREATE OR REPLACE VIEW DIPLOM.PRACTICE_PROGRESS AS
             on tr.STAGE = gs.STAGE
         left join DIPLOM.TASKS t
             on t.ID = tr.TASK
-        left join DIPLOM.ANSWER a
-            on a.TASK = t.ID
-            and student.ID = a.PERSON
+        left join DIPLOM.ANSWER last_a
+            on last_a.TASK = t.ID
+            and student.ID = last_a.PERSON
+        left join DIPLOM.ANSWER true_a
+            on true_a.ID = DIPLOM.FND_TASKS.GET_STUDENT_TRUE_ANSWER(
+                p_task => t.ID
+                , p_student => student.ID
+            )
     WHERE 1 = 1
         and student.TYPE not in (1, 2)
 ;
