@@ -31,6 +31,7 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
         p_login in VARCHAR2
         , p_password in VARCHAR2
         , p_user_type out NUMBER
+        , p_user_id out NUMBER
     );
 
     --Ввести новый тип пользователя
@@ -174,12 +175,15 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         p_login in VARCHAR2
         , p_password in VARCHAR2
         , p_user_type out NUMBER
+        , p_user_id out NUMBER
     ) IS
     BEGIN
         select
             type
+            , id
         into
             p_user_type
+            , p_user_id
         from
             DIPLOM.USERS
         where 1 = 1
@@ -187,7 +191,7 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
             and password = get_password(p_password)
         ;
         --Если пользователь не найден возвращаем 0
-        exception when others then p_user_type := 0;
+        exception when others then p_user_type := 0; p_user_id := 0;
     END valid_user;
 
     --Ввести новый тип пользователя

@@ -536,7 +536,7 @@
             , ASSIGNED_DATE DATE
             , ASSIGNED_BY NUMBER(5) not null
             , CONSTRAINT give_stages_pk PRIMARY KEY (id)
-            , CONSTRAINT give_stages_uniq UNIQUE (student_id, stage, assigned_date)
+            , CONSTRAINT give_stages_uniq UNIQUE (student_id, stage)
         );
 
         /* Создать триггер */

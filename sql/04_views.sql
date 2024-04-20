@@ -98,6 +98,10 @@ CREATE OR REPLACE VIEW DIPLOM.PRACTICE_PROGRESS_INFO AS
         left join DIPLOM.ANSWER last_a
             on last_a.TASK = t.ID
             and student.ID = last_a.PERSON
+            and last_a.ID = DIPLOM.FND_TASKS.GET_LAST_ANSWER_TIME(
+                p_task => t.ID
+                , p_student => student.ID
+            )
         left join DIPLOM.ANSWER true_a
             on true_a.ID = DIPLOM.FND_TASKS.GET_STUDENT_TRUE_ANSWER(
                 p_task => t.ID

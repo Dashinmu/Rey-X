@@ -332,7 +332,10 @@ begin
         , p_error => p_error
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
-    p_error := null;
+end;
+declare
+    p_error VARCHAR2(200);
+begin
     DIPLOM.FND_TASKS.give_stage(
         p_user => 1
         , p_stage => 2
@@ -353,6 +356,7 @@ begin
         , p_error => p_error
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE('1 - '||p_error); end if;
+    p_error := null;
     diplom.fnd_tasks.add_answer(
         p_user => 3
         , p_answer => '2 4'
@@ -360,6 +364,7 @@ begin
         , p_error => p_error
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE('2 - '||p_error); end if;
+    p_error := null;
     diplom.fnd_tasks.add_answer(
         p_user => 3
         , p_answer => 'SELECT trunc(sysdate) FROM dual'
@@ -367,6 +372,7 @@ begin
         , p_error => p_error
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE('3 - '||p_error); end if;
+    p_error := null;
     diplom.fnd_tasks.add_answer(
         p_user => 3
         , p_answer => 'SELECT trunc(sysdate) sd FROM dual'
@@ -374,6 +380,7 @@ begin
         , p_error => p_error
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE('4 - '||p_error); end if;
+    p_error := null;
     diplom.fnd_tasks.add_answer(
         p_user => 3
         , p_answer => '1 4'
@@ -383,25 +390,48 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE('5 - '||p_error); end if;
 end;
 
+/* Создать ответы студент*/
+declare
+    p_error VARCHAR2(200);
+begin
+    diplom.fnd_tasks.add_answer(
+        p_user => 3
+        , p_answer => '2 4 5'
+        , p_task => 2
+        , p_error => p_error
+    );
+end;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Создать ответы студент*/
+declare
+    p_error VARCHAR2(200);
+begin
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('2 - '||p_error); end if;
+    p_error := null;
+    diplom.fnd_tasks.add_answer(
+        p_user => 3
+        , p_answer => 'SELECT trunc(sysdate) FROM dual'
+        , p_task => 3
+        , p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('3 - '||p_error); end if;
+    p_error := null;
+    diplom.fnd_tasks.add_answer(
+        p_user => 3
+        , p_answer => 'SELECT trunc(sysdate) sd FROM dual'
+        , p_task => 4
+        , p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('4 - '||p_error); end if;
+    p_error := null;
+    diplom.fnd_tasks.add_answer(
+        p_user => 3
+        , p_answer => '1 4'
+        , p_task => 5
+        , p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE('5 - '||p_error); end if;
+end;
 
 
 

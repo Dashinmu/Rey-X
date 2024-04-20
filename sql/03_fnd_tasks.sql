@@ -89,6 +89,12 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         , p_student in NUMBER
     ) RETURN NUMBER;
 
+    --Получить id последнего ответа
+    FUNCTION get_last_answer_time(
+        p_task in NUMBER
+        , p_student in NUMBER
+    ) RETURN NUMBER;
+
 END fnd_tasks;
 
 CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
@@ -586,6 +592,37 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             and a.PERSON = p_student
         ;
         return res;
+    END;
+
+    --Получить id последнего ответа
+    FUNCTION get_last_answer_time(
+        p_task in NUMBER
+        , p_student in NUMBER
+    ) RETURN NUMBER IS
+        res NUMBER;
+    BEGIN
+        select
+            a.ID
+        into
+            res
+        from 
+            DIPLOM.ANSWER a
+        where 1 = 1
+            and a.PERSON = p_student
+            and a.TASK = p_task
+            and a.CREATION_DATE = (
+                select
+                    max(CREATION_DATE)
+                from
+                    DIPLOM.ANSWER
+                where 1 = 1
+                    and PERSON = a.PERSON
+                    and TASK = a.TASK
+            )
+        ;
+        return res;
+
+        EXCEPTION WHEN OTHERS THEN return -1;
     END;
 
 END fnd_tasks;

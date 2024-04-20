@@ -22,12 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Формируем запрос на проверку данных пользователя
-        $sql = "BEGIN diplom.fnd_user.valid_user( :username, :password, :usertype ); END;";
+        $sql = "BEGIN diplom.fnd_user.valid_user( :username, :password, :usertype, :userid ); END;";
         $stmt = oci_parse($conn, $sql);
         // Ввод параметров
         oci_bind_by_name($stmt, ':username', $userlogin);
         oci_bind_by_name($stmt, ':password', $password);
-        oci_bind_by_name($stmt, ':usertype', $usertype, 1, SQLT_INT);
+        oci_bind_by_name($stmt, ':usertype', $usertype, 2, SQLT_INT);
+        oci_bind_by_name($stmt, ':userid', $userid, 5, SQLT_INT);
 
         // Выполняем запрос
         if (oci_execute($stmt)) {
@@ -36,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 session_start();
                 $_SESSION["userlogin"] = $userlogin;
                 $_SESSION["usertype"] = $usertype;
+                $_SESSION["userid"] = $userid;
                 header("Location: /index.php?access=$usertype");
                 exit();
             } else {
