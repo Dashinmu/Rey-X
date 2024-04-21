@@ -69,8 +69,6 @@ if ($usertype != 1 && $usertype != 2) {
                     <span>N/A</span>
                 </div>
             </div>
-
-
         </div>
 
         <!-- Этапы и история заданий -->
@@ -78,108 +76,77 @@ if ($usertype != 1 && $usertype != 2) {
             <div class = "label">
                 <span>Этапы практики</span>
             </div>
-            <div class = "stages-item">
-                <div class = "stage" id = "stage2" onclick="toggleStage('stage2', 'stage2-tasks')">
-                    <div class = "stage-info">
-                        <div class = "stage-note-2">
-                            <span class = "note-text">PL/SQL</span>
-                            <span class = "note-text">Новичок</span>
+            <?php 
+                $all_info = oci_parse($conn, $get_student_all_stage);
+                oci_bind_by_name($all_info, ":student_id", $userid);
+                oci_execute($all_info);
+                $last_row = 0;
+            ?>
+                <div class = "stages-item">
+            <?php
+                while ( $row = oci_fetch_array($all_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
+                    $status = "";
+                    if (is_null($row['FIRST_TRUE_ANSWER']) && !is_null($row['LAST_DATE'])) {$status = "wrong";}
+                    if (is_null($row['LAST_DATE'])) {$status = "inactive";}
+                    if ($last_row <> $row['STAGE_ID'] && $last_row <> 0) {
+            ?>              
+                            </div>
                         </div>
-                        <div class = "stage-info-2">
-                            <span class = "stage-name">Stage #2</span>
-                            <span class = "stage-desc">Введение в работу с PL/SQL</span>
-                            <span class = "stage-tasks">Выполнено заданий: 3/13</span>
-                        </div>
-                    </div>
-                    <div 
-                        class = "progress"
-                        role = "progressbar"
-                        data-correct-task = "1"
-                        data-all-task = "13"
-                    >
-                        <div class = "progress-bar"></div>
-                    </div>
-                </div>
-                <div class = "tasks hidden" id = 'stage2-tasks'>
-                    <div class = "task wrong">
-                        <span class = "task-stage-name">Stage #2<span class = "task-num"> - 3</span></span>
-                        <span class = "task-descrip">Task 2-3 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score wrong"> Не решено</span></span>
-                    </div>
-                    <div class = "task wrong">
-                        <span class = "task-stage-name">Stage #2<span class = "task-num"> - 2</span></span>
-                        <span class = "task-descrip">Task 2-2 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score wrong"> Не решено</span></span>
-                    </div>
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #2<span class = "task-num"> - 1</span></span>
-                        <span class = "task-descrip">Task 2-1 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 10</span></span>
-                        <span class = "task-descrip">Task 1-10 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 9</span></span>
-                        <span class = "task-descrip">Task 1-9 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 8</span></span>
-                        <span class = "task-descrip">Task 1-8 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 7</span></span>
-                        <span class = "task-descrip">Task 1-7 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
-                </div>
-            </div>
-            <div class = "stages-item">
-                <div class = "stage" id = "stage1" onclick="toggleStage('stage1', 'stage1-tasks')">
-                    <div class = "stage-info">
-                        <div class = "stage-note-2">
-                            <span class = "note-text">Ознакомление</span>
-                        </div>
-                        <div class = "stage-info-2">
-                            <span class = "stage-name">Stage #1</span>
-                            <span class = "stage-desc">Ознакомление с практикой</span>
-                            <span class = "stage-tasks">Выполнено заданий: 10/10</span>
-                        </div>
-                    </div>
-                    <div 
-                        class = "progress"
-                        role = "progressbar"
-                        data-correct-task = "10"
-                        data-all-task = "10"
-                    >
-                        <div class = "progress-bar"></div>
-                    </div>
-                </div>
-                <div class = "tasks hidden" id = "stage1-tasks">
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 10</span></span>
-                        <span class = "task-descrip">Task 1-10 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 9</span></span>
-                        <span class = "task-descrip">Task 1-9 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 8</span></span>
-                        <span class = "task-descrip">Task 1-8 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
-                    <div class = "task">
-                        <span class = "task-stage-name">Stage #1<span class = "task-num"> - 7</span></span>
-                        <span class = "task-descrip">Task 1-7 description</span>
-                        <span class = "task-rating">Статус:<span class = "task-rating-score"> Решено</span></span>
-                    </div>
+                        <div class = "stages-item">
+            <?php
+                    }
+                    if ($last_row <> $row['STAGE_ID'])
+                    {
+                        $last_row = $row['STAGE_ID'];
+            ?>
+                            <div class = "stage" id = "stage<?php echo $row['STAGE_ID']?>" onclick="toggleStage('stage<?php echo $row['STAGE_ID']?>', 'stage<?php echo $row['STAGE_ID']?>-tasks')">
+                                <div class = "stage-info">
+                                    <div class = "stage-note-2">
+                                        <span class = "note-text"><?php echo "Ознакомление" ?></span>
+                                    </div>
+                                    <div class = "stage-info-2">
+                                        <span class = "stage-name"><?php echo $row['STAGE_NAME'] ?></span>
+                                        <span class = "stage-desc"><?php echo $row['STAGE_MEANING'] ?></span>
+                                        <span class = "stage-tasks"><?php echo "Выполнено заданий: ".$row['TASK_ANSWER_IN_STAGE']."/".$row['STAGE_NUM_TASKS'] ?></span>
+                                    </div>
+                                </div>
+                                <div 
+                                    class = "progress"
+                                    role = "progressbar"
+                                    data-correct-task = "<?php echo $row['TASK_COMPLETE_IN_STAGE'] ?>"
+                                    data-all-task = "<?php echo $row['STAGE_NUM_TASKS'] ?>"
+                                >
+                                    <div class = "progress-bar"></div>
+                                </div>
+                            </div>
+                            <div class = "tasks hidden" id = "stage<?php echo $row['STAGE_ID']?>-tasks">
+                                <div class = "task <?php echo $status ?>">
+                                    <span class = "task-stage-name"><?php echo $row['STAGE_NAME'] ?><span class = "task-num"> - <?php echo $row['TASK_NUM'] ?></span></span>
+                                    <span class = "task-descrip"><?php echo $row['TASK_NAME'] ?></span>
+                                    <span class = "task-rating">Статус:
+                                        <span class = "task-rating-score <?php echo $status ?>"> 
+                                            <?php if (($status == "wrong") || ($status == "inactive")) {echo "Не решено";} else {echo "Решено";} ?>
+                                        </span>
+                                    </span>
+                                </div>
+            <?php
+                    } else {
+            ?>
+                                <div class = "task <?php echo $status ?>">
+                                    <span class = "task-stage-name"><?php echo $row['STAGE_NAME'] ?><span class = "task-num"> - <?php echo $row['TASK_NUM'] ?></span></span>
+                                    <span class = "task-descrip"><?php echo $row['TASK_NAME'] ?></span>
+                                    <span class = "task-rating">Статус:
+                                        <span class = "task-rating-score <?php echo $status ?>"> 
+                                            <?php if (($status == "wrong") || ($status == "inactive")) {echo "Не решено";} else {echo "Решено";} ?>
+                                        </span>
+                                    </span>
+                                </div>
+            <?php
+                    }
+                    unset($row);
+                }
+                oci_free_statement($all_info);
+            ?>
                 </div>
             </div>
         </div>

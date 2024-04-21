@@ -218,6 +218,22 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 end;
 
+/* Создать задание */
+declare
+    p_id_task NUMBER(4);
+    p_error VARCHAR2(200);
+begin
+    DIPLOM.fnd_tasks.add_task(
+        p_meaning => 'Задание 3: Основы запросов PL/SQL'
+        , p_desc => 'Напишите запрос...'
+        , p_type => 3
+        , p_author => 1 
+        , p_id_task => p_id_task
+        , p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+end;
+
 /* Связать задания */
 declare
     p_error VARCHAR2(200);
@@ -280,6 +296,20 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 end;
 
+/* Связать задания */
+declare
+    p_error VARCHAR2(200);
+begin
+    diplom.fnd_tasks.connect_task(
+        p_stage => 2
+        , p_task => 21
+        , p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+    p_error := null;
+end;
+
+
 /* Создать ответы руководитель*/
 declare
     p_error VARCHAR2(200);
@@ -316,6 +346,19 @@ begin
         p_user => 1
         , p_answer => '  1'
         , p_task => 5
+        , p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+end;
+
+/* Создать ответы руководитель*/
+declare
+    p_error VARCHAR2(200);
+begin
+    diplom.fnd_tasks.add_answer(
+        p_user => 1
+        , p_answer => 'SELECT * FROM DIPLOM.users WHERE type = 1'
+        , p_task => 4
         , p_error => p_error
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
@@ -432,9 +475,6 @@ begin
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE('5 - '||p_error); end if;
 end;
-
-
-
 
 
 

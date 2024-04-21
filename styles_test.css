@@ -530,6 +530,11 @@ main {
     border: 2px solid #CC2B2B;
 }
 
+.task.inactive {
+    opacity: 50%;
+    border: 2px solid #FFFFFF;
+}
+
 .task-stage-name {
     color: #3BB273;
 }
@@ -544,6 +549,10 @@ main {
 
 .task-rating-score.wrong {
     color: #CC2B2B;
+}
+
+.task-rating-score.inactive {
+    color: #8d8d8d;
 }
 
 .stages-item .stage {

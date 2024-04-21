@@ -128,16 +128,18 @@ if ($usertype != 1 && $usertype != 2) {
                 oci_bind_by_name($tasks_info, ":student_id", $userid);
                 oci_execute($tasks_info);
                 while ( $row = oci_fetch_array($tasks_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
-                    echo "
-                    <div class = 'task "; if(is_null($row['FIRST_TRUE_ANSWER'])) {echo "wrong";} echo "'>
-                        <span class = 'task-stage-name'>".$row['STAGE_NAME']."<span class = 'task-num'> - ".$row['TASK_NUM']."</span></span>
-                        <span class = 'task-descrip'>".$row['TASK_NAME']."</span>
-                        <span class = 'task-rating'>Статус:<span class = 'task-rating-score ";
-                        if(is_null($row['FIRST_TRUE_ANSWER'])) {echo "wrong '> Не решено</span>";} else {echo "'> Решено</span>";} echo "
-                            </span>
-                    </div>
-                    ";
-                    unset($row);
+                    if (!is_null($row['LAST_DATE'])) {
+                        echo "
+                        <div class = 'task "; if(is_null($row['FIRST_TRUE_ANSWER'])) {echo "wrong";} echo "'>
+                            <span class = 'task-stage-name'>".$row['STAGE_NAME']."<span class = 'task-num'> - ".$row['TASK_NUM']."</span></span>
+                            <span class = 'task-descrip'>".$row['TASK_NAME']."</span>
+                            <span class = 'task-rating'>Статус:<span class = 'task-rating-score ";
+                            if(is_null($row['FIRST_TRUE_ANSWER'])) {echo "wrong '> Не решено</span>";} else {echo "'> Решено</span>";} echo "
+                                </span>
+                        </div>
+                        ";
+                        unset($row);
+                    }
                 }
                 oci_free_statement($tasks_info);
             ?>
