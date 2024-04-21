@@ -529,6 +529,7 @@ main {
 .task-info.active {
     margin: 10px;
     margin-bottom: 0px;
+    opacity: 100%;
 }
 
 .task-info:hover {

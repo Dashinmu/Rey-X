@@ -202,7 +202,11 @@ require_once "modal.php";
 
     $(function() {
         $(".task-info").click(function() {
-            $(this).toggleClass("active");
+            if ($(this).hasClass("inactive")) {
+                $(this).toggleClass("active").toggleClass("inactive");
+            } else {
+                $(this).toggleClass("active");
+            }
             $(this).closest(".task").children(".task-answer").toggleClass("hidden");
         })
     });
