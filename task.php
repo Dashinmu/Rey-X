@@ -120,26 +120,48 @@ if ($usertype != 1 && $usertype != 2) {
                                 </div>
                             </div>
                             <div class = "tasks hidden" id = "stage<?php echo $row['STAGE_ID']?>-tasks">
-                                <div class = "task <?php echo $status ?>">
-                                    <span class = "task-stage-name"><?php echo $row['STAGE_NAME'] ?><span class = "task-num"> - <?php echo $row['TASK_NUM'] ?></span></span>
-                                    <span class = "task-descrip"><?php echo $row['TASK_NAME'] ?></span>
-                                    <span class = "task-rating">Статус:
-                                        <span class = "task-rating-score <?php echo $status ?>"> 
-                                            <?php if (($status == "wrong") || ($status == "inactive")) {echo "Не решено";} else {echo "Решено";} ?>
+                                <div class = "task">
+                                    <div class = "task-info <?php echo $status ?>">
+                                        <span class = "task-stage-name"><?php echo $row['STAGE_NAME'] ?><span class = "task-num"> - <?php echo $row['TASK_NUM'] ?></span></span>
+                                        <span class = "task-descrip"><?php echo $row['TASK_NAME'] ?></span>
+                                        <span class = "task-rating">Статус:
+                                            <span class = "task-rating-score <?php echo $status ?>"> 
+                                                <?php if (($status == "wrong") || ($status == "inactive")) {echo "Не решено";} else {echo "Решено";} ?>
+                                            </span>
                                         </span>
-                                    </span>
+                                    </div>
+                                    <div class = "task-answer <?php echo $status ?> hidden">
+                                        <div class = "task-answer-desc">
+                                            <span class = "task-answer-span"><?php echo $row['TASK_DESC'] ?></span>
+                                        </div>
+                                        <div class = "task-answer-area">
+                                            <textarea class = "textarea" placeholder = "Введите решение"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-primary btn-block <?php echo $status ?>">Отправить на проверку</button>
+                                    </div>
                                 </div>
             <?php
                     } else {
             ?>
-                                <div class = "task <?php echo $status ?>">
-                                    <span class = "task-stage-name"><?php echo $row['STAGE_NAME'] ?><span class = "task-num"> - <?php echo $row['TASK_NUM'] ?></span></span>
-                                    <span class = "task-descrip"><?php echo $row['TASK_NAME'] ?></span>
-                                    <span class = "task-rating">Статус:
-                                        <span class = "task-rating-score <?php echo $status ?>"> 
-                                            <?php if (($status == "wrong") || ($status == "inactive")) {echo "Не решено";} else {echo "Решено";} ?>
+                                <div class = "task">
+                                    <div class = "task-info <?php echo $status ?>">
+                                        <span class = "task-stage-name"><?php echo $row['STAGE_NAME'] ?><span class = "task-num"> - <?php echo $row['TASK_NUM'] ?></span></span>
+                                        <span class = "task-descrip"><?php echo $row['TASK_NAME'] ?></span>
+                                        <span class = "task-rating">Статус:
+                                            <span class = "task-rating-score <?php echo $status ?>"> 
+                                                <?php if (($status == "wrong") || ($status == "inactive")) {echo "Не решено";} else {echo "Решено";} ?>
+                                            </span>
                                         </span>
-                                    </span>
+                                    </div>
+                                    <div class = "task-answer <?php echo $status ?> hidden">
+                                        <div class = "task-answer-desc">
+                                            <span class = "task-answer-span"><?php echo $row['TASK_DESC'] ?></span>
+                                        </div>
+                                        <div class = "task-answer-area">
+                                            <textarea class = "textarea" placeholder = "Введите решение"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-primary btn-block <?php echo $status ?>">Отправить на проверку</button>
+                                    </div>
                                 </div>
             <?php
                     }
@@ -177,6 +199,13 @@ require_once "modal.php";
         stageNum.classList.toggle("active");
         stageTasks.classList.toggle("hidden");
     }
+
+    $(function() {
+        $(".task-info").click(function() {
+            $(this).toggleClass("active");
+            $(this).closest(".task").children(".task-answer").toggleClass("hidden");
+        })
+    });
 
 </script>
 <?php

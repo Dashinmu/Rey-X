@@ -248,23 +248,23 @@ menu {
     border-top: none;
 }
 
-.modal-footer .btn-primary {
+.btn-primary {
     background-color: #63A583;
     border-color: #63A583;
 }
 
-.modal-footer .btn-primary:hover {
+.btn-primary:hover {
     background-color: #77bc9b;
     border-color: #77bc9b;
 }
 
-.modal-footer .btn-secondary {
+.btn-secondary {
     background-color: #a5402f;
     border-color: #a5402f;
     color: white;
 }
 
-.modal-footer .btn-secondary:hover {
+.btn-secondary:hover {
     color: #ccc;
 }
 
@@ -514,23 +514,32 @@ main {
 }
 
 .task {
+    display: grid;
+}
+
+.task-info {
+    display: flex;
+    justify-content: space-between;
     border: 2px solid #63A583;
     border-radius: 10px;
     padding: 10px;
-    margin: 10px;
-    display: flex;
-    justify-content: space-between;
+    margin: 1px;
 }
 
-.task:hover {
+.task-info.active {
+    margin: 10px;
+    margin-bottom: 0px;
+}
+
+.task-info:hover {
     background: #6e92d654;
 }
 
-.task.wrong {
+.task-info.wrong {
     border: 2px solid #CC2B2B;
 }
 
-.task.inactive {
+.task-info.inactive {
     opacity: 50%;
     border: 2px solid #FFFFFF;
 }
@@ -608,4 +617,84 @@ main {
     
 .stage-info .stage-note-2 {
     display: flex;
+}
+
+.task .task-answer {
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: 2px solid #63A583;
+    margin: 10px;
+    margin-top: -10px;
+    padding: 10px;
+    padding-top: 0;
+    display: grid;
+    justify-items: center;
+    border-top: none;
+    overflow-wrap: break-word;
+}
+
+.task-answer.hidden {
+    display: none;
+}
+
+.task-answer.wrong {
+    border: 2px solid #CC2B2B;
+    border-top: none;
+}
+
+.task-answer-desc {
+    padding: 10px;
+    padding-top: 20px;
+    max-width: 750px;
+}
+
+.task-answer.btn {
+    padding-top: 10px;
+}
+
+.textarea {
+    background-color: #e4dbd986;
+    caret-color: #6E93D6;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #E4DBD9;
+    border-radius: 10px;
+    overflow: auto;
+    resize: vertical;
+    color: #FFFFFF;
+    min-width: 750px;
+}
+
+.textarea:hover {
+    background: none;
+    transition: background-color 0.3s ease;
+}
+
+.task-answer .btn.wrong {
+    border: 2px solid #a5402f;
+    background-color: #a5402f;
+    opacity: 75%;
+}
+
+.task-answer .btn.wrong:hover {
+    opacity: 100%;
+}
+
+.task-answer .btn {
+    border: 2px solid #63A583;
+    background-color: #63A583;
+    opacity: 75%;
+}
+
+.task-answer .btn:hover {
+    opacity: 100%;
+}
+
+.task-answer .btn.inactive {
+    opacity: 75%;
+}
+
+.task-answer .btn:hover {
+    opacity: 100%;
 }
