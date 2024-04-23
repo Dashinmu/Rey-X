@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method = "post" action = "./scripts/change_password.php">
                     <div class="form-group">
                         <input type="password" class="form-control" id="oldPassword" placeholder="Введите старый пароль">
                     </div>

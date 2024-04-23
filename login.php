@@ -1,5 +1,4 @@
 <?php
-session_abort();
 $page_title = "Авторизация"; // Устанавливаем заголовок страницы
 require_once "header.php"; // Подключаем header.php
 ?>

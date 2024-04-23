@@ -28,7 +28,7 @@
                 <li class="menu-item first"><a href="/index.php" class="menu-link">Главная</a></li>
                 <li class="menu-item"><a href="/task.php" class="menu-link">Задания</a></li>
                 <li class="menu-item"><a href="#" class="menu-link" data-toggle="modal" data-target="#settingsModal">Изменить пароль</a></li>
-                <li class="menu-item last"><a href="/login.php" class="menu-link">Выйти</a></li>
+                <li class="menu-item last"><a href="./scripts/logout.php" class="menu-link">Выйти</a></li>
             </ul>
         </div>
         <div class="pages_link">

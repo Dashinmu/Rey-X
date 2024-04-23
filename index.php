@@ -130,7 +130,7 @@ if ($usertype != 1 && $usertype != 2) {
                 while ( $row = oci_fetch_array($tasks_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
                     if (!is_null($row['LAST_DATE'])) {
                         echo "
-                        <div class = 'task "; if(is_null($row['FIRST_TRUE_ANSWER'])) {echo "wrong";} echo "'>
+                        <div class = 'task-info "; if(is_null($row['FIRST_TRUE_ANSWER'])) {echo "wrong";} echo "'>
                             <span class = 'task-stage-name'>".$row['STAGE_NAME']."<span class = 'task-num'> - ".$row['TASK_NUM']."</span></span>
                             <span class = 'task-descrip'>".$row['TASK_NAME']."</span>
                             <span class = 'task-rating'>Статус:<span class = 'task-rating-score ";

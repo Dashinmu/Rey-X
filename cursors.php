@@ -73,4 +73,13 @@
             , STAGE_NAME
             , TASK_NUM DESC
     ";
+
+    $change_password = "
+        BEGIN diplom.fnd_user.change_password(
+            p_login => :p_login
+            , p_password_old => :p_password_old
+            , p_password_new => :p_password_new
+            , p_error => :p_error); 
+        END;
+    ";
 ?>

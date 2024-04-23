@@ -523,7 +523,7 @@ main {
     border: 2px solid #63A583;
     border-radius: 10px;
     padding: 10px;
-    margin: 1px;
+    margin: 3px;
 }
 
 .task-info.active {
