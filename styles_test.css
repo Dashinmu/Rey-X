@@ -67,18 +67,28 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
-    background-color: #a5402f; /* Красный цвет */
-    color: #fff; /* Белый цвет */
+    background-color: #ad5444;
+    color: #fff;
     border-radius: 5px;
+    border: 2px solid #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 9999;
-    display: none; /* Скрыть изначально */
+    display: none;
+}
+
+.display_notification {
+    display: grid;
+}
+
+.display_notification_accept {
+    background-color: #27925b;
+    display: grid;   
 }
 
 .notification::before {
     display: inline-block;
     color: #fff;
-    background-color: #a5402f;
+    background-color: #ad5444;
     width: 20px;
     height: 20px;
     line-height: 20px;
@@ -89,12 +99,16 @@ body {
 
 .notification button {
     background-color: #fff;
-    color: #a5402f;
+    color: #ad5444;
     border: none;
     padding: 8px 16px;
     cursor: pointer;
     border-radius: 5px;
     margin-top: 10px;
+}
+
+.display_notification_accept button {
+    color: #27925b;
 }
 
 .notification button:hover {
@@ -259,8 +273,8 @@ menu {
 }
 
 .btn-secondary {
-    background-color: #a5402f;
-    border-color: #a5402f;
+    background-color: #ad5444;
+    border-color: #ad5444;
     color: white;
 }
 
@@ -673,8 +687,8 @@ main {
 }
 
 .task-answer .btn.wrong {
-    border: 2px solid #a5402f;
-    background-color: #a5402f;
+    border: 2px solid #ad5444;
+    background-color: #ad5444;
     opacity: 75%;
 }
 

@@ -27,7 +27,7 @@ require_once "header.php"; // Подключаем header.php
             <script>
                 function showNotification(message) {
                     document.querySelector('.notification .message').innerText = message;
-                    document.querySelector('.notification').style.display = 'block';
+                    document.querySelector('.notification').style.display = 'grid';
                 }
 
                 function closeNotification() {

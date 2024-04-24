@@ -32,8 +32,31 @@
             </ul>
         </div>
         <div class="pages_link">
-            <a href="/index.php" class="btn btn-outline-light active btn-sm" aria-current="page">Главная</a>
-            <a href="/task.php" class="btn btn-outline-light btn-sm">Задания</a>
+            <a href="/index.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/index.php') { echo "active"; }?> btn-sm" aria-current="page">Главная</a>
+            <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Задания</a>
         </div>
     </div>
 </menu>
+
+<script>
+    function toggleMenu() {
+        var menuContent = document.getElementById("menuContent");
+        menuContent.classList.toggle("show-menu");
+    }
+
+    // Закрытие меню при клике вне его области
+    window.addEventListener('click', function(event) {
+        var menuContent = document.getElementById("menuContent");
+        var menuToggler = document.querySelector(".user-info");
+        var menuToggler1 = document.querySelector(".user-info img");
+        var menuToggler2 = document.querySelector(".user-info span");
+        if (
+            !menuContent.contains(event.target) 
+            && event.target !== menuToggler
+            && event.target !== menuToggler1
+            && event.target !== menuToggler2
+        ) {
+            menuContent.classList.remove("show-menu");
+        }
+    });
+</script>

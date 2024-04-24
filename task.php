@@ -1,20 +1,8 @@
 <?php
 $page_title = "Авторизация"; // Устанавливаем заголовок страницы
+require_once "./scripts/sessions.php";
 require_once "header.php"; // Подключаем header.php
 require_once "./scripts/db_connect.php"; // Подключаем файл с подключением к базе данных
-
-// Проверяем, установлена ли сессия и существует ли имя пользователя в сессии
-if (!isset($_SESSION['userlogin']) && !isset($_SESSION['usertype'])) {
-    // Если сессия не установлена или имя пользователя отсутствует, перенаправляем на страницу авторизации
-    header("Location: /login.php");
-    exit();
-} else {
-    // Перенаправлять если хитрые хотят поменять права доступа
-    if (!str_contains($_SERVER['REQUEST_URI'],"?access=$usertype")) {
-        header("Location: /task.php?access=$usertype");
-        exit();
-    };
-}
 
 $sql = "BEGIN diplom.fnd_user.get_personal_data(
     p_login => :userlogin

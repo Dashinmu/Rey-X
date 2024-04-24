@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["userlogin"] = $userlogin;
                 $_SESSION["usertype"] = $usertype;
                 $_SESSION["userid"] = $userid;
-                header("Location: /index.php?access=$usertype");
+                header("Location: /index.php");
                 exit();
             } else {
                 // Если пользователь не найден, перенаправляем обратно на страницу входа с ошибкой
