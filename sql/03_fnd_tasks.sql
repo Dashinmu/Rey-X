@@ -95,6 +95,11 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         , p_student in NUMBER
     ) RETURN NUMBER;
 
+    --Проверить существует ли ответ с флагом PRIMARY Y на задании
+    FUNCTION check_primary_answer(
+        p_task in NUMBER
+    ) RETURN BOOLEAN;
+
 END fnd_tasks;
 
 CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
@@ -623,6 +628,26 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         return res;
 
         EXCEPTION WHEN OTHERS THEN return -1;
+    END;
+
+    --Проверить существует ли ответ с флагом PRIMARY Y на задании
+    FUNCTION check_primary_answer(
+        p_task in NUMBER
+    ) RETURN BOOLEAN IS
+        flag NUMBER(1);
+    BEGIN
+        select
+            1
+        into
+            flag
+        from
+            diplom.ANSWER
+        where 1 = 1
+            and PRIMARY like 'Y'
+            and TASK = p_task
+        ;
+        return false;
+        exception when others then return true;
     END;
 
 END fnd_tasks;

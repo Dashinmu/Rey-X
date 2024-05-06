@@ -462,7 +462,10 @@
             end;
             if diplom.fnd_user.is_admin(:new.person)
             then
-                :new.primary := 'Y';
+                if DIPLOM.FND_TASKS.check_primary_answer(:new.task)
+                    then :new.primary := 'Y';
+                    else raise_application_error(-20007, p_error);
+                end if;
             else
                 :new.rating := DIPLOM.fnd_tasks.get_rating(:new.answer, :new.task, p_error);
                 if :new.rating < 0 then

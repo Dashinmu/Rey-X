@@ -476,11 +476,33 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE('5 - '||p_error); end if;
 end;
 
+declare
+    p_error VARCHAR2(400);
+begin
+    diplom.fnd_tasks.add_answer(
+        p_user => 3
+        , p_answer => 'SELECT trunc(sysdate) sd FROM dual'
+        , p_task => 4
+        , p_error => p_error
+    );
+     if p_error is not null then DBMS_OUTPUT.PUT_LINE('4 - '||p_error); end if;
+end;
 
+update diplom.answer set answer = upper('SELECT trunc(sysdate) "sdb" FROM dual') where id = 4;
+select * from diplom.answer;
+select * from diplom.tasks;
+select * from diplom.TASK_TYPES;
 
+select
+    *
+from
+    DIPLOM.answer
+where 1 = 1
+    and primary = 'Y'
+    and task = 4
+;
 
-
-
+DELETE FROM DIPLOM.ANSWER where ID = 103;
 
 
 
