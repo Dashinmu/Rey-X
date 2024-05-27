@@ -118,14 +118,14 @@ if ($usertype != 1 && $usertype != 2) {
                                             </span>
                                         </span>
                                     </div>
-                                    <div class = "task-answer <?php echo $status ?> hidden">
+                                    <div id = <?php echo $row['TASK_ID']?> class = "task-answer <?php echo $status ?> hidden">
                                         <div class = "task-answer-desc">
                                             <span class = "task-answer-span"><?php echo $row['TASK_DESC'] ?></span>
                                         </div>
                                         <div class = "task-answer-area">
                                             <textarea class = "textarea" placeholder = "Введите решение"></textarea>
                                         </div>
-                                        <button type="button" class="btn btn-primary btn-block <?php echo $status ?>">Отправить на проверку</button>
+                                        <button type="button" class="btn answer btn-primary btn-block <?php echo $status ?>">Отправить на проверку</button>
                                     </div>
                                 </div>
             <?php
@@ -141,14 +141,14 @@ if ($usertype != 1 && $usertype != 2) {
                                             </span>
                                         </span>
                                     </div>
-                                    <div class = "task-answer <?php echo $status ?> hidden">
+                                    <div id = <?php echo $row['TASK_ID']?> class = "task-answer <?php echo $status ?> hidden">
                                         <div class = "task-answer-desc">
                                             <span class = "task-answer-span"><?php echo $row['TASK_DESC'] ?></span>
                                         </div>
                                         <div class = "task-answer-area">
                                             <textarea class = "textarea" placeholder = "Введите решение"></textarea>
                                         </div>
-                                        <button type="button" class="btn btn-primary btn-block <?php echo $status ?>">Отправить на проверку</button>
+                                        <button type="button" class="btn answer btn-primary btn-block <?php echo $status ?>">Отправить на проверку</button>
                                     </div>
                                 </div>
             <?php
@@ -186,7 +186,7 @@ require_once "modal.php";
         var stageTasks = document.getElementById(tasksId);
         stageNum.classList.toggle("active");
         stageTasks.classList.toggle("hidden");
-    }
+    };
 
     $(function() {
         $(".task-info").click(function() {
@@ -196,6 +196,34 @@ require_once "modal.php";
                 $(this).toggleClass("active");
             }
             $(this).closest(".task").children(".task-answer").toggleClass("hidden");
+        })
+    });
+
+    $(function() {
+        $(".btn").click(function() {
+            var answer = $(this).closest(".task-answer").children(".task-answer-area").children(".textarea").val();
+            var taskID = $(this).closest(".task-answer").attr("id");
+            var user = <?php echo $userid?>;
+            $.ajax({
+                url:"./scripts/answer.php"
+                , type: "POST"
+                , data: {
+                    answer: answer
+                    , task: taskID
+                    , user: user
+                }
+                , success: function(response){
+                    var result = JSON.parse(response);
+                    if (result.message != "0") {
+                        alert(result.error_message);
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function(){
+                   alert("Не удалось отправить запрос на проверку...");
+                }
+            });
         })
     });
 
