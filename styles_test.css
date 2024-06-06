@@ -579,6 +579,55 @@ main {
     color: #8d8d8d;
 }
 
+.tasks .task-activity {
+    display: grid;
+    margin: 3px;
+    border: 2px solid #63A583;
+    border-radius: 10px;
+}
+
+.tasks .task-activity.wrong {
+    border: 2px solid #CC2B2B;
+}
+
+.tasks .task-activity:hover {
+    background: #6e92d654;
+}
+
+.tasks .task-activity .task-info:hover {
+    background: none;
+}
+
+.tasks .task-activity .task-info {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.tasks .task-activity .task-info .task-activity-date {
+    margin-left: 10px;
+    border-radius: 10px;
+    border: 2px solid #3BB273;
+    background: #3BB273;
+    /* padding: 4px; */
+    font-size: 11px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.tasks .task-activity .task-info.wrong .task-activity-date.wrong {
+    border: 2px solid #CC2B2B;
+    background: #CC2B2B;
+}
+
+.tasks .task-activity .task-activity-answer {
+    color: #b8b8b8;
+    padding-left: 13px;
+    padding-bottom: 7px;
+}
+
 .stages-item .stage {
     display: grid;
     max-width: none;

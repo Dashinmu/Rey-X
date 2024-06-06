@@ -12,20 +12,21 @@
                     <span class="user-role"><?php echo $user_type_mean?></span>
                 </div>
             </div>
-            <?php if (!is_null($tutor_fio)) 
-                echo "
+            <?php if (!is_null($tutor_fio) && $usertype != 1 && $usertype != 2) {?>
                     <div class='user-info'>
                         <img src='img/avatar.png' alt='User Avatar' class='avatar'>
                         <div class = 'user-detail'>
-                            <span class='text'>".$tutor_fio."</span>
-                            <span class='user-role'>".$tutor_type_mean."</span>
-                            <span class='user-phone'>".$tutor_phone."</span>
+                            <span class='text'><?php echo $tutor_fio?></span>
+                            <span class='user-role'><?php echo $tutor_type_mean?></span>
+                            <span class='user-phone'><?php echo $tutor_phone?></span>
                         </div>
                     </div>
-                ";
+            <?php
+            }
             ?>
             <ul class="menu-list">
                 <li class="menu-item first"><a href="/index.php" class="menu-link">Главная</a></li>
+                <?php if ($usertype == 1 || $usertype == 2) echo '<li class="menu-item"><a href="/accounts.php" class="menu-link">Пользователи</a></li>'?>
                 <li class="menu-item"><a href="/task.php" class="menu-link">Задания</a></li>
                 <li class="menu-item"><a href="#" class="menu-link" data-toggle="modal" data-target="#settingsModal">Изменить пароль</a></li>
                 <li class="menu-item last"><a href="./scripts/logout.php" class="menu-link">Выйти</a></li>
@@ -33,7 +34,14 @@
         </div>
         <div class="pages_link">
             <a href="/index.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/index.php') { echo "active"; }?> btn-sm" aria-current="page">Главная</a>
-            <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Задания</a>
+            <?php if ($usertype == 1 || $usertype == 2) {?>
+                <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Этапы</a>
+                <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Задания</a>
+                <a href="/index.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/history.php') { echo "active"; }?> btn-sm" aria-current="page">История</a>
+                <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/accounts.php') { echo "active"; }?> btn-sm">Пользователи</a>
+            <?php } else {?>
+                <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Задания</a>
+            <?php }?>
         </div>
     </div>
 </menu>

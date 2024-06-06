@@ -48,6 +48,7 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         , p_answer in VARCHAR2
         , p_task in NUMBER
         , p_error out VARCHAR2
+        , p_status out NUMBER
     );
 
     --Получить ответ
@@ -268,6 +269,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         , p_answer in VARCHAR2
         , p_task in NUMBER
         , p_error out VARCHAR2
+        , p_status out NUMBER
     ) IS
         res VARCHAR2(4000);
     BEGIN
@@ -282,7 +284,25 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             , res
         );
         commit;
-
+        select
+            rating
+        into
+            p_status
+        from
+            DIPLOM.ANSWER
+        where 1 = 1
+            and task = p_task
+            and person = p_user
+            and id = (
+                select
+                    max(id)
+                from
+                    DIPLOM.ANSWER
+                where 1 = 1
+                    and task = p_task
+                    and person = p_user
+            )
+        ;
         exception when others then p_error := SQLERRM;
     END add_answer;
 

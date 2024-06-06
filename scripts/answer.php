@@ -8,16 +8,17 @@ if (isset($_POST["answer"]) && isset($_POST["task"]) && isset($_POST["user"])) {
     $task = (int)$_POST["task"];
 
     if ($conn) {
-        $sql = "BEGIN diplom.fnd_tasks.add_answer(:user, :answer, :task, :error); END;";
+        $sql = "BEGIN diplom.fnd_tasks.add_answer(:user, :answer, :task, :error, :status); END;";
         $stmt = oci_parse($conn, $sql);
         oci_bind_by_name($stmt, ":user", $user);
         oci_bind_by_name($stmt, ":answer", $answer);
         oci_bind_by_name($stmt, ":task", $task);
         oci_bind_by_name($stmt, ":error", $error, 400, SQLT_CHR);
+        oci_bind_by_name($stmt, ":status", $status, 2, SQLT_INT);
     
         if (oci_execute($stmt)) {
             if (is_null($error)) {
-                echo json_encode(array("message" => 2, "error_message" => ""));
+                echo json_encode(array("message" => 2, "error_message" => $status));
             } else {
                 echo json_encode(array("message" => 1, "error_message" => $error));
             }

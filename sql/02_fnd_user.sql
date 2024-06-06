@@ -55,6 +55,8 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
     PROCEDURE get_personal_data(
         p_login in VARCHAR2
         , p_username out VARCHAR2
+        , p_userphone out VARCHAR2
+        , p_usermail out VARCHAR2
         , p_type_meaning out VARCHAR2
         , p_tutor_name out VARCHAR2
         , p_tutor_type out VARCHAR2
@@ -239,6 +241,8 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
     PROCEDURE get_personal_data(
         p_login in VARCHAR2
         , p_username out VARCHAR2
+        , p_userphone out VARCHAR2
+        , p_usermail out VARCHAR2
         , p_type_meaning out VARCHAR2
         , p_tutor_name out VARCHAR2
         , p_tutor_type out VARCHAR2
@@ -247,12 +251,16 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
     BEGIN
         SELECT
             pi.USER_NAME
+            , nvl(pi.USER_PHONE, 'UNKNOWN')
+            , nvl(pi.USER_MAIL, 'UNKNOWN')
             , pi.USER_TYPE
             , nvl(pi_t.USER_NAME, 'UNKNOWN')
             , nvl(pi_t.USER_TYPE, 'UNKNOWN')
             , nvl(pi_t.USER_PHONE, 'UNKNOWN')
         INTO
             p_username
+            , p_userphone
+            , p_usermail
             , p_type_meaning
             , p_tutor_name
             , p_tutor_type

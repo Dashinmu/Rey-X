@@ -7,6 +7,8 @@ require_once "./scripts/db_connect.php"; // Подключаем файл с п�
 $sql = "BEGIN diplom.fnd_user.get_personal_data(
     p_login => :userlogin
     , p_username => :user_fio
+    , p_userphone => :user_phone
+    , p_usermail => :user_mail
     , p_type_meaning => :user_type_mean
     , p_tutor_name => :tutor_fio
     , p_tutor_type => :tutor_type_mean
@@ -15,6 +17,8 @@ $sql = "BEGIN diplom.fnd_user.get_personal_data(
 $stmt = oci_parse($conn, $sql);
 oci_bind_by_name($stmt, ":userlogin", $userlogin);
 oci_bind_by_name($stmt, ":user_fio", $user_fio, 50, SQLT_CHR);
+oci_bind_by_name($stmt, ":user_phone", $user_phone, 50, SQLT_CHR);
+oci_bind_by_name($stmt, ":user_mail", $user_mail, 50, SQLT_CHR);
 oci_bind_by_name($stmt, ":user_type_mean", $user_type_mean, 50, SQLT_CHR);
 oci_bind_by_name($stmt, ":tutor_fio", $tutor_fio, 50, SQLT_CHR);
 oci_bind_by_name($stmt, ":tutor_type_mean", $tutor_type_mean, 50, SQLT_CHR);
@@ -136,6 +140,83 @@ if ($usertype != 1 && $usertype != 2) {
 
 
 <?php
+} else {
+?>
+<main>
+<!-- Личные данные -->
+<div class="personal-info">
+    <div class = "personal-avatar">
+        <img src="img/student.jpg" alt="User Avatar">
+    </div>
+    <div class = 'div-personal-name'>
+        <span><?php echo $user_fio?></span>
+    </div>
+    <div class="tutor-detail">
+        <span class="text"><b>Телефон:</b> <?php echo $user_phone?></span>
+        <span class="text"><b>Почта:</b> <?php echo $user_mail?></span>
+    </div>
+</div>
+
+<!-- Этапы и история заданий -->
+<div class = "personal-history">
+    <div class = "label">
+        <span>Активные практиканты</span>
+    </div>
+
+    <div class = "stages">
+        <!-- Запрос на получение последних 2х этапов -->
+        <?php 
+            $stage_info = oci_parse($conn, $get_active_student);
+            oci_bind_by_name($stage_info, ":user_id", $userid);
+            oci_execute($stage_info);
+            while ( $row = oci_fetch_array($stage_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
+        ?>
+            <div class = "task-info" >
+                <span class = "task-stage-name"><?php echo $row['STUDENT_NAME']?>
+                </span>
+            </div>
+        <?php
+                unset($row);
+            }
+            oci_free_statement($stage_info);
+        ?>
+    </div>
+
+    <div class = "label last">
+        <span>Последняя активность практикантов</span>
+    </div>
+    <div class = "tasks">
+        <!-- Запрос на получение последних 7ми заданий -->
+        <?php 
+            $tasks_info = oci_parse($conn, $get_student_activity);
+            oci_bind_by_name($tasks_info, ":user_id", $userid);
+            oci_execute($tasks_info);
+            while ( $row = oci_fetch_array($tasks_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
+                if (!is_null($row['LAST_DATE'])) {
+        ?>
+                <div class = "task-activity <?php if($row['RATING'] == 0) echo 'wrong'; ?>">
+                    <div class = "task-info <?php if($row['RATING'] == 0) echo 'wrong'; ?>" >
+                        <span class = "task-stage-name"><?php echo $row['STUDENT_NAME']?>
+                            <span class = 'task-num'>: <?php echo $row['STAGE_NAME']?>
+                                <span class = 'task-descrip'> - <?php echo $row['TASK_NAME']?></span>
+                            </span>
+                        </span>
+                        <span class = "task-activity-date <?php if($row['RATING'] == 0) echo 'wrong'; ?>">
+                            <?php echo $row['LAST_DATE']?>
+                        </span>
+                    </div>
+                    <span class = 'task-activity-answer'><?php echo $row['ANSWER']?></span>
+                </div>
+        <?php
+                    unset($row);
+                }
+            }
+            oci_free_statement($tasks_info);
+        ?>
+    </div>
+</div>
+</main>
+<?php 
 }
 require_once "modal.php";
 ?>

@@ -7,6 +7,8 @@ require_once "./scripts/db_connect.php"; // Подключаем файл с п�
 $sql = "BEGIN diplom.fnd_user.get_personal_data(
     p_login => :userlogin
     , p_username => :user_fio
+    , p_userphone => :user_phone
+    , p_usermail => :user_mail
     , p_type_meaning => :user_type_mean
     , p_tutor_name => :tutor_fio
     , p_tutor_type => :tutor_type_mean
@@ -15,6 +17,8 @@ $sql = "BEGIN diplom.fnd_user.get_personal_data(
 $stmt = oci_parse($conn, $sql);
 oci_bind_by_name($stmt, ":userlogin", $userlogin);
 oci_bind_by_name($stmt, ":user_fio", $user_fio, 50, SQLT_CHR);
+oci_bind_by_name($stmt, ":user_phone", $user_phone, 50, SQLT_CHR);
+oci_bind_by_name($stmt, ":user_mail", $user_mail, 50, SQLT_CHR);
 oci_bind_by_name($stmt, ":user_type_mean", $user_type_mean, 50, SQLT_CHR);
 oci_bind_by_name($stmt, ":tutor_fio", $tutor_fio, 50, SQLT_CHR);
 oci_bind_by_name($stmt, ":tutor_type_mean", $tutor_type_mean, 50, SQLT_CHR);
@@ -200,7 +204,7 @@ require_once "modal.php";
     });
 
     $(function() {
-        $(".btn").click(function() {
+        $(".answer").click(function() {
             var answer = $(this).closest(".task-answer").children(".task-answer-area").children(".textarea").val();
             var taskID = $(this).closest(".task-answer").attr("id");
             var user = <?php echo $userid?>;
@@ -215,6 +219,22 @@ require_once "modal.php";
                 , success: function(response){
                     var result = JSON.parse(response);
                     if (result.message != "0") {
+                        if (result.error_message != "0") {
+                            if(
+                                $(this).closest(".task").children("task-info").hasClass("wrong")
+                                && $(this).closest(".task").children("task-answer").hasClass("wrong")
+                            ) {
+                                $(this).closest(".task").children("task-info").toggleClass("wrong");
+                                $(this).closest(".task").children("task-answer").toggleClass("wrong");
+                            }
+                        } else {
+                            if (!$(this).closest(".task").children("task-info").hasClass("wrong")
+                                && !$(this).closest(".task").children("task-answer").hasClass("wrong")
+                            ){
+                                $(this).closest(".task").children("task-info").toggleClass("wrong");
+                                $(this).closest(".task").children("task-answer").toggleClass("wrong");
+                            }
+                        }
                         alert(result.error_message);
                     } else {
                         alert(result.error_message);
