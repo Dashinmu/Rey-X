@@ -6,7 +6,7 @@ require_once "cursors.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if (!empty($_POST["oldPassword"]) || !empty($_POST["newPassword"]) || !empty($_POST["confirmPassword"])) {
+    if (!empty($_POST["oldPassword"]) && !empty($_POST["newPassword"]) && !empty($_POST["confirmPassword"])) {
         if (!$conn) {
             echo "!CONN";
         }

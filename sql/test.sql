@@ -67,6 +67,9 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 end;
 
+select * from DIPLOM.USERS;
+delete from DIPLOM.USERS where id in (21, 22, 23, 24);
+
 /* Проверить пользователя */
 declare
     p_error NUMBER(1);

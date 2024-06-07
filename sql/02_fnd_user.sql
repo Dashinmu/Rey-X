@@ -14,6 +14,7 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
         , p_username in VARCHAR2 default null
         , p_email in VARCHAR2 default null
         , p_phone in VARCHAR2 default null
+        , p_start_date in VARCHAR2 default null
         , p_end_date in DATE default null
         , p_error out VARCHAR2
     );
@@ -88,48 +89,31 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         , p_username in VARCHAR2 default null
         , p_email in VARCHAR2 default null
         , p_phone in VARCHAR2 default null
+        , p_start_date in VARCHAR2 default null
         , p_end_date in DATE default null
         , p_error out VARCHAR2
     ) IS
     BEGIN
         --Присвоить имя пользователю
-        if p_username is null then 
-            INSERT INTO DIPLOM.USERS(
-                LOGIN
-                , PASSWORD
-                , TYPE
-                , NAME
-                , CONTACT_INFO1
-                , CONTACT_INFO2
-                , END_DATE
-            ) VALUES (
-                p_login
-                , p_password
-                , p_user_type
-                , p_login
-                , p_email
-                , p_phone
-                , p_end_date
-            );
-        else
-            INSERT INTO DIPLOM.USERS(
-                LOGIN
-                , PASSWORD
-                , TYPE
-                , NAME
-                , CONTACT_INFO1
-                , CONTACT_INFO2
-                , END_DATE
-            ) VALUES (
-                p_login
-                , p_password
-                , p_user_type
-                , p_username
-                , p_email
-                , p_phone
-                , p_end_date
-            );
-        end if;
+        INSERT INTO DIPLOM.USERS(
+            LOGIN
+            , PASSWORD
+            , TYPE
+            , NAME
+            , CONTACT_INFO1
+            , CONTACT_INFO2
+            , START_DATE
+            , END_DATE
+        ) VALUES (
+            p_login
+            , p_password
+            , p_user_type
+            , nvl(p_username, p_login)
+            , p_email
+            , p_phone
+            , p_start_date
+            , p_end_date
+        );
         commit;
 
         exception 

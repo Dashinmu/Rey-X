@@ -38,7 +38,7 @@
                 <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Этапы</a>
                 <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Задания</a>
                 <a href="/index.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/history.php') { echo "active"; }?> btn-sm" aria-current="page">История</a>
-                <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/accounts.php') { echo "active"; }?> btn-sm">Пользователи</a>
+                <a href="/accounts.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/accounts.php') { echo "active"; }?> btn-sm">Пользователи</a>
             <?php } else {?>
                 <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Задания</a>
             <?php }?>

@@ -75,7 +75,7 @@
         BEFORE INSERT ON diplom.users FOR EACH ROW            
         BEGIN
             :new.id := diplom.user_id_seq.nextval;
-            :new.start_date := trunc(sysdate);
+            if :new.start_date is null then :new.start_date := trunc(sysdate); end if;
             if :new.end_date is null then :new.end_date := to_date('01013872','ddmmyyyy'); end if;
             begin
                 select id into :new.type from diplom.user_type where id = :new.type;

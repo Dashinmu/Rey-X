@@ -158,15 +158,17 @@ if ($usertype != 1 && $usertype != 2) {
 </div>
 
 <!-- Этапы и история заданий -->
-<div class = "students-activity">
+<div class = "students-activity min">
     <div class = "label">
-        <span>Активные практиканты</span>
+        <span>Практиканты</span>
+        <a href="#" class="create-account-btn" data-toggle="modal" data-target="#createAccountModal">Создать учётную запись</a>
+        <!-- <span class = "create-account-btn">Создать учётную запись</span> -->
     </div>
 
     <div class = "active-students">
         <!-- Запрос на получение последних 2х этапов -->
         <?php 
-            $stage_info = oci_parse($conn, $get_active_student);
+            $stage_info = oci_parse($conn, $get_all_student);
             oci_bind_by_name($stage_info, ":user_id", $userid);
             oci_execute($stage_info);
             while ( $row = oci_fetch_array($stage_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
@@ -188,45 +190,6 @@ if ($usertype != 1 && $usertype != 2) {
             oci_free_statement($stage_info);
         ?>
     </div>
-
-    <div class = "label last">
-        <span>Последняя активность практикантов</span>
-    </div>
-    <div class = "tasks">
-        <!-- Запрос на получение последних 7ми заданий -->
-        <?php 
-            $tasks_info = oci_parse($conn, $get_student_activity);
-            oci_bind_by_name($tasks_info, ":user_id", $userid);
-            oci_execute($tasks_info);
-            while ( $row = oci_fetch_array($tasks_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
-                if (!is_null($row['LAST_DATE'])) {
-        ?>
-                <div class = "task-activity <?php if($row['RATING'] == 0) echo 'wrong'; ?>">
-                    <div class = "task-info <?php if($row['RATING'] == 0) echo 'wrong'; ?>" >
-                        <span class = "task-stage-name"><?php echo $row['STUDENT_NAME']?>
-                            <span class = 'task-num'>: <?php echo $row['STAGE_NAME']?>
-                                <span class = 'task-descrip'> - <?php 
-                                    if (strlen($row['TASK_NAME']) > 50) {
-                                        echo substr($row['TASK_NAME'], 0, 50).'...';
-                                    } else {
-                                        echo $row['TASK_NAME'];
-                                    }
-                                ?></span>
-                            </span>
-                        </span>
-                        <span class = "task-activity-date <?php if($row['RATING'] == 0) echo 'wrong'; ?>">
-                            <?php echo $row['LAST_DATE']?>
-                        </span>
-                    </div>
-                    <span class = 'task-activity-answer'><?php echo $row['ANSWER']?></span>
-                </div>
-        <?php
-                    unset($row);
-                }
-            }
-            oci_free_statement($tasks_info);
-        ?>
-    </div>
 </div>
 </main>
 <?php 
@@ -235,41 +198,49 @@ require_once "modal.php";
 ?>
 <script>
     $(function() {
-        $(".stage-progress-circle").each(function() {
-            var v_cnt = $(this).attr('data-correct-task');
-            var v_all = $(this).attr('data-all-task');
-            var value = getpercentageToTask(v_cnt, v_all);
-            var left = $(this).find('.progress-circle-left .progress-circle');
-            var right = $(this).find('.progress-circle-right .progress-circle');
-            if (value > 0) {
-                if (value <= 0.5) {
-                    right.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)')
-                } else {
-                    right.css('transform', 'rotate(180deg)')
-                    left.css('transform', 'rotate(' + percentageToDegrees(value - 0.5) + 'deg)')
-                }
-            }
-        })
-        function getpercentageToTask(v_cnt, v_all) {
-            return v_cnt / v_all
-        }
-        function percentageToDegrees(percentage) {
-            return percentage * 360
-        }
-    });
-
-    $(function() {
         $(".stage").click(function() {
             window.location.href = "/task.php";
         })
-        $(".task-info").click(function() {
-            window.location.href = "/task.php";
-        })
-        $(".task-activity").click(function() {
-            window.location.href = "/task.php";
-        })
-        $(".active-students").click(function() {
-            window.location.href = "/accounts.php";
+    });
+    $(function() {
+        $("#btn_create_user").click(function(){
+            var p_login = $(this).closest(".modal-body").children(".form-group.login").children("form-control").val();
+            var p_username = $(this).closest(".modal-body").children(".form-group.username").children("form-control").val();
+            var p_password = $(this).closest(".modal-body").children(".form-group.password").children("form-control").val();
+            var p_start_date = $(this).closest(".modal-body").children(".form-group.startdate").children("form-control").val();
+            var p_end_date = $(this).closest(".modal-body").children(".form-group.enddate").children("form-control").val();
+            var p_email = $(this).closest(".modal-body").children(".form-group.email").children("form-control").val();
+            var p_phone = $(this).closest(".modal-body").children(".form-group.phone").children("form-control").val();
+            var p_user_type = <?php if ($userid == 1) { echo 0; } else { echo 1; }?>;
+            $.ajax({
+                url:"./scripts/create_account.php"
+                , type: "POST"
+                , data: {
+                    p_login: p_login
+                    , p_username: p_username
+                    , p_password: p_password
+                    , p_start_date: p_start_date
+                    , p_end_date: p_end_date
+                    , p_email: p_email
+                    , p_phone: p_phone
+                    , p_user_type: p_user_type
+                }
+                , success: function(response){
+                    var result = JSON.parse(response);
+                    if (result.message != 0){
+                        if (result.message != 1){
+                            showNotification("Учётная запись успешна создана!", 'accept');
+                        } else {
+                            alert(result.error_message);
+                        }
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function(){
+                    alert("Не удалось отправить запрос на создание...");
+                }
+            });
         })
     });
 </script>

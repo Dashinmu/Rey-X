@@ -12,7 +12,7 @@
                     , TASK_COMPLETE_IN_STAGE
                     , TASK_ANSWER_IN_STAGE
                     , STAGE_ASSIGNED_DATE
-                    , LAST_DATE
+                    , MAX(LAST_DATE)
                 FROM
                     DIPLOM.PRACTICE_PROGRESS_INFO
                 WHERE 1 = 1
@@ -26,9 +26,8 @@
                     , TASK_COMPLETE_IN_STAGE
                     , TASK_ANSWER_IN_STAGE
                     , STAGE_ASSIGNED_DATE
-                    , LAST_DATE
                 ORDER BY
-                    LAST_DATE DESC
+                    8 DESC
             )
         WHERE 1 = 1
             and ROWNUM <= 2
@@ -142,6 +141,58 @@
             , q.ID
     ";
 
+    $get_all_student = "
+        SELECT
+            q.STUDENT_NAME
+            , q.START_DATE
+            , q.END_DATE
+            , q.ID
+            , case when q.END_DATE < trunc(sysdate)
+                then 'INACTIVE'
+                else 'ACTIVE'
+            end STATUS
+            , count(q.STAGE_ID) STAGE_CNT
+            , sum(q.STAGE_NUM_TASKS) STAGE_TASKS
+            , sum(q.TASK_COMPLETE_IN_STAGE) STAGE_TASKS_COMPLETE
+        FROM
+            (
+                SELECT
+                    u.NAME STUDENT_NAME
+                    , u.START_DATE
+                    , u.END_DATE
+                    , u.ID
+                    , ppi.STAGE_ID
+                    , ppi.STAGE_NUM_TASKS
+                    , ppi.TASK_COMPLETE_IN_STAGE
+                FROM
+                    DIPLOM.USERS u
+                    join DIPLOM.PERSON_RELATIONS pr
+                        on pr.CHILD = u.ID
+                        and pr.PARENT = :user_id
+                    join DIPLOM.PRACTICE_PROGRESS_INFO ppi
+                        on ppi.STUDENT_ID = u.ID
+                WHERE 1 = 1
+                GROUP BY
+                    u.NAME
+                    , u.START_DATE
+                    , u.END_DATE
+                    , u.ID
+                    , ppi.STAGE_ID
+                    , ppi.STAGE_NUM_TASKS
+                    , ppi.TASK_COMPLETE_IN_STAGE   
+            ) q
+        WHERE 1 = 1
+        GROUP BY
+            q.STUDENT_NAME
+            , q.START_DATE
+            , q.END_DATE
+            , q.ID
+            , case when q.END_DATE < trunc(sysdate)
+                then 'INACTIVE'
+                else 'ACTIVE'
+            end
+    ";
+
     $get_student_all_stage = "
         SELECT
             *
@@ -156,11 +207,29 @@
     ";
 
     $change_password = "
-        BEGIN diplom.fnd_user.change_password(
-            p_login => :p_login
-            , p_password_old => :p_password_old
-            , p_password_new => :p_password_new
-            , p_error => :p_error); 
+        BEGIN 
+            diplom.fnd_user.change_password(
+                p_login => :p_login
+                , p_password_old => :p_password_old
+                , p_password_new => :p_password_new
+                , p_error => :p_error
+            ); 
+        END;
+    ";
+
+    $create_user = "
+        BEGIN
+            diplom.fnd_user.add_user(
+                p_login => :p_login
+                , p_password => :p_password
+                , p_user_type => :p_user_type
+                , p_username => :p_username
+                , p_email => :p_email
+                , p_phone => :p_phone
+                , p_start_date => :p_start_date
+                , p_end_date => :p_end_date
+                , p_error => :p_error
+            );
         END;
     ";
 ?>
