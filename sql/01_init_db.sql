@@ -67,8 +67,11 @@
             , start_date DATE
             , end_date DATE
             , CONSTRAINT users_pk PRIMARY KEY (id, login)
-            , CONSTRAINT user_uniq UNIQUE (type, login, start_date, end_date)
+            , CONSTRAINT user_uniq UNIQUE (login)
         );
+
+        ALTER TABLE DIPLOM.USERS DROP CONSTRAINT user_uniq;
+        ALTER TABLE DIPLOM.USERS MODIFY (CONSTRAINT user_uniq UNIQUE (login));
 
         /* Создать триггер */
         CREATE OR REPLACE TRIGGER diplom.user_id_trigger
@@ -159,11 +162,13 @@
         BEFORE INSERT ON diplom.person_relations FOR EACH ROW
         BEGIN
             :new.id := diplom.person_relations_seq.nextval;
-            :new.start_date := trunc(sysdate);
+            /* if :new.start_date is null then :new.start_date := trunc(sysdate); */
             select
-                END_DATE
+                START_DATE
+                , END_DATE
             into
-                :new.end_date
+                :new.start_date
+                , :new.end_date
             from
                 DIPLOM.USERS
             where 1 = 1

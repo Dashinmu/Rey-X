@@ -16,7 +16,7 @@ CREATE OR REPLACE VIEW DIPLOM.PERSONAL_INFO AS
     WHERE 1 = 1
 ;
 
---Представление задания
+--Представление задания от этапов
 CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
     SELECT
         s.ID as STAGE_ID
@@ -26,22 +26,24 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , to_char(s.INACTIVE_DATE, 'dd.mm.yyyy') as STAGE_INACTIVE_DATE
         , s.TIME_PERIOD as STAGE_TIME_PERIOD --нужен ли?
         , t.ID as TASK_ID
+        , tt.ID as TASK_TYPE_ID
         , tt.MEANING as TASK_TYPE
         , t.MEANING as TASK_NAME
         , st.NUM_TASK as TASK_NUM_IN_STAGE
         , t.DESCRIP as TASK_DESC
         , to_char(t.INACTIVE_DATE, 'dd.mm.yyyy') as TASK_INACTIVE_DATE
         , a.ANSWER as TRUE_ANSWER
+        , max(st.NUM_TASK) as STAGE_NUM_TASKS
     FROM
         DIPLOM.STAGES s
         join DIPLOM.USERS u
             on u.ID = s.CREATED_BY
         left join DIPLOM.TASK_RELATIONS st
             on st.STAGE = s.ID
-            and s.INACTIVE_DATE >= st.END_DATE
+            and s.INACTIVE_DATE <= st.END_DATE
         left join DIPLOM.TASKS t
             on st.TASK = t.ID
-            and t.INACTIVE_DATE >= st.END_DATE
+            and t.INACTIVE_DATE <= st.END_DATE
         left join DIPLOM.TASK_TYPES tt
             on tt.id = t.TYPE
         left join DIPLOM.ANSWER a
@@ -49,6 +51,71 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
             and a.CREATION_DATE BETWEEN t.CREATION_DATE and t.INACTIVE_DATE
             and a.PRIMARY like 'Y'
     WHERE 1 = 1
+    GROUP BY
+        s.ID
+        , s.STAGE_NAME
+        , s.MEANING
+        , u.LOGIN
+        , to_char(s.INACTIVE_DATE, 'dd.mm.yyyy')
+        , s.TIME_PERIOD
+        , t.ID
+        , tt.ID
+        , tt.MEANING
+        , t.MEANING
+        , st.NUM_TASK
+        , t.DESCRIP
+        , to_char(t.INACTIVE_DATE, 'dd.mm.yyyy')
+        , a.ANSWER
+    ORDER BY
+        1 desc, 11 desc
+;
+
+--Представление заданий
+CREATE OR REPLACE VIEW DIPLOM.ALL_TASKS AS
+    SELECT
+        t.ID as TASK_ID
+        , t.TYPE as TASK_TYPE_ID
+        , tt.MEANING as TASK_TYPE
+        , t.MEANING as TASK_MEANING
+        , t.DESCRIP as TASK_DESCRIPTION
+        , t.CREATION_DATE as TASK_CREATION_DATE
+        , t.INACTIVE_DATE as TASK_INACTIVE_DATE
+        , t.CREATED_BY as AUTHOR_ID
+        , u.LOGIN as AUTHOR
+        , a.ANSWER as ANSWER
+        , case when t.INACTIVE_DATE < trunc(sysdate) then 'inactive' end as TASK_INACTIVE_STATUS
+        , LISTAGG(s.STAGE_NAME, ';') WITHIN GROUP (order by s.ID desc) as LINKS_TO_STAGES
+    FROM
+        DIPLOM.TASKS t
+        join DIPLOM.TASK_TYPES tt
+            on t.TYPE = tt.ID
+        join DIPLOM.USERS u
+            on t.CREATED_BY = u.ID
+        join DIPLOM.ANSWER a
+            on a.TASK = t.ID
+            and a.CREATION_DATE BETWEEN trunc(t.CREATION_DATE) and trunc(t.INACTIVE_DATE)
+            and a.PRIMARY like 'Y'
+        left join DIPLOM.TASK_RELATIONS tr
+            on t.ID = tr.TASK
+            and t.INACTIVE_DATE <= tr.END_DATE
+        left join DIPLOM.STAGES s
+            on s.ID = tr.STAGE
+            and s.INACTIVE_DATE <= tr.END_DATE
+    WHERE 1 = 1
+    GROUP BY
+        t.ID
+        , t."TYPE"
+        , tt.MEANING
+        , t.MEANING
+        , t.DESCRIP
+        , t.CREATION_DATE
+        , t.INACTIVE_DATE
+        , t.CREATED_BY
+        , u.LOGIN
+        , a.ANSWER
+        , case when t.INACTIVE_DATE < trunc(sysdate) then 'inactive' end
+    ORDER BY
+        1 desc
 ;
 
 --Представление прогресса выполнения заданий студентами #1

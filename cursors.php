@@ -148,8 +148,7 @@
             , q.END_DATE
             , q.ID
             , case when q.END_DATE < trunc(sysdate)
-                then 'INACTIVE'
-                else 'ACTIVE'
+                then 'inactive'
             end STATUS
             , count(q.STAGE_ID) STAGE_CNT
             , sum(q.STAGE_NUM_TASKS) STAGE_TASKS
@@ -191,6 +190,8 @@
                 then 'INACTIVE'
                 else 'ACTIVE'
             end
+        ORDER BY
+            5 desc, 2
     ";
 
     $get_student_all_stage = "
@@ -228,6 +229,63 @@
                 , p_phone => :p_phone
                 , p_start_date => :p_start_date
                 , p_end_date => :p_end_date
+                , p_user => :p_user
+                , p_error => :p_error
+            );
+        END;
+    ";
+
+    $get_all_tasks_info = "
+        SELECT
+            *
+        FROM
+            DIPLOM.ALL_TASKS
+        WHERE 1 = 1
+    ";
+
+    $get_all_tasks_types = "
+        SELECT * FROM DIPLOM.TASK_TYPES
+    ";
+
+    $add_task = "
+        BEGIN
+            DIPLOM.FND_TASKS.ADD_TASK(
+                p_meaning => :p_meaning
+                , p_desc => :p_desc
+                , p_type => :p_type
+                , p_author => :p_author
+                , p_id_task => :p_id_task
+                , p_error => :p_error
+            );
+        END;
+    ";
+
+    $add_answer = "
+        BEGIN
+            DIPLOM.FND_TASKS.ADD_ANSWER(
+                p_user => :p_user
+                , p_answer => :p_answer
+                , p_task => :p_task
+                , p_error => :p_error
+                , p_status => :p_status
+            );
+        END;
+    ";
+
+    $get_all_stages_info = "
+        SELECT * FROM DIPLOM.TASKS_INFO
+    ";
+
+    $get_all_stages_info_orig = "
+        SELECT * FROM DIPLOM.STAGES
+    ";
+
+    $create_stage = "
+        BEGIN
+            DIPLOM.FND_TASKS.ADD_STAGE(
+                p_meaning => :p_meaning
+                , p_stage_name => :p_stage_name
+                , p_author => :p_author
                 , p_error => :p_error
             );
         END;

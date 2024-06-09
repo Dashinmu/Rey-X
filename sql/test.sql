@@ -67,8 +67,23 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 end;
 
+declare
+    p_error VARCHAR2(400);
+BEGIN
+    diplom.FND_USER.ADD_USER(
+        P_LOGIN  => 'dashinmuSSS',
+        P_PASSWORD  => '123',
+        P_USER_TYPE => 3,
+        P_USER => 2,
+        p_error => p_error
+    );
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+end;
+
 select * from DIPLOM.USERS;
-delete from DIPLOM.USERS where id in (21, 22, 23, 24);
+select * from DIPLOM.PERSON_RELATIONS;
+select to_date(null, 'YYYY-MM-DDDD') from dual;
+delete from DIPLOM.USERS where id > 81;
 
 /* Проверить пользователя */
 declare
@@ -227,10 +242,10 @@ declare
     p_error VARCHAR2(200);
 begin
     DIPLOM.fnd_tasks.add_task(
-        p_meaning => 'Задание 3: Основы запросов PL/SQL'
-        , p_desc => 'Напишите запрос...'
+        p_meaning => 'ТЕСТ'
+        , p_desc => 'ТЕСТ'
         , p_type => 3
-        , p_author => 1 
+        , p_author => 2
         , p_id_task => p_id_task
         , p_error => p_error
     );
@@ -304,7 +319,7 @@ declare
     p_error VARCHAR2(200);
 begin
     diplom.fnd_tasks.connect_task(
-        p_stage => 2
+        p_stage => 1
         , p_task => 21
         , p_error => p_error
     );
@@ -356,13 +371,15 @@ end;
 
 /* Создать ответы руководитель*/
 declare
-    p_error VARCHAR2(200);
+    p_error VARCHAR2(400);
+    p_status NUMBER(2);
 begin
     diplom.fnd_tasks.add_answer(
         p_user => 1
         , p_answer => 'SELECT * FROM DIPLOM.users WHERE type = 1'
-        , p_task => 4
+        , p_task => 21
         , p_error => p_error
+        , p_status => p_status
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 end;
@@ -585,6 +602,18 @@ GROUP BY
     , q.END_DATE
     , q.ID
 ;
+
+SELECT
+    *
+FROM
+    DIPLOM.TASKS_INFO
+WHERE 1 = 1
+;
+
+DELETE FROM DIPLOM.STAGES WHERE ID > 20;
+DELETE FROM DIPLOM.TASKS WHERE ID > 40;
+DELETE FROM DIPLOM.ANSWER WHERE TASK > 40;
+DELETE FROM DIPLOM.TASK_RELATIONS where ID > 40;
 
 --Проверка работы DBMS_SQL (СЛОЖНЫЙ, НО НАДЁЖНЫЙ!)
 declare

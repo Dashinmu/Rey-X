@@ -15,7 +15,8 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
         , p_email in VARCHAR2 default null
         , p_phone in VARCHAR2 default null
         , p_start_date in VARCHAR2 default null
-        , p_end_date in DATE default null
+        , p_end_date in VARCHAR2 default null
+        , p_user in NUMBER
         , p_error out VARCHAR2
     );
 
@@ -81,6 +82,32 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         RETURN sys.DBMS_CRYPTO.HASH(UTL_RAW.CAST_TO_RAW(P_PASSWORD||V_SALT), DBMS_CRYPTO.HASH_SH1);
     END get_password;
 
+    --Привязать пользователя
+    PROCEDURE link_user(
+        p_user in NUMBER
+        , p_student in VARCHAR2
+    ) IS
+        student_id NUMBER(5);
+    BEGIN
+        SELECT
+            ID
+        INTO
+            student_id
+        FROM
+            DIPLOM.USERS
+        WHERE 1 = 1
+            and LOGIN = upper(p_student)
+        ;
+        INSERT INTO DIPLOM.PERSON_RELATIONS(
+            PARENT
+            , CHILD
+        ) VALUES (
+            p_user
+            , student_id
+        );
+        commit;
+    END;
+
     --Создать нового пользователя
     PROCEDURE add_user(
         p_login in VARCHAR2
@@ -90,7 +117,8 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         , p_email in VARCHAR2 default null
         , p_phone in VARCHAR2 default null
         , p_start_date in VARCHAR2 default null
-        , p_end_date in DATE default null
+        , p_end_date in VARCHAR2 default null
+        , p_user in NUMBER
         , p_error out VARCHAR2
     ) IS
     BEGIN
@@ -111,10 +139,16 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
             , nvl(p_username, p_login)
             , p_email
             , p_phone
-            , p_start_date
-            , p_end_date
+            , to_date(p_start_date, 'YYYY-MM-DD')
+            , to_date(p_end_date, 'YYYY-MM-DD')
         );
+
         commit;
+
+        link_user(
+            p_user => p_user
+            , p_student => p_login
+        );
 
         exception 
             when no_user_type_found then p_error := ('ERROR: Не существует тип пользователя с id = '||p_user_type);

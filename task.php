@@ -167,6 +167,131 @@ if ($usertype != 1 && $usertype != 2) {
     </main>  
 
 <?php
+} else { ?>
+    <main>
+        <!-- Личные данные -->
+        <div class="personal-info">
+            <div class = "personal-avatar">
+                <img src="img/student.jpg" alt="User Avatar">
+            </div>
+            <div class = 'div-personal-name'>
+                <span><?php echo $user_fio?></span>
+            </div>
+            <div class="tutor-detail">
+                <span class="text"><b>Телефон:</b> <?php echo $user_phone?></span>
+                <span class="text"><b>Почта:</b> <?php echo $user_mail?></span>
+            </div>
+        </div>
+        <div class = "second-block">
+    <?php
+        if ($_GET['a'] == 'stage') {
+            $all_stages_info = oci_parse($conn, $get_all_stages_info);
+            oci_execute($all_stages_info);
+    ?>   
+            <div class = "label">
+                <span>Этапы практики</span>
+                <a href="#" class="create-btn" data-toggle="modal" data-target="#createStage">Создать этап</a>
+            </div>
+            <div class = "stages-info-block">
+                <div class = "stage-info-item">
+                    <?php
+                        $lastrow = 0;
+                        while ($row = oci_fetch_array($all_stages_info, OCI_RETURN_NULLS + OCI_ASSOC)) {
+                            if ($lastrow != 0 && $row['STAGE_ID'] != $lastrow) {
+                    ?>
+                    </div>
+                </div>
+                <div class = "stage-info-item">
+                    <?php
+                            }
+                            if ($lastrow == 0 || $row['STAGE_ID'] != $lastrow) {
+                    ?>
+                        <div class = "stage-info">
+                            <div class = "stage-marks">
+                            </div>
+                            <div class = "stage-subinfo">
+                                <div>
+                                    <span class = "stage-name"><?php echo $row['STAGE_NAME'] ?></span>
+                                    <span class = "stage-mean"><?php echo $row['STAGE_MEANING']?></span>
+                                </div>
+                                <span class = "stage-num-task">Количество заданий: <?php echo $row['STAGE_NUM_TASKS']?></span>
+                            </div>
+                        </div>
+                        <div class = "stage-items-info hidden">
+                    <?php                            
+                            }
+                    ?> 
+                            <div class = "item-info">
+                                <div class = "item-name">
+                                    <div>
+                                        <span class = "task-num"><?php echo $row['TASK_NUM_IN_STAGE'] ?></span>
+                                        <span class = "task-name"><?php echo $row['TASK_NAME']?></span>
+                                    </div>
+                                    <span class = "task-date">по <?php echo $row['TASK_INACTIVE_DATE']?></span>
+                                </div>
+                                <div class = "item-descrip hidden">
+                                    <span class = "task-desc"><?php echo $row['TASK_DESC']?></span>
+                                    <code class = "task-answer"><?php echo $row['TRUE_ANSWER']?></code>
+                                </div>
+                            </div>
+                    <?php
+                            $lastrow = $row['STAGE_ID'];
+                        }
+                    ?>
+                    </div>
+                </div>
+            </div>
+    <?php
+        } else {
+            $all_tasks_info = oci_parse($conn, $get_all_tasks_info);
+           /*  oci_bind_by_name($all_tasks_info, ":user_id", $userid); */
+            oci_execute($all_tasks_info);
+    ?>      
+            <div class = "label">
+                <span>Банк заданий</span>
+                <a href="#" class="create-btn" data-toggle="modal" data-target="#createTask">Создать задание</a>
+            </div>
+            <div class = "tasks-info-block">
+                <?php
+                    while ($row = oci_fetch_array($all_tasks_info, OCI_RETURN_NULLS + OCI_ASSOC)) {
+                ?>
+                    <div class = "task-info-item <?php echo $row['TASK_INACTIVE_STATUS']?>">
+                        <div class = "item-info">
+                            <span class = "task-name"><?php echo $row['TASK_MEANING']?></span>
+                            <span class = "task-type"><?php echo $row['TASK_TYPE']?></span>
+                            <span class = "task-date">Дата: <?php echo $row['TASK_CREATION_DATE']?> - <?php echo $row['TASK_INACTIVE_DATE']?></span>
+                        </div>
+                        <div class = "item-descrip hidden">
+                        <?php
+                            if (!is_null($row['LINKS_TO_STAGES'])) {
+                        ?>
+                            <div class = "marks">
+                                <?php 
+                                    $links = explode(';', $row['LINKS_TO_STAGES']);
+                                    for ($i = 0; $i < count($links); $i++){
+                                ?>
+                                    <span class = "links"><?php echo $links[$i]?></span>
+                                <?php
+                                    }
+                                ?>   
+                            </div>
+                        <?php
+                            }
+                        ?>
+                            <span class = "task-desc"><?php echo $row['TASK_DESCRIPTION']?></span>
+                            <code class = "task-answer"><?php echo $row['ANSWER']?></code>
+                        </div>
+                    </div>
+                <?php
+                    }
+                ?>
+            </div>
+        </div>
+    <?php
+        }
+    ?>
+    </main>
+<?php 
 }
 require_once "modal.php";
 ?>
@@ -242,6 +367,120 @@ require_once "modal.php";
                 }
                 , error: function(){
                    alert("Не удалось отправить запрос на проверку...");
+                }
+            });
+        })
+    });
+
+    $(function() {
+        $(".task-info-item").click(function() {
+            $(this).toggleClass("open");
+            $(this).children(".item-descrip").toggleClass("hidden");
+        })
+    });
+
+    $(function() {
+        $("#btn_create_task").click(function(){
+            var p_meaning = $("#task_meaning").val();
+            var p_desc = $("#task_desc").val();
+            var p_type = $("#task_type").val();
+            var p_author = <?php echo $userid ?>;
+            var p_answer = $("#task_answer").val();
+            $.ajax({
+                url:"./scripts/create_task.php"
+                , type: "POST"
+                , data: {
+                    p_meaning: p_meaning
+                    , p_desc: p_desc
+                    , p_type: p_type
+                    , p_author: p_author
+                }
+                , success: function(response){
+                    var result = JSON.parse(response);
+                    if (result.message != 0){
+                        if (result.message != 1){
+                            /* showNotification("Задание успешно создано!", 'accept'); */
+                            $.ajax({
+                                url:"./scripts/answer.php"
+                                , type: "POST"
+                                , data: {
+                                    user: p_author
+                                    , task: result.error_message
+                                    , answer: p_answer
+                                }
+                                , success: function(response) {
+                                    var res = JSON.parse(response);
+                                    if (res.message != 0) {
+                                        if (res.message != 1) {
+                                            showNotification("Задание успешно создано!", 'accept');
+                                            /* location.reload(); */
+                                        } else {
+                                            alert(res.error_message)
+                                        }
+                                    } else {
+                                        alert(res.error_message);
+                                    }
+                                }
+                                , error: function() {
+                                    alert("Не удалось отправить запрос на запись ответа...");
+                                }
+                            });
+                        } else {
+                            alert(result.error_message);
+                        }
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function(){
+                    alert("Не удалось отправить запрос на создание...");
+                }
+            });
+        })
+    });
+
+    $(function() {
+        $(".stage-info").click(function() {
+            $(this).toggleClass("open");
+            $(this).closest(".stage-info-item").children(".stage-items-info").toggleClass("hidden");
+        })
+    });
+
+    $(function() {
+        $(".item-name").click(function() {
+            $(this).toggleClass("open");
+            $(this).closest(".item-info").children(".item-descrip").toggleClass("hidden");
+        })
+    });
+
+    $(function() {
+        $("#btn_create_stage").click(function() {
+            var p_stage_name = $("#stage_name").val();
+            var p_meaning = $("#stage_mean").val();
+            var p_author = <?php echo $userid ?>;
+            $.ajax({
+                url:"./scripts/create_stage.php"
+                , type: "POST"
+                , data: {
+                    p_meaning: p_meaning
+                    , p_stage_name: p_stage_name
+                    , p_author: p_author
+                }
+                , success: function(response) {
+                    var result = JSON.parse(response);
+                    if (result.message != 0) {
+                        if (result.message != 1) {
+                            showNotification("Этап успешно создано!", 'accept');
+                            /* location.reload(); */
+                        } else {
+                            alert(result.error_message)
+                        }
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function() {
+                    alert("Не удалось отправить запрос на запись этапа...");
                 }
             });
         })

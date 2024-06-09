@@ -786,6 +786,11 @@ main {
     margin: 3px;
 }
 
+.students-activity .active-students .student-info.inactive {
+    border: 2px solid #8d8d8d;
+    opacity: 70%;
+}
+
 .students-activity .active-students .student-info:hover {
     background: #6e92d654;
 }
@@ -814,6 +819,11 @@ main {
     padding-right: 4px;
 }
 
+.students-activity .active-students .student-info .student-info1 .student-date.inactive {
+    border: 2px solid #8d8d8d;
+    background: #8d8d8d;
+}
+
 .students-activity .active-students .student-info .student-info2 {
     display: flex;
     justify-content: space-between;
@@ -840,4 +850,213 @@ main {
 .students-activity .label .create-account-btn:hover {
     background: #2F4C58;
     text-decoration: none;
+}
+
+.second-block {
+    padding-left: 70px;
+    margin-top: 40px;
+}
+
+.second-block .label {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.second-block .label .create-btn {
+    font-size: 20px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 2px solid #27925b;
+    background: #27925b;
+    transition: background-color 0.3s ease;
+    color: #FFFFFF;
+}
+
+.second-block .label .create-btn:hover {
+    background: #2F4C58;
+    text-decoration: none;
+}
+
+.tasks-info-block {
+    display: flex;
+    flex-direction: column;
+    min-width: 790px;
+    max-width: 850px;
+    max-height: 750px;
+    overflow: auto;
+}
+
+.tasks-info-block .task-info-item {
+    display: grid;
+    padding: 10px;
+    margin: 5px;
+    border: 2px solid #6E93D6;
+    border-radius: 10px;
+}
+
+.tasks-info-block .task-info-item:hover {
+    background: #6e92d654;
+}
+
+.tasks-info-block .task-info-item.open {
+    background: #6e92d654;
+}
+
+.tasks-info-block .task-info-item .item-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tasks-info-block .task-info-item .item-descrip {
+    display: grid;
+}
+
+.tasks-info-block .task-info-item .item-descrip.hidden {
+    display: none;
+}
+
+.tasks-info-block .task-info-item .item-descrip .marks {
+    display: flex;
+    align-items: center;
+}
+
+.tasks-info-block .task-info-item .item-descrip .marks .links {
+    font-size: 12px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background-color: #6E93D6;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.tasks-info-block .task-info-item .item-descrip .task-desc {
+    margin: 10px;
+    margin-left: 0px;
+    overflow-wrap: break-word;
+    overflow: auto;
+}
+
+.tasks-info-block .task-info-item .item-descrip .task-answer {
+    color: skyblue;
+    border: 2px solid #fafafa;
+    padding: 5px;
+    border-radius: 5px;
+    background: #1B2A2F;
+    overflow-wrap: break-word;
+    overflow: auto;
+}
+
+.stages-info-block {
+    display: flex;
+    flex-direction: column;
+    min-width: 790px;
+    max-width: 850px;
+    max-height: 750px;
+    overflow: auto;
+}
+
+.stages-info-block .stage-info-item {
+    display: grid;
+    margin: 5px;
+    border: 2px solid #6E93D6;
+    border-radius: 10px;
+}
+
+.stages-info-block .stage-info-item .stage-info {
+    display: grid;
+    border-bottom: 2px solid #6E93D6;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.stages-info-block .stage-info-item .stage-info .stage-subinfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stages-info-block .stage-info-item .stage-info:hover {
+    background: #6e92d654;
+}
+
+.stages-info-block .stage-info-item .stage-info.open {
+    background: #6e92d654;
+}
+
+.stages-info-block .stage-info-item .stage-items-info {
+    margin-top: 10px;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info {
+    display: grid;
+    margin-bottom: 10px;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info.hidden {
+    display: none;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info .item-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 2px solid #fafafa;
+    border-radius: 10px;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info .item-name:hover {
+    background: #6e92d654;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info .item-name.open {
+    background: #6e92d654;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info .item-name .task-num {
+    color: #3BB273;
+    font-weight: bold;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info .item-descrip {
+    display: grid;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    border: 2px solid #fafafa;
+    border-radius: 10px;
+    border-top: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    margin-top: -10px;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info .item-descrip.hidden {
+    display: none;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info .item-descrip .task-desc {
+    margin: 10px;
+    margin-left: 0px;
+    overflow-wrap: break-word;
+    overflow: auto;
+}
+
+.stages-info-block .stage-info-item .stage-items-info .item-info .item-descrip .task-answer {
+    color: skyblue;
+    border: 2px solid #6E93D6;
+    padding: 5px;
+    border-radius: 5px;
+    background: #152930;
+    overflow-wrap: break-word;
+    overflow: auto;
 }
