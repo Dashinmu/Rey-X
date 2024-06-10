@@ -97,7 +97,8 @@ require_once "modal.php";
         })
     });
     $(function() {
-        $("#btn_create_user").click(function(){
+        $("#createAccountModal").submit(function(e){
+            e.preventDefault();
             var p_login = $("#login").val();
             var p_username = $("#username").val();
             var p_password = $("#password").val();

@@ -7,6 +7,7 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         , p_stage_name in VARCHAR2 default null
         , p_author in NUMBER
         , p_time_period in NUMBER default null
+        , p_stage_id out NUMBER
         , p_error out VARCHAR2
     );
 
@@ -37,8 +38,8 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         p_stage in NUMBER
         , p_task in NUMBER
         , p_num_task in NUMBER default null --последовательность задания в этапе
-        , p_start_date in DATE default null
-        , p_end_date in DATE default null
+        , p_start_date in VARCHAR2 default null
+        , p_end_date in VARCHAR2 default null
         , p_error out VARCHAR2
     );
 
@@ -101,6 +102,11 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         p_task in NUMBER
     ) RETURN BOOLEAN;
 
+    --Узнать количество назначенных этапов
+    FUNCTION get_all_students_assigned_stages(
+        p_student in NUMBER
+    ) RETURN NUMBER;
+
 END fnd_tasks;
 
 CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
@@ -121,6 +127,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         , p_stage_name in VARCHAR2 default null
         , p_author in NUMBER
         , p_time_period in NUMBER default null
+        , p_stage_id out NUMBER
         , p_error out VARCHAR2
     ) IS
     BEGIN
@@ -135,6 +142,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             , p_author
             , p_time_period
         );
+        p_stage_id := DIPLOM.stages_seq.currval;
         commit;
 
         exception when others then p_error := 'Нарушено условие уникальности stages_uniq';
@@ -206,10 +214,12 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         p_stage in NUMBER
         , p_task in NUMBER
         , p_num_task in NUMBER default null --последовательность задания в этапе
-        , p_start_date in DATE default null
-        , p_end_date in DATE default null
+        , p_start_date in VARCHAR2 default null
+        , p_end_date in VARCHAR2 default null
         , p_error out VARCHAR2
     ) IS
+        start_date DATE := to_date(p_start_date, 'YYYY-MM-DD');
+        end_date DATE := to_date(p_end_date, 'YYYY-MM-DD');
     BEGIN
         insert into DIPLOM.task_relations(
             stage
@@ -221,8 +231,8 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             p_stage
             , p_task
             , p_num_task
-            , p_start_date
-            , p_end_date
+            , start_date
+            , end_date
         );
         commit;
 
@@ -538,7 +548,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         res NUMBER(2);
     BEGIN
         select
-            max(NUM_TASK)
+            count(NUM_TASK)
         into
             res
         from
@@ -668,6 +678,24 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         ;
         return false;
         exception when others then return true;
+    END;
+
+    --Узнать количество назначенных этапов
+    FUNCTION get_all_students_assigned_stages(
+        p_student in NUMBER
+    ) RETURN NUMBER IS
+        res NUMBER(2);
+    BEGIN
+        select
+            count(stage)
+        into
+            res
+        from
+            DIPLOM.GIVE_STAGES
+        where 1 = 1
+            and STUDENT_ID = p_student
+        ;
+        return res;
     END;
 
 END fnd_tasks;

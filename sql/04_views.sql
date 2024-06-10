@@ -33,7 +33,9 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , t.DESCRIP as TASK_DESC
         , to_char(t.INACTIVE_DATE, 'dd.mm.yyyy') as TASK_INACTIVE_DATE
         , a.ANSWER as TRUE_ANSWER
+        , case when s.INACTIVE_DATE < trunc(sysdate) then 'inactive' end STAGE_STATUS
         , max(st.NUM_TASK) as STAGE_NUM_TASKS
+        , listagg(s2.STAGE_NAME, ';') WITHIN GROUP (ORDER BY s2.ID desc) as LINKS_TO_STAGES
     FROM
         DIPLOM.STAGES s
         join DIPLOM.USERS u
@@ -50,6 +52,11 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
             on a.TASK = t.ID
             and a.CREATION_DATE BETWEEN t.CREATION_DATE and t.INACTIVE_DATE
             and a.PRIMARY like 'Y'
+        left join DIPLOM.STAGE_RELATIONS sr
+            on sr.CHILD = s.ID
+            and trunc(sysdate) between sr.START_DATE and sr.END_DATE
+        left join DIPLOM.STAGES s2
+            on s2.ID = sr.PARENT
     WHERE 1 = 1
     GROUP BY
         s.ID
@@ -66,6 +73,7 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , t.DESCRIP
         , to_char(t.INACTIVE_DATE, 'dd.mm.yyyy')
         , a.ANSWER
+        , case when s.INACTIVE_DATE < trunc(sysdate) then 'inactive' end
     ORDER BY
         1 desc, 11 desc
 ;

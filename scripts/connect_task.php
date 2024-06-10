@@ -8,24 +8,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn){
         if (
-            !empty($_POST["p_meaning"]) 
-            && !empty($_POST["p_stage_name"]) 
-            && !empty($_POST["p_author"])
+            !empty($_POST["p_stage"]) 
+            && !empty($_POST["p_task"])
+            && isset($_POST["p_num_task"])
+            && isset($_POST["p_start_date"])
+            && isset($_POST["p_end_date"])
         ){
-            $p_meaning = $_POST["p_meaning"];
-            $p_stage_name = $_POST["p_stage_name"];
-            $p_author = $_POST["p_author"];
+            $p_stage = $_POST["p_stage"];
+            $p_task = $_POST["p_task"];
+            $p_num_task = $_POST["p_num_task"];
+            $p_start_date = $_POST["p_start_date"];
+            $p_end_date = $_POST["p_end_date"];
     
-            $stmt = oci_parse($conn, $create_stage);
-            oci_bind_by_name($stmt, ":p_meaning", $p_meaning);
-            oci_bind_by_name($stmt, ":p_stage_name", $p_stage_name);
-            oci_bind_by_name($stmt, ":p_author", $p_author);
-            oci_bind_by_name($stmt, ":p_stage_id", $p_stage_id, 3, SQLT_INT);
+            $stmt = oci_parse($conn, $connect_task);
+            oci_bind_by_name($stmt, ":p_stage", $p_stage);
+            oci_bind_by_name($stmt, ":p_task", $p_task);
+            oci_bind_by_name($stmt, ":p_num_task", $p_num_task);
+            oci_bind_by_name($stmt, ":p_start_date", $p_start_date);
+            oci_bind_by_name($stmt, ":p_end_date", $p_end_date);
             oci_bind_by_name($stmt, ":p_error", $p_error, 400, SQLT_CHR);
     
             if (oci_execute($stmt)) {
                 if (is_null($p_error)) {
-                    echo json_encode(array("message" => 2, "error_message" => $p_stage_id));
+                    echo json_encode(array("message" => 2, "error_message" => "Задание связано."));
                 } else {
                     echo json_encode(array("message" => 1, "error_message" => $p_error));
                 }

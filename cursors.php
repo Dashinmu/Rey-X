@@ -96,6 +96,53 @@
             and ROWNUM <= 5
     ";
 
+    $get_all_students_history = "
+        SELECT
+            ppi.STUDENT_ID
+            , ppi.STUDENT_NAME
+            , ppi.STAGE_ID
+            , ppi.STAGE_NAME
+            , ppi.TASK_ID
+            , ppi.TASK_NUM
+            , ppi.TASK_NAME
+            , a.ANSWER
+            , a.RATING
+            , a.CREATION_DATE
+            , pr.START_DATE
+            , pr.END_DATE
+            , case when pr.END_DATE < trunc(sysdate) then 'inactive' end as STUDENT_STATUS
+            , ppi2.NUM_STAGES_ASSIGNED
+            , ppi2.NUM_ALL_ANSWER_TASKS
+            , ppi2.NUM_STAGES_ASSIGNED
+        FROM
+            DIPLOM.PRACTICE_PROGRESS_INFO ppi
+            join DIPLOM.PERSON_RELATIONS pr
+                on pr.CHILD = PPI.STUDENT_ID
+                and pr.END_DATE > trunc(sysdate - 62)
+            join DIPLOM.USERS u
+                on pr.PARENT = u.ID
+                and u.ID = :p_user
+            left join DIPLOM.ANSWER a
+                on a.TASK = ppi.TASK_ID
+                and a.PERSON = ppi.STUDENT_ID
+            left join (
+                SELECT
+                    STUDENT_ID
+                    , count(nvl(STAGE_ID, 0)) as NUM_STAGES_ASSIGNED
+                    , sum(nvl(TASK_ANSWER_IN_STAGE, 0)) as NUM_ALL_ANSWER_TASKS
+                    , sum(nvl(STAGE_NUM_TASKS, 0)) as NUM_ALL_TASKS_STAGES
+                FROM
+                    DIPLOM.PRACTICE_PROGRESS_INFO
+                WHERE 1 = 1
+                GROUP BY
+                    STUDENT_ID
+            ) ppi2
+                on ppi2.STUDENT_ID = ppi.STUDENT_ID
+        WHERE 1 = 1
+        ORDER BY
+            1, 3 desc, 6 desc, 10 desc
+    ";
+
     $get_active_student = "
         SELECT
             q.STUDENT_NAME
@@ -286,6 +333,30 @@
                 p_meaning => :p_meaning
                 , p_stage_name => :p_stage_name
                 , p_author => :p_author
+                , p_stage_id => :p_stage_id
+                , p_error => :p_error
+            );
+        END;
+    ";
+
+    $connect_stage = "
+        BEGIN
+            DIPLOM.fnd_tasks.connect_stage(
+                p_parent => :p_parent
+                , p_child => :p_child
+                , p_error => :p_error
+            );
+        END;
+    ";
+
+    $connect_task = "
+        BEGIN
+            DIPLOM.fnd_tasks.connect_task(
+                p_stage => :p_stage
+                , p_task => :p_task
+                , p_num_task => :p_num_task
+                , p_start_date => :p_start_date
+                , p_end_date => :p_end_date
                 , p_error => :p_error
             );
         END;

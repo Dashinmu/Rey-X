@@ -21,11 +21,11 @@
 </script>
 
 <!-- Modal Password -->
-<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Изменить пароль</h5>
+                <h5 class="modal-title" id="settingsModal">Изменить пароль</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -179,7 +179,7 @@
                         <input type="text" id = "stage_mean" class="form-control" name="stage_mean" placeholder="Введите описание" required>
                     </div>
                     <div class="form-group">
-                        <select id = "task_type" class="form-control" name="task_type">
+                        <select id = "stage_child_id" class="form-control" name="stage_child_id">
                             <option value = "">--Выберите с каким этапом связать--</option>
                             <?php 
                                 $all_stages = oci_parse($conn, $get_all_stages_info_orig);
@@ -201,6 +201,78 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" id="btn_create_stage" class="btn btn-primary btn-block">Подтвердить</button>
+                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Link Task to Stage -->
+<div class="modal fade" id="linkTaskToStage" tabindex="-1" role="dialog" aria-labelledby="linkTaskToStage" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="linkTaskToStage">Создать этап</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method = "post">
+                    <div class="form-group">
+                        <select id = "stage_id_select" class="form-control" name="stage_id_select" required>
+                            <option value = "">--Выберите с каким этапом связать--</option>
+                            <?php 
+                                $all_stages = oci_parse($conn, $get_all_stages_info_orig);
+                                oci_execute($all_stages);
+                                while($row = oci_fetch_array($all_stages, OCI_RETURN_NULLS + OCI_ASSOC)) {
+                            ?>
+                                <option value = "<?php echo $row['ID']?>"><?php echo $row['STAGE_NAME']?> -> <?php 
+                                    if (strlen($row['MEANING']) > 60) {
+                                        echo substr($row['MEANING'], 0, 60).'...';
+                                    } else {
+                                        echo $row['MEANING'];
+                                    }
+                                    
+                                ?></option>
+                            <?php        
+                                }
+                                oci_free_statement($all_stages);
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id = "task_id_select" class="form-control" name="task_id_select" required>
+                            <option value = "">--Выберите задание--</option>
+                            <?php 
+                                $all_task = oci_parse($conn, $get_all_tasks_info);
+                                oci_execute($all_task);
+                                while($row = oci_fetch_array($all_task, OCI_RETURN_NULLS + OCI_ASSOC)) {
+                            ?>
+                                <option value = "<?php echo $row['TASK_ID']?>"><?php echo $row['TASK_MEANING']?> -> <?php 
+                                    if (strlen($row['TASK_DESCRIPTION']) > 60) {
+                                        echo substr($row['TASK_DESCRIPTION'], 0, 60).'...';
+                                    } else {
+                                        echo $row['TASK_DESCRIPTION'];
+                                    }
+                                    
+                                ?></option>
+                            <?php        
+                                }
+                                oci_free_statement($all_task);
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id = "link_enddate"class="form-control" name="link_enddate" placeholder="Введите дату окончания DD.MM.YYYY"
+                            onfocus="(this.type='date')"
+                            onblur="(this.type='text')"
+                        >
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="btn_link_task_to_stage" class="btn btn-primary btn-block">Подтвердить</button>
                         <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>
                     </div>
                 </form>

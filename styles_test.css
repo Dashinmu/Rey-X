@@ -371,6 +371,7 @@ main {
 
 .label span {
     font-size: 32px;
+    font-weight: bold;
 }
 
 .label.last{
@@ -887,6 +888,9 @@ main {
     max-width: 850px;
     max-height: 750px;
     overflow: auto;
+    border: 2px solid #fafafa;
+    border-radius: 10px;
+    padding: 5px;
 }
 
 .tasks-info-block .task-info-item {
@@ -974,6 +978,24 @@ main {
     border-bottom: 2px solid #6E93D6;
     border-radius: 5px;
     padding: 5px;
+}
+
+.stages-info-block .stage-info-item .stage-info .stage-marks {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.stages-info-block .stage-info-item .stage-info .stage-marks .links {
+    font-size: 12px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background-color: #d66e6e;
+    margin-right: 10px;
+    margin-bottom: 2px;
 }
 
 .stages-info-block .stage-info-item .stage-info .stage-subinfo {

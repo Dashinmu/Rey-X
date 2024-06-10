@@ -190,7 +190,10 @@ if ($usertype != 1 && $usertype != 2) {
     ?>   
             <div class = "label">
                 <span>Этапы практики</span>
-                <a href="#" class="create-btn" data-toggle="modal" data-target="#createStage">Создать этап</a>
+                <div>
+                    <a href="#" class="create-btn" data-toggle="modal" data-target="#linkTaskToStage">Добавить задание</a>
+                    <a href="#" class="create-btn" data-toggle="modal" data-target="#createStage">Создать этап</a>
+                </div>
             </div>
             <div class = "stages-info-block">
                 <div class = "stage-info-item">
@@ -204,10 +207,20 @@ if ($usertype != 1 && $usertype != 2) {
                 <div class = "stage-info-item">
                     <?php
                             }
-                            if ($lastrow == 0 || $row['STAGE_ID'] != $lastrow) {
+                            if ($row['STAGE_ID'] != $lastrow) {
                     ?>
                         <div class = "stage-info">
                             <div class = "stage-marks">
+                                <?php 
+                                    if (!is_null($row['LINKS_TO_STAGES'])) {
+                                        $links = explode(';', $row['LINKS_TO_STAGES']);
+                                        for ($i = 0; $i < count($links); $i++){
+                                ?>
+                                    <span class = "links"><?php echo $links[$i]?></span>
+                                <?php
+                                        }
+                                    }
+                                ?>
                             </div>
                             <div class = "stage-subinfo">
                                 <div>
@@ -380,7 +393,8 @@ require_once "modal.php";
     });
 
     $(function() {
-        $("#btn_create_task").click(function(){
+        $("#createTask").submit(function(e){
+            e.preventDefault();
             var p_meaning = $("#task_meaning").val();
             var p_desc = $("#task_desc").val();
             var p_type = $("#task_type").val();
@@ -454,10 +468,12 @@ require_once "modal.php";
     });
 
     $(function() {
-        $("#btn_create_stage").click(function() {
+        $("#createStage").submit(function(e) {
+            e.preventDefault();
             var p_stage_name = $("#stage_name").val();
             var p_meaning = $("#stage_mean").val();
             var p_author = <?php echo $userid ?>;
+            var p_stage_child_id = $("#stage_child_id").val();
             $.ajax({
                 url:"./scripts/create_stage.php"
                 , type: "POST"
@@ -470,10 +486,72 @@ require_once "modal.php";
                     var result = JSON.parse(response);
                     if (result.message != 0) {
                         if (result.message != 1) {
-                            showNotification("Этап успешно создано!", 'accept');
+                            /* showNotification("Этап успешно создано!", 'accept'); */
                             /* location.reload(); */
+                            if ( p_stage_child_id == null) {
+                                $.ajax({
+                                    url:"./scripts/connect_stage.php"
+                                    , type: "POST"
+                                    , data: {
+                                        p_parent: p_stage_child_id
+                                        , p_child: result.error_message
+                                    }
+                                    , success: function(response) {
+                                        var res = JSON.parse(response);
+                                        if (res.message != 0) {
+                                            if (res.message != 1) {
+                                                showNotification("Этап создан и связан!", 'accept');
+                                            } else {
+                                                alert(res.error_message);
+                                            }
+                                        } else {
+                                            alert(res.error_message);
+                                        }
+                                    }
+                                    , error: function() {
+                                        alert("Не удалось отправить запрос на запись этапа...");
+                                    }
+                                });
+                            } else {
+                                showNotification("Этап успешно создано!", 'accept');
+                            }
                         } else {
-                            alert(result.error_message)
+                            alert(result.error_message);
+                        }
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function() {
+                    alert("Не удалось отправить запрос на запись этапа...");
+                }
+            });
+        })
+    });
+
+    $(function() {
+        $("#linkTaskToStage").submit(function(e) {
+            e.preventDefault();
+            var p_stage = $("#stage_id_select").val();
+            var p_task = $("#task_id_select").val();
+            var p_end_date = $("#link_enddate").val();
+            $.ajax({
+                url:"./scripts/connect_task.php"
+                , type: "POST"
+                , data: {
+                    p_stage: p_stage
+                    , p_task: p_task
+                    , p_num_task: null
+                    , p_start_date: null
+                    , p_end_date: p_end_date
+                }
+                , success: function(response) {
+                    var result = JSON.parse(response);
+                    if (result.message != 0) {
+                        if (result.message != 1) {
+                            showNotification(result.error_message, 'accept');
+                        } else {
+                            alert(result.error_message);
                         }
                     } else {
                         alert(result.error_message);

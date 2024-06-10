@@ -37,7 +37,7 @@
             <?php if ($usertype == 1 || $usertype == 2) {?>
                 <a href="/task.php?a=stage" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php?a=stage') { echo "active"; }?> btn-sm">Этапы</a>
                 <a href="/task.php?a=tasks" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php?a=tasks') { echo "active"; }?> btn-sm">Задания</a>
-                <a href="/index.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/history.php') { echo "active"; }?> btn-sm" aria-current="page">История</a>
+                <a href="/history.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/history.php') { echo "active"; }?> btn-sm" aria-current="page">История</a>
                 <a href="/accounts.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/accounts.php') { echo "active"; }?> btn-sm">Пользователи</a>
             <?php } else {?>
                 <a href="/task.php" class="btn btn-outline-light <?php if ($_SERVER['REQUEST_URI'] == '/task.php') { echo "active"; }?> btn-sm">Задания</a>

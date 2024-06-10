@@ -606,11 +606,58 @@ GROUP BY
 SELECT
     *
 FROM
-    DIPLOM.TASKS_INFO
+    DIPLOM.ALL_TASKS
 WHERE 1 = 1
 ;
 
+SELECT
+    ppi.STUDENT_ID
+    , ppi.STUDENT_NAME
+    , ppi.STAGE_ID
+    , ppi.STAGE_NAME
+    , ppi.TASK_ID
+    , ppi.TASK_NUM
+    , ppi.TASK_NAME
+    , a.ANSWER
+    , a.RATING
+    , a.CREATION_DATE
+    , pr.START_DATE
+    , pr.END_DATE
+    , case when pr.END_DATE < trunc(sysdate) then 'inactive' end as STUDENT_STATUS
+    , ppi2.NUM_STAGES_ASSIGNED
+    , ppi2.NUM_ALL_ANSWER_TASKS
+    , ppi2.NUM_STAGES_ASSIGNED
+FROM
+    DIPLOM.PRACTICE_PROGRESS_INFO ppi
+    join DIPLOM.PERSON_RELATIONS pr
+        on pr.CHILD = PPI.STUDENT_ID
+        and pr.END_DATE > trunc(sysdate - 62)
+    join DIPLOM.USERS u
+        on pr.PARENT = u.ID
+        and u.ID = :p_user
+    left join DIPLOM.ANSWER a
+        on a.TASK = ppi.TASK_ID
+        and a.PERSON = ppi.STUDENT_ID
+    left join (
+        SELECT
+            STUDENT_ID
+            , count(nvl(STAGE_ID, 0)) as NUM_STAGES_ASSIGNED
+            , sum(nvl(TASK_ANSWER_IN_STAGE, 0)) as NUM_ALL_ANSWER_TASKS
+            , sum(nvl(STAGE_NUM_TASKS, 0)) as NUM_ALL_TASKS_STAGES
+        FROM
+            DIPLOM.PRACTICE_PROGRESS_INFO
+        WHERE 1 = 1
+        GROUP BY
+            STUDENT_ID
+    ) ppi2
+        on ppi2.STUDENT_ID = ppi.STUDENT_ID
+WHERE 1 = 1
+ORDER BY
+    1, 3 desc, 6 desc, 10 desc
+;
+
 DELETE FROM DIPLOM.STAGES WHERE ID > 20;
+DELETE FROM DIPLOM.STAGE_RELATIONS WHERE ID > 20;
 DELETE FROM DIPLOM.TASKS WHERE ID > 40;
 DELETE FROM DIPLOM.ANSWER WHERE TASK > 40;
 DELETE FROM DIPLOM.TASK_RELATIONS where ID > 40;
