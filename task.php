@@ -134,6 +134,7 @@ if ($usertype != 1 && $usertype != 2) {
                                 </div>
             <?php
                     } else {
+                        if (!is_null($row['STAGE_ID'])) {
             ?>
                                 <div class = "task">
                                     <div class = "task-info <?php echo $status ?>">
@@ -156,6 +157,7 @@ if ($usertype != 1 && $usertype != 2) {
                                     </div>
                                 </div>
             <?php
+                        }
                     }
                     unset($row);
                 }
@@ -233,7 +235,8 @@ if ($usertype != 1 && $usertype != 2) {
                         <div class = "stage-items-info hidden">
                     <?php                            
                             }
-                    ?> 
+                        if (!is_null($row['TASK_NUM_IN_STAGE'])) {
+                    ?>
                             <div class = "item-info">
                                 <div class = "item-name">
                                     <div>
@@ -248,6 +251,7 @@ if ($usertype != 1 && $usertype != 2) {
                                 </div>
                             </div>
                     <?php
+                        }
                             $lastrow = $row['STAGE_ID'];
                         }
                     ?>

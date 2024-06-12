@@ -79,31 +79,33 @@ if ($usertype != 1 && $usertype != 2) {
                 oci_bind_by_name($stage_info, ":student_id", $userid);
                 oci_execute($stage_info);
                 while ( $row = oci_fetch_array($stage_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
-                    echo "
-                        <div class = 'stage'>
-                            <div class = 'stage-info'>
-                                <span class = 'stage-name'>".$row['STAGE_NAME']."</span>
-                                <span class = 'stage-desc'>".$row['STAGE_MEANING']."</span>
-                                <span class = 'stage-tasks'>Выполнено заданий: ".$row['TASK_ANSWER_IN_STAGE']."/".$row['STAGE_NUM_TASKS']."</span>
-                                <div class = 'stage-note'>
-                                    <span class = 'note-text'>PL/SQL</span>
-                                    <span class = 'note-text'>Новичок</span>
+                    if (!is_null($row.['STAGE_ID'])) {
+                        echo "
+                            <div class = 'stage'>
+                                <div class = 'stage-info'>
+                                    <span class = 'stage-name'>".$row['STAGE_NAME']."</span>
+                                    <span class = 'stage-desc'>".$row['STAGE_MEANING']."</span>
+                                    <span class = 'stage-tasks'>Выполнено заданий: ".$row['TASK_ANSWER_IN_STAGE']."/".$row['STAGE_NUM_TASKS']."</span>
+                                    <div class = 'stage-note'>
+                                        <span class = 'note-text'>PL/SQL</span>
+                                        <span class = 'note-text'>Новичок</span>
+                                    </div>
+                                </div>
+                                <div class = 'stage-progress-circle' data-correct-task = '".$row['TASK_COMPLETE_IN_STAGE']."' data-all-task = '".$row['STAGE_NUM_TASKS']."'>
+                                    <span class = 'progress-circle-left'>
+                                        <span class = 'progress-circle'></span>
+                                    </span>
+                                    <span class = 'progress-circle-right'>
+                                        <span class = 'progress-circle'></span>
+                                    </span>
+                                    <div class = 'stage-progress-value'>
+                                        <span>".$row['TASK_COMPLETE_IN_STAGE']."<span class = 'stage-num-tasks'>/".$row['STAGE_NUM_TASKS']."</span></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class = 'stage-progress-circle' data-correct-task = '".$row['TASK_COMPLETE_IN_STAGE']."' data-all-task = '".$row['STAGE_NUM_TASKS']."'>
-                                <span class = 'progress-circle-left'>
-                                    <span class = 'progress-circle'></span>
-                                </span>
-                                <span class = 'progress-circle-right'>
-                                    <span class = 'progress-circle'></span>
-                                </span>
-                                <div class = 'stage-progress-value'>
-                                    <span>".$row['TASK_COMPLETE_IN_STAGE']."<span class = 'stage-num-tasks'>/".$row['STAGE_NUM_TASKS']."</span></span>
-                                </div>
-                            </div>
-                        </div>
-                    ";
-                    unset($row);
+                        ";
+                        unset($row);
+                    }
                 }
                 oci_free_statement($stage_info);
             ?>

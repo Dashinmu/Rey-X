@@ -265,6 +265,7 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         where 1 = 1
             and login = upper(p_login)
             and password = get_password(p_password)
+            and trunc(sysdate) between START_DATE and END_DATE
         ;
         --Если пользователь не найден возвращаем 0
         exception when others then p_user_type := 0; p_user_id := 0;
