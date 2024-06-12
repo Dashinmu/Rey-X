@@ -88,6 +88,26 @@
             :new.login := upper(:new.login);
         END;
 
+        CREATE OR REPLACE TRIGGER diplom.user_id_trigger_update
+        BEFORE UPDATE ON DIPLOM.USERS FOR EACH ROW
+        BEGIN
+            if :new.login is not null and upper(:new.login) not like :old.login 
+                then :new.login := upper(:new.login); 
+                else :new.login := :old.login;
+            end if;
+            if :new.password is not null 
+                then :new.password := DIPLOM.FND_USER.GET_PASSWORD(P_PASSWORD  => :new.password); 
+                else :new.password := :old.password;
+            end if;
+            if :new.start_date < :old.start_date or :new.start_date is null then raise_application_error(-20001, 'Дата начала обучения не может быть указана меньше текущей'); 
+                elsif :new.start_date is null then :new.start_date := :old.start_date;
+            end if;
+            if :new.end_date <= :old.start_date then raise_application_error(-20001, 'Дата окончания обучения не может быть меньше даты начала обучения'); 
+                elsif :new.end_date is null then :new.end_date := :old.end_date;
+            end if;
+            if :new.name is null or :new.name like :old.name then :new.name := :old.name; end if;
+        END;
+
         /* Удалить таблицу */
         /* DROP TABLE diplom.users */
     

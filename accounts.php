@@ -51,7 +51,6 @@ if ($usertype == 1 || $usertype == 2) { ?>
     </div>
 </div>
 
-<!-- Этапы и история заданий -->
 <div class = "students-activity min">
     <div class = "label">
         <span>Практиканты</span>
@@ -60,17 +59,20 @@ if ($usertype == 1 || $usertype == 2) { ?>
     </div>
 
     <div class = "active-students">
-        <!-- Запрос на получение последних 2х этапов -->
         <?php 
             $stage_info = oci_parse($conn, $get_all_student);
             oci_bind_by_name($stage_info, ":user_id", $userid);
             oci_execute($stage_info);
             while ( $row = oci_fetch_array($stage_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
         ?>
-            <div class = "student-info <?php echo $row['STATUS']?>">
+            <div id = "<?php echo $row['ID']?>" class = "student-info <?php echo $row['STATUS']?>">
                 <div class = "student-info1">
-                    <span class = "student-name"><?php echo $row['STUDENT_NAME']?></span>
-                    <span class = "student-date <?php echo $row['STATUS']?>">с <?php echo $row['START_DATE']?> по <?php echo $row['END_DATE']?></span>
+                    <span class = "student-name">
+                        <?php echo $row['STUDENT_NAME']?>
+                    </span>
+                    <span class = "student-date <?php echo $row['STATUS']?>">
+                        с <?php echo $row['START_DATE']?> по <?php echo $row['END_DATE']?>
+                    </span>
                 </div>
                 <div class = "student-info2">
                     <span class = "student-stages">Этапы: <?php echo $row['STAGE_CNT']?></span>
@@ -91,11 +93,89 @@ if ($usertype == 1 || $usertype == 2) { ?>
 require_once "modal.php";
 ?>
 <script>
+    var student_id;
     $(function() {
-        $(".stage").click(function() {
-            window.location.href = "/task.php";
+        $(".student-info").click(function() {
+            student_id = this.id;
+            var student_name, student_startdate, student_enddate, student_email, student_phone, student_login;
+            $.ajax({
+                url:"./scripts/getuserinfo.php"
+                , type: "POST"
+                , data: {
+                    user_id: student_id
+                }
+                , success: function(response) {
+                    result = JSON.parse(response);
+                    if (result.message == 2) {
+                        student_login = result.login;
+                        student_name = result.name;
+                        student_startdate = result.startdate;
+                        student_enddate = result.enddate;
+                        student_email = result.email;
+                        student_phone = result.phone;
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function() {
+                    alert("Ошибка AJAX");
+                }
+                , async: false
+            });
+            $("#login_get").val(student_login);
+            $("#username_get").val(student_name);
+            $("#startdate_get").val(student_startdate);
+            $("#enddate_get").val(student_enddate);
+            $("#email_get").val(student_email);
+            $("#phone_get").val(student_phone);
+            $("#userInfoModal").modal('toggle');
         })
     });
+
+    $(function() {
+        $("#userInfoModal").submit(function(e){
+            e.preventDefault();
+            var login = $("#login_get").val();
+            var username = $("#username_get").val();
+            var password = $("#password_get").val();
+            var startdate = $("#startdate_get").val();
+            var enddate = $("#enddate_get").val();
+            var email = $("#email_get").val();
+            var phone = $("#phone_get").val();
+            $.ajax({
+                url:"./scripts/update_user.php"
+                , type: "POST"
+                , data: {
+                    p_login: login
+                    , p_password: password
+                    , p_username: username
+                    , p_email: email
+                    , p_phone: phone
+                    , p_start_date: startdate
+                    , p_end_date: enddate
+                    , p_user: student_id
+                    , p_tutor: <?php echo $userid; ?>
+                }
+                , success: function(response) {
+                    var result = JSON.parse(response);
+                    if (result.message != 0) {
+                        if (result.message != 1) {
+                            showNotification("Данные пользователи обновлены!", "accept");
+                        } else {
+                            alert(result.error_message);
+                        }
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function() {
+                    alert("AJAX ERROR");
+                }
+                , async: false
+            })
+        })
+    });
+
     $(function() {
         $("#createAccountModal").submit(function(e){
             e.preventDefault();
@@ -125,7 +205,7 @@ require_once "modal.php";
                     var result = JSON.parse(response);
                     if (result.message != 0){
                         if (result.message != 1){
-                            showNotification("Учётная запись успешна создана!", 'accept');
+                            showNotification("Учётная запись успешна обновлена!", 'accept');
                         } else {
                             alert(result.error_message);
                         }
@@ -136,6 +216,7 @@ require_once "modal.php";
                 , error: function(){
                     alert("Не удалось отправить запрос на создание...");
                 }
+                , async: false
             });
         })
     });

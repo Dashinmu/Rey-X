@@ -65,6 +65,20 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
         , p_tutor_phone out VARCHAR2
     );
 
+    --Обновить данные пользователя
+    PROCEDURE update_user(
+        p_login in VARCHAR2 default null
+        , p_password in VARCHAR2 default null
+        , p_username in VARCHAR2 default null
+        , p_email in VARCHAR2 default null
+        , p_phone in VARCHAR2 default null
+        , p_start_date in VARCHAR2 default null
+        , p_end_date in VARCHAR2 default null
+        , p_user in NUMBER
+        , p_tutor in NUMBER
+        , p_error out VARCHAR2
+    );
+
 END FND_USER;
 
 CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
@@ -154,6 +168,48 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
             when no_user_type_found then p_error := ('ERROR: Не существует тип пользователя с id = '||p_user_type);
             when others then p_error := 'Пользовать '||p_login||' уже существует в системе';
     END add_user;
+
+    --Обновить данные пользователя
+    PROCEDURE update_user(
+        p_login in VARCHAR2 default null
+        , p_password in VARCHAR2 default null
+        , p_username in VARCHAR2 default null
+        , p_email in VARCHAR2 default null
+        , p_phone in VARCHAR2 default null
+        , p_start_date in VARCHAR2 default null
+        , p_end_date in VARCHAR2 default null
+        , p_user in NUMBER
+        , p_tutor in NUMBER
+        , p_error out VARCHAR2
+    ) IS
+    BEGIN
+        UPDATE
+            DIPLOM.USERS
+        SET
+            LOGIN = p_login
+            , NAME = p_username
+            , PASSWORD = p_password
+            , CONTACT_INFO1 = p_email
+            , CONTACT_INFO2 = p_phone
+            , START_DATE = to_date(p_start_date, 'YYYY-MM-DD')
+            , END_DATE = to_date(p_end_date, 'YYYY-MM-DD')
+        WHERE 1 = 1
+            and ID = p_user
+        ;
+        commit;
+        UPDATE
+            DIPLOM.PERSON_RELATIONS
+        SET
+            START_DATE = to_date(p_start_date, 'YYYY-MM-DD')
+            , END_DATE = to_date(p_end_date, 'YYYY-MM-DD')
+        WHERE
+            CHILD = p_user
+            and PARENT = p_tutor
+        ;
+        commit;
+
+        exception when others then p_error := SQLERRM;
+    END;
 
     --Поменять пароль учётной записи.
     PROCEDURE change_password(
@@ -293,7 +349,7 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
                 on pi_t.USER_ID = pr.PARENT
         WHERE 1 = 1
             and pi.USER_LOGIN like upper(p_login)
-            and trunc(sysdate) <= to_date(pi.USER_INACTIVE_DATE, 'dd.mm.yyyy')
+            and trunc(sysdate) <= pi.USER_INACTIVE_DATE
         ;
         exception when others then p_username := '000';
     END get_personal_data;

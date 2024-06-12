@@ -107,32 +107,53 @@
             , ppi.TASK_NAME
             , a.ANSWER
             , a.RATING
-            , a.CREATION_DATE
+            , to_char(a.CREATION_DATE, 'dd.mm.yyyy hh24:mi:ss') as CREATION_DATE
+            , to_char(ppi.FIRST_TRUE_ANSWER_DATE, 'dd.mm.yyyy hh24:mi:ss') as FIRST_TRUE_ANSWER_DATE
             , pr.START_DATE
             , pr.END_DATE
             , case when pr.END_DATE < trunc(sysdate) then 'inactive' end as STUDENT_STATUS
+            , u.NAME
             , ppi2.NUM_STAGES_ASSIGNED
+            , ppi2.NUM_ALL_COMPLETE_TASKS
             , ppi2.NUM_ALL_ANSWER_TASKS
-            , ppi2.NUM_STAGES_ASSIGNED
+            , ppi2.NUM_ALL_TASKS_STAGES
         FROM
             DIPLOM.PRACTICE_PROGRESS_INFO ppi
             join DIPLOM.PERSON_RELATIONS pr
                 on pr.CHILD = PPI.STUDENT_ID
                 and pr.END_DATE > trunc(sysdate - 62)
+                and pr.PARENT = :p_user
             join DIPLOM.USERS u
-                on pr.PARENT = u.ID
-                and u.ID = :p_user
+                on ppi.STUDENT_ID = u.ID
             left join DIPLOM.ANSWER a
                 on a.TASK = ppi.TASK_ID
                 and a.PERSON = ppi.STUDENT_ID
             left join (
                 SELECT
                     STUDENT_ID
-                    , count(nvl(STAGE_ID, 0)) as NUM_STAGES_ASSIGNED
-                    , sum(nvl(TASK_ANSWER_IN_STAGE, 0)) as NUM_ALL_ANSWER_TASKS
-                    , sum(nvl(STAGE_NUM_TASKS, 0)) as NUM_ALL_TASKS_STAGES
+                    , count(STAGE_ID) as NUM_STAGES_ASSIGNED
+                    , sum(TASK_COMPLETE_IN_STAGE) as NUM_ALL_COMPLETE_TASKS
+                    , sum(TASK_ANSWER_IN_STAGE) as NUM_ALL_ANSWER_TASKS
+                    , sum(STAGE_NUM_TASKS) as NUM_ALL_TASKS_STAGES
                 FROM
-                    DIPLOM.PRACTICE_PROGRESS_INFO
+                    (
+                        SELECT
+                            STUDENT_ID
+                            , STAGE_ID
+                            , TASK_COMPLETE_IN_STAGE
+                            , TASK_ANSWER_IN_STAGE
+                            , STAGE_NUM_TASKS
+                            , MAX(LAST_DATE)
+                        FROM
+                            DIPLOM.PRACTICE_PROGRESS_INFO
+                        WHERE 1 = 1
+                        GROUP BY
+                            STUDENT_ID
+                            , STAGE_ID
+                            , TASK_COMPLETE_IN_STAGE
+                            , TASK_ANSWER_IN_STAGE
+                            , STAGE_NUM_TASKS
+                    )
                 WHERE 1 = 1
                 GROUP BY
                     STUDENT_ID
@@ -152,10 +173,12 @@
             , count(q.STAGE_ID) STAGE_CNT
             , sum(q.STAGE_NUM_TASKS) STAGE_TASKS
             , sum(q.TASK_COMPLETE_IN_STAGE) STAGE_TASKS_COMPLETE
+            , q.STUDENT_ID
         FROM
             (
                 SELECT
-                    u.NAME STUDENT_NAME
+                    u.ID STUDENT_ID
+                    , u.NAME STUDENT_NAME
                     , u.START_DATE
                     , u.END_DATE
                     , u.ID
@@ -172,7 +195,8 @@
                         on ppi.STUDENT_ID = u.ID
                 WHERE 1 = 1
                 GROUP BY
-                    u.NAME
+                    u.ID
+                    , u.NAME
                     , u.START_DATE
                     , u.END_DATE
                     , u.ID
@@ -186,6 +210,7 @@
             , q.START_DATE
             , q.END_DATE
             , q.ID
+            , q.STUDENT_ID
     ";
 
     $get_all_student = "
@@ -357,6 +382,23 @@
                 , p_num_task => :p_num_task
                 , p_start_date => :p_start_date
                 , p_end_date => :p_end_date
+                , p_error => :p_error
+            );
+        END;
+    ";
+
+    $update_user = "
+        BEGIN
+            DIPLOM.FND_USER.update_user(
+                p_tutor => :p_tutor
+                , p_login => :p_login
+                , p_password => :p_password
+                , p_username => :p_username
+                , p_email => :p_email
+                , p_phone => :p_phone
+                , p_start_date => :p_start_date
+                , p_end_date => :p_end_date
+                , p_user => :p_user
                 , p_error => :p_error
             );
         END;

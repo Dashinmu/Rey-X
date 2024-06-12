@@ -627,6 +627,8 @@ main {
     color: #b8b8b8;
     padding-left: 13px;
     padding-bottom: 7px;
+    max-width: 750px;
+    overflow: auto;
 }
 
 .stages-item .stage {
@@ -769,6 +771,7 @@ main {
     flex-direction: column;
     padding-left: 70px;
     margin-top: 40px;
+    max-width: 900x;
 }
 
 .students-activity.min {
@@ -777,6 +780,12 @@ main {
 
 .students-activity .active-students {
     display: grid;
+    margin-top: 15px;
+}
+
+.students-activity .active-students .userInfoA {
+    text-decoration: none;
+    color: #FFFFFF;
 }
 
 .students-activity .active-students .student-info {
@@ -832,7 +841,7 @@ main {
 
 .students-activity .label {
     display: flex;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
     align-items: center;
 }
 
@@ -955,6 +964,20 @@ main {
     background: #1B2A2F;
     overflow-wrap: break-word;
     overflow: auto;
+}
+
+.tasks-info-block .task-info-item .item-descrip .btn_edit_task {
+    border: 2px solid #fafafa;
+    border-radius: 10px;
+    margin-top: 10px;
+    max-width: 200px;
+    background: #5978b1;
+    color: #fafafa;
+    transition: background-color 0.3s ease;
+}
+
+.tasks-info-block .task-info-item .item-descrip .btn_edit_task:hover {
+    background: #3c527c;
 }
 
 .stages-info-block {
@@ -1080,5 +1103,171 @@ main {
     border-radius: 5px;
     background: #152930;
     overflow-wrap: break-word;
+    overflow: auto;
+}
+
+.students-activity .students-history {
+    display: grid;
+    max-height: 700px;
+    overflow: auto;
+    max-height: 750px;
+}
+
+.students-activity .students-history .student-block {
+    display: grid;
+    border: 2px solid #6E93D6;
+    border-radius: 10px;
+    margin: 1px;
+    margin-top: 10px;
+}
+
+.students-activity .students-history .student-block.inactive {
+    border: 2px solid #8d8d8d;
+}
+
+.students-activity .students-history .student-block .student-info {
+    padding: 10px;
+    border: 2px solid #6e93d6;
+    border-radius: 10px;
+    margin: -2px;
+}
+
+.students-activity .students-history .student-block .student-info.open {
+    background: #6e92d654;
+}
+
+.students-activity .students-history .student-block .student-info.inactive {
+    border: 2px solid #8d8d8d;
+    opacity: 70%;
+}
+
+.students-activity .students-history .student-block .student-info:hover {
+    background: #6e92d654;
+}
+
+.students-activity .students-history .student-block .student-info .student-info1 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.students-activity .students-history .student-block .student-info .student-info1 .student-name {
+    color: #27925b;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.students-activity .students-history .student-block .student-info .student-info1 .student-date {
+    color: #fafafa;
+    margin-left: 10px;
+    border-radius: 10px;
+    border: 2px solid #6E93D6;
+    background: #6E93D6;
+    font-size: 11px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.students-activity .students-history .student-info .student-info1 .student-date.inactive {
+    border: 2px solid #8d8d8d;
+    background: #8d8d8d;
+}
+
+.students-activity .students-history .student-info .student-info2 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.students-activity .students-history .student-block2 {
+    margin-top: 10px;
+}
+
+.students-activity .students-history .student-block2 .student-history-block {
+    display: grid;
+    border: 2px solid /* #d66e6e; */ #3BB273;
+    border-radius: 10px;
+    /* padding: 10px; */
+    margin: 10px;
+    margin-top: 0px;
+}
+
+.students-activity .students-history .student-block2 .student-history-block.incorrect {
+    border: 2px solid /* #3BB273 */ #d66e6e;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid /* #d66e6e; */ #3BB273;
+    margin: -2px;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-info.incorrect {
+    border: 2px solid /* #3BB273 */ #d66e6e;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-info:hover {
+    background: #6e92d654;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-info.open {
+    background: #6e92d654;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-info .student-stage-name {
+    font-weight: bold;
+    color: #6E93D6;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-info .student-time {
+    font-size: 12px;
+    /* font-weight: bold; */
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background-color: /* #d66e6e */ #3BB273;
+    margin-left: 15px;
+    /* color: #333; */
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-info .student-time.incorrect {
+    background-color: /* #27925b */ #d66e6e;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-block .answer-task-info {
+    margin: 10px;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-block .answer-task-info .answer-time {
+    font-size: 12px;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-block .answer-task-info .answer-answer {
+    border: 2px solid /* #d66e6e */ #27925b;
+    padding: 5px;
+    border-radius: 5px;
+    max-width: 700px;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-block .answer-task-info .answer-answer.incorrect {
+    border: 2px solid /* #27925b */ #d66e6e;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-block .answer-task-info .answer-answer.open {
+    background: #6e92d654;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-block .answer-task-info .answer-answer .answer-code {
+    color: skyblue;
+    overflow-wrap: break-word;
+    overflow: hidden;
+}
+
+.students-activity .students-history .student-block2 .student-history-block .student-task-block .answer-task-info .answer-answer .answer-code.wrap {
     overflow: auto;
 }

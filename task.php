@@ -268,7 +268,7 @@ if ($usertype != 1 && $usertype != 2) {
                 <?php
                     while ($row = oci_fetch_array($all_tasks_info, OCI_RETURN_NULLS + OCI_ASSOC)) {
                 ?>
-                    <div class = "task-info-item <?php echo $row['TASK_INACTIVE_STATUS']?>">
+                    <div class = "task-info-item <?php echo $row['TASK_INACTIVE_STATUS']?>" id = "task-<?php echo $row['TASK_ID']?>">
                         <div class = "item-info">
                             <span class = "task-name"><?php echo $row['TASK_MEANING']?></span>
                             <span class = "task-type"><?php echo $row['TASK_TYPE']?></span>
@@ -293,6 +293,7 @@ if ($usertype != 1 && $usertype != 2) {
                         ?>
                             <span class = "task-desc"><?php echo $row['TASK_DESCRIPTION']?></span>
                             <code class = "task-answer"><?php echo $row['ANSWER']?></code>
+                            <input type = "button" class = "btn_edit_task" value = "Изменить задание">
                         </div>
                     </div>
                 <?php
@@ -449,6 +450,7 @@ require_once "modal.php";
                 , error: function(){
                     alert("Не удалось отправить запрос на создание...");
                 }
+                , async: false
             });
         })
     });
@@ -488,7 +490,7 @@ require_once "modal.php";
                         if (result.message != 1) {
                             /* showNotification("Этап успешно создано!", 'accept'); */
                             /* location.reload(); */
-                            if ( p_stage_child_id == null) {
+                            if ( p_stage_child_id != "") {
                                 $.ajax({
                                     url:"./scripts/connect_stage.php"
                                     , type: "POST"
@@ -525,6 +527,7 @@ require_once "modal.php";
                 , error: function() {
                     alert("Не удалось отправить запрос на запись этапа...");
                 }
+                , async: false
             });
         })
     });
@@ -560,6 +563,7 @@ require_once "modal.php";
                 , error: function() {
                     alert("Не удалось отправить запрос на запись этапа...");
                 }
+                , async: false
             });
         })
     });

@@ -67,6 +67,20 @@ begin
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 end;
 
+SELECT * FROM DIPLOM.USERS;
+DECLARE
+    p_error VARCHAR2(400);
+BEGIN
+    DIPLOM.FND_TASKS.give_stage(
+        p_user => 2
+        , p_stage => 2
+        , p_student => 102
+        , p_error => p_error
+    );
+END;
+
+SELECT * FROM DIPLOM.STAGE_RELATIONS
+
 declare
     p_error VARCHAR2(400);
 BEGIN
@@ -610,6 +624,8 @@ FROM
 WHERE 1 = 1
 ;
 
+DELETE FROM DIPLOM.ANSWER WHERE ID = 4;
+
 SELECT
     ppi.STUDENT_ID
     , ppi.STUDENT_NAME
@@ -625,8 +641,9 @@ SELECT
     , pr.END_DATE
     , case when pr.END_DATE < trunc(sysdate) then 'inactive' end as STUDENT_STATUS
     , ppi2.NUM_STAGES_ASSIGNED
+    , ppi2.NUM_ALL_COMPLETE_TASKS
     , ppi2.NUM_ALL_ANSWER_TASKS
-    , ppi2.NUM_STAGES_ASSIGNED
+    , ppi2.NUM_ALL_TASKS_STAGES
 FROM
     DIPLOM.PRACTICE_PROGRESS_INFO ppi
     join DIPLOM.PERSON_RELATIONS pr
@@ -641,11 +658,29 @@ FROM
     left join (
         SELECT
             STUDENT_ID
-            , count(nvl(STAGE_ID, 0)) as NUM_STAGES_ASSIGNED
-            , sum(nvl(TASK_ANSWER_IN_STAGE, 0)) as NUM_ALL_ANSWER_TASKS
-            , sum(nvl(STAGE_NUM_TASKS, 0)) as NUM_ALL_TASKS_STAGES
+            , count(STAGE_ID) as NUM_STAGES_ASSIGNED
+            , sum(TASK_COMPLETE_IN_STAGE) as NUM_ALL_COMPLETE_TASKS
+            , sum(TASK_ANSWER_IN_STAGE) as NUM_ALL_ANSWER_TASKS
+            , sum(STAGE_NUM_TASKS) as NUM_ALL_TASKS_STAGES
         FROM
-            DIPLOM.PRACTICE_PROGRESS_INFO
+            (
+                SELECT
+                    STUDENT_ID
+                    , STAGE_ID
+                    , TASK_COMPLETE_IN_STAGE
+                    , TASK_ANSWER_IN_STAGE
+                    , STAGE_NUM_TASKS
+                    , MAX(LAST_DATE)
+                FROM
+                    DIPLOM.PRACTICE_PROGRESS_INFO
+                WHERE 1 = 1
+                GROUP BY
+                    STUDENT_ID
+                    , STAGE_ID
+                    , TASK_COMPLETE_IN_STAGE
+                    , TASK_ANSWER_IN_STAGE
+                    , STAGE_NUM_TASKS
+            )
         WHERE 1 = 1
         GROUP BY
             STUDENT_ID
@@ -654,6 +689,36 @@ FROM
 WHERE 1 = 1
 ORDER BY
     1, 3 desc, 6 desc, 10 desc
+;
+
+SELECT
+    STUDENT_ID
+    , count(STAGE_ID) as NUM_STAGES_ASSIGNED
+    , sum(TASK_COMPLETE_IN_STAGE) as NUM_ALL_COMPLETE_TASKS
+    , sum(TASK_ANSWER_IN_STAGE) as NUM_ALL_ANSWER_TASKS
+    , sum(STAGE_NUM_TASKS) as NUM_ALL_TASKS_STAGES
+FROM
+    (
+        SELECT
+            STUDENT_ID
+            , STAGE_ID
+            , TASK_COMPLETE_IN_STAGE
+            , TASK_ANSWER_IN_STAGE
+            , STAGE_NUM_TASKS
+            , MAX(LAST_DATE)
+        FROM
+            DIPLOM.PRACTICE_PROGRESS_INFO
+        WHERE 1 = 1
+        GROUP BY
+            STUDENT_ID
+            , STAGE_ID
+            , TASK_COMPLETE_IN_STAGE
+            , TASK_ANSWER_IN_STAGE
+            , STAGE_NUM_TASKS
+    )
+WHERE 1 = 1
+GROUP BY
+    STUDENT_ID
 ;
 
 DELETE FROM DIPLOM.STAGES WHERE ID > 20;

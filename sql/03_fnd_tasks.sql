@@ -555,7 +555,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             DIPLOM.TASK_RELATIONS
         where 1 = 1
             and STAGE = p_stage
-            and p_date between START_DATE and END_DATE
+            /* and p_date between START_DATE and END_DATE */
         ;
         return res;
     END;

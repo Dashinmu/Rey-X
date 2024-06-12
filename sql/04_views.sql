@@ -5,7 +5,8 @@ CREATE OR REPLACE VIEW DIPLOM.PERSONAL_INFO AS
         , u.NAME as USER_NAME
         , u.CONTACT_INFO1 as USER_MAIL
         , u.CONTACT_INFO2 as USER_PHONE
-        , to_char(u.END_DATE, 'dd.mm.yyyy') as USER_INACTIVE_DATE
+        , u.START_DATE as USER_START_DATE
+        , u.END_DATE as USER_INACTIVE_DATE
         , ut.MEANING as USER_TYPE
         , u.LOGIN as USER_LOGIN
     FROM
@@ -23,7 +24,7 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , s.STAGE_NAME as STAGE_NAME
         , s.MEANING as STAGE_MEANING
         , u.LOGIN as STAGE_AUTHOR_NAME
-        , to_char(s.INACTIVE_DATE, 'dd.mm.yyyy') as STAGE_INACTIVE_DATE
+        , s.INACTIVE_DATE as STAGE_INACTIVE_DATE
         , s.TIME_PERIOD as STAGE_TIME_PERIOD --нужен ли?
         , t.ID as TASK_ID
         , tt.ID as TASK_TYPE_ID
@@ -31,7 +32,7 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , t.MEANING as TASK_NAME
         , st.NUM_TASK as TASK_NUM_IN_STAGE
         , t.DESCRIP as TASK_DESC
-        , to_char(t.INACTIVE_DATE, 'dd.mm.yyyy') as TASK_INACTIVE_DATE
+        , t.INACTIVE_DATE as TASK_INACTIVE_DATE
         , a.ANSWER as TRUE_ANSWER
         , case when s.INACTIVE_DATE < trunc(sysdate) then 'inactive' end STAGE_STATUS
         , max(st.NUM_TASK) as STAGE_NUM_TASKS
@@ -63,7 +64,7 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , s.STAGE_NAME
         , s.MEANING
         , u.LOGIN
-        , to_char(s.INACTIVE_DATE, 'dd.mm.yyyy')
+        , s.INACTIVE_DATE
         , s.TIME_PERIOD
         , t.ID
         , tt.ID
@@ -71,7 +72,7 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , t.MEANING
         , st.NUM_TASK
         , t.DESCRIP
-        , to_char(t.INACTIVE_DATE, 'dd.mm.yyyy')
+        , t.INACTIVE_DATE
         , a.ANSWER
         , case when s.INACTIVE_DATE < trunc(sysdate) then 'inactive' end
     ORDER BY
@@ -138,7 +139,7 @@ CREATE OR REPLACE VIEW DIPLOM.PRACTICE_PROGRESS_INFO AS
             p_stage => s.ID
             , p_date => student.START_DATE
         ) as STAGE_NUM_TASKS
-        , to_char(gs.ASSIGNED_DATE, 'dd.mm.yyyy hh24:mm') as STAGE_ASSIGNED_DATE
+        , gs.ASSIGNED_DATE as STAGE_ASSIGNED_DATE
         , u.LOGIN as ASSIGNED_BY
         , null as TO_TASK
         , t.ID as TASK_ID

@@ -266,7 +266,11 @@ require_once "modal.php";
             window.location.href = "/task.php";
         })
         $(".task-activity").click(function() {
-            window.location.href = "/task.php";
+            if (<?php echo $usertype?> != 3) {
+                window.location.href = "/history.php";
+            } else {
+                window.location.href = "/task.php";
+            }
         })
         $(".active-students").click(function() {
             window.location.href = "/accounts.php";
