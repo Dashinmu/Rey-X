@@ -412,10 +412,10 @@
         BEGIN
             :new.id := diplom.task_relations_seq.nextval;
             if :new.start_date is null then
-                :new.start_date := trunc(sysdate);
+                :new.start_date := DIPLOM.FND_TASKS.get_stage_date(:new.stage, 0);
             end if;
             if :new.end_date is null then
-                :new.end_date := to_date('01013872','ddmmyyyy');
+                :new.end_date := DIPLOM.FND_TASKS.get_stage_date(:new.stage, 1);
             end if;
             begin
                 select id into :new.stage from DIPLOM.STAGES where id = :new.stage;
@@ -437,6 +437,13 @@
                     and trunc(sysdate) between start_date and end_date
                 ;
             end if;
+        END;
+
+        CREATE OR REPLACE TRIGGER diplom.task_relations_trigger_update
+        BEFORE UPDATE ON diplom.task_relations FOR EACH ROW
+        BEGIN
+            if DIPLOM.FND_TASKS.valid_task_date(:new.start_date, :old.stage) then :new.start_date := :old.start_date; end if;
+            if DIPLOM.FND_TASKS.valid_task_date(:new.end_date, :old.stage) then :new.end_date := :old.end_date; end if;
         END;
 
         /* Удалить таблицу */

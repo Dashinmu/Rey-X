@@ -328,3 +328,59 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="taskInfoModal" tabindex="-1" role="dialog" aria-labelledby="taskInfoModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskInfoModal">Обновить задание</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method = "post">
+                    <div class = "form-group">
+                        <input type="text" id = "task_meaning_get" class="form-control" name="task_meaning" placeholder="Введите наименование" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id = "task_desc_get" class="form-control" name="task_desc" placeholder="Введите описание" required>
+                    </div>
+                    <div class="form-group">
+                        <select id = "task_type_get" class="form-control" name="task_type" required>
+                            <option value = "">--Выберите тип задания--</option>
+                            <?php 
+                                $all_task_types = oci_parse($conn, $get_all_tasks_types);
+                                oci_execute($all_task_types);
+                                while($row = oci_fetch_array($all_task_types, OCI_RETURN_NULLS + OCI_ASSOC)) {
+                            ?>
+                                <option value = "<?php echo $row['ID']?>"><?php echo $row['MEANING']?></option>
+                            <?php        
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class = "form-group">
+                        <input type="text" id = "task_creation_date_get" class="form-control" name="startdate" placeholder="Введите дату начала DD.MM.YYYY"
+                            onfocus="(this.type='date')"
+                            onblur="(this.type='text')"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id = "task_inactive_date_get" class="form-control" name="startdate" placeholder="Введите дату начала DD.MM.YYYY"
+                            onfocus="(this.type='date')"
+                            onblur="(this.type='text')"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <textarea type="text" id = "task_answer_get" class="form-control" name="task_answer" placeholder="Введите решение" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="btn_update_task_info" class="btn btn-primary btn-block">Подтвердить</button>
+                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

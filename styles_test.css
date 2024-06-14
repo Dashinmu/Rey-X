@@ -904,14 +904,10 @@ main {
 
 .tasks-info-block .task-info-item {
     display: grid;
-    padding: 10px;
+    /* padding: 10px; */
     margin: 5px;
     border: 2px solid #6E93D6;
     border-radius: 10px;
-}
-
-.tasks-info-block .task-info-item:hover {
-    background: #6e92d654;
 }
 
 .tasks-info-block .task-info-item.open {
@@ -922,10 +918,29 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px;
+    border: 2px solid #6E93D6;
+    border-radius: 10px;
+    margin: -2px;
+    margin-bottom: 0px;
+}
+
+.tasks-info-block .task-info-item .item-info:hover {
+    background: #6e92d654;
+    cursor: pointer;
+}
+
+.tasks-info-block .task-info-item .item-info.open {
+    background: #6e92d654;
 }
 
 .tasks-info-block .task-info-item .item-descrip {
     display: grid;
+    padding: 10px;
+    padding-top: 2px;
+    background: #506a9c54;
+    margin-top: -3px;
+    padding-top: 5px;
 }
 
 .tasks-info-block .task-info-item .item-descrip.hidden {
@@ -964,6 +979,11 @@ main {
     background: #1B2A2F;
     overflow-wrap: break-word;
     overflow: auto;
+}
+
+.tasks-info-block .task-info-item .item-descrip .task-answer:hover {
+    cursor: pointer;
+    background: #5978b1;
 }
 
 .tasks-info-block .task-info-item .item-descrip .btn_edit_task {

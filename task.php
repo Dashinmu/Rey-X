@@ -247,7 +247,7 @@ if ($usertype != 1 && $usertype != 2) {
                                 </div>
                                 <div class = "item-descrip hidden">
                                     <span class = "task-desc"><?php echo $row['TASK_DESC']?></span>
-                                    <code class = "task-answer"><?php echo $row['TRUE_ANSWER']?></code>
+                                    <code id = "task-<?php echo $row['TASK_ID']?>" class = "task-answer"><?php echo $row['TRUE_ANSWER']?></code>
                                 </div>
                             </div>
                     <?php
@@ -272,7 +272,7 @@ if ($usertype != 1 && $usertype != 2) {
                 <?php
                     while ($row = oci_fetch_array($all_tasks_info, OCI_RETURN_NULLS + OCI_ASSOC)) {
                 ?>
-                    <div class = "task-info-item <?php echo $row['TASK_INACTIVE_STATUS']?>" id = "task-<?php echo $row['TASK_ID']?>">
+                    <div class = "task-info-item <?php echo $row['TASK_INACTIVE_STATUS']?>">
                         <div class = "item-info">
                             <span class = "task-name"><?php echo $row['TASK_MEANING']?></span>
                             <span class = "task-type"><?php echo $row['TASK_TYPE']?></span>
@@ -296,8 +296,8 @@ if ($usertype != 1 && $usertype != 2) {
                             }
                         ?>
                             <span class = "task-desc"><?php echo $row['TASK_DESCRIPTION']?></span>
-                            <code class = "task-answer"><?php echo $row['ANSWER']?></code>
-                            <input type = "button" class = "btn_edit_task" value = "Изменить задание">
+                            <code id = "task-<?php echo $row['TASK_ID']?>" class = "task-answer"><?php echo $row['ANSWER']?></code>
+                            <!-- <input type = "button" class = "btn_edit_task" value = "Изменить задание"> -->
                         </div>
                     </div>
                 <?php
@@ -391,9 +391,92 @@ require_once "modal.php";
     });
 
     $(function() {
-        $(".task-info-item").click(function() {
+        $(".item-info").click(function() {
             $(this).toggleClass("open");
-            $(this).children(".item-descrip").toggleClass("hidden");
+            $(this).closest(".task-info-item").children(".item-descrip").toggleClass("hidden");
+        })
+    });
+
+    var task_id;
+    $(function() {
+        $(".task-answer").click(function() {
+            task_id = Number(this.id.replace('task-', ''));
+            var task_meaning, task_type, task_type_id, task_descrip, task_creation_date, task_inactive_date, task_author, task_answer;
+            $.ajax({
+                url:"./scripts/gettaskinfo.php"
+                , type: "POST"
+                , data: {
+                    task_id: task_id
+                }
+                , success: function(response) {
+                    result = JSON.parse(response);
+                    if (result.message == 2) {
+                        task_type_id = result.task_type_id;
+                        task_type = result.task_type;
+                        task_meaning = result.task_meaning;
+                        task_descrip = result.task_description;
+                        task_creation_date = result.task_creation_date;
+                        task_inactive_date = result.task_inactive_date;
+                        task_author = result.author;
+                        task_answer = result.answer;
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function() {
+                    alert("Ошибка AJAX");
+                }
+                , async: false
+            });
+            $("#task_meaning_get").val(task_meaning);
+            $("#task_desc_get").val(task_descrip);
+            $("#task_type_get").val(task_type_id);
+            $("#task_creation_date_get").val(task_creation_date);
+            $("#task_inactive_date_get").val(task_inactive_date);
+            $("#task_answer_get").val(task_answer);
+            $("#taskInfoModal").modal('toggle');
+        })
+    });
+
+    $(function() {
+        $("#taskInfoModal").submit(function(e){
+            e.preventDefault();
+            var task_meaning = $("#task_meaning_get").val();
+            var task_descrip = $("#task_desc_get").val();
+            var task_type_id = $("#task_type_get").val();
+            var task_creation_date = $("#task_creation_date_get").val();
+            var task_inactive_date = $("#task_inactive_date_get").val();
+            var task_answer = $("#task_answer_get").val();
+            $.ajax({
+                url:"./scripts/update_task.php"
+                , type: "POST"
+                , data: {
+                    task_meaning: task_meaning
+                    , task_descrip: task_descrip
+                    , task_type_id: task_type_id
+                    , task_creation_date: task_creation_date
+                    , task_inactive_date: task_inactive_date
+                    , task_answer: task_answer
+                    , task_id: task_id
+                    , user_id: <?php echo $userid ?>
+                }
+                , success: function(response) {
+                    var result = JSON.parse(response);
+                    if (result.message != 0) {
+                        if (result.message != 1) {
+                            showNotification("Данные задания обновлены!", "accept");
+                        } else {
+                            alert(result.error_message);
+                        }
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function() {
+                    alert("AJAX ERROR");
+                }
+                /* , async: false */
+            })
         })
     });
 

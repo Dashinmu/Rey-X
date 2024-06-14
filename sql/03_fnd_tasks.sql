@@ -107,6 +107,31 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         p_student in NUMBER
     ) RETURN NUMBER;
 
+    --Обновить задание
+    PROCEDURE update_task(
+        p_task_id in NUMBER
+        , p_task_meaning in VARCHAR2
+        , p_task_descrip in VARCHAR2
+        , p_task_type_id in NUMBER
+        , p_task_start_date in VARCHAR2
+        , p_task_end_date in VARCHAR2
+        , p_task_answer in VARCHAR2
+        , p_user in NUMBER
+        , p_error out VARCHAR2
+    );
+
+    --Функция проверки вхождения даты задания в диапазон Stage
+    FUNCTION valid_task_date(
+        p_date in DATE
+        , p_stage in NUMBER
+    ) RETURN BOOLEAN;
+
+    --Получить последнюю дату Stage
+    FUNCTION get_stage_date(
+        p_stage in NUMBER
+        , p_date in NUMBER
+    ) RETURN DATE;
+
 END fnd_tasks;
 
 CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
@@ -695,6 +720,111 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         where 1 = 1
             and STUDENT_ID = p_student
         ;
+        return res;
+    END;
+
+    --Обновить задание
+    PROCEDURE update_task(
+        p_task_id in NUMBER
+        , p_task_meaning in VARCHAR2
+        , p_task_descrip in VARCHAR2
+        , p_task_type_id in NUMBER
+        , p_task_start_date in VARCHAR2
+        , p_task_end_date in VARCHAR2
+        , p_task_answer in VARCHAR2
+        , p_user in NUMBER
+        , p_error out VARCHAR2
+    ) IS
+        p_start_date_rel_old DATE;
+    BEGIN
+        UPDATE
+            DIPLOM.TASKS
+        SET
+            TYPE = p_task_type_id
+            , CREATION_DATE = to_date(p_task_start_date, 'YYYY-MM-DD')
+            , INACTIVE_DATE = to_date(p_task_end_date, 'YYYY-MM-DD')
+            , MEANING = p_task_meaning
+            , DESCRIP = p_task_descrip
+        WHERE 1 = 1
+            and ID = p_task_id
+        ;
+        
+        UPDATE
+            DIPLOM.ANSWER
+        SET
+            ANSWER = p_task_answer
+        WHERE 1 = 1
+            and TASK = p_task_id
+            and PRIMARY like 'Y'
+        ;
+        
+        UPDATE
+            DIPLOM.TASK_RELATIONS
+        SET
+            START_DATE = to_date(p_task_start_date, 'YYYY-MM-DD')
+            , END_DATE = to_date(p_task_end_date, 'YYYY-MM-DD')
+        WHERE 1 = 1
+            and TASK = p_task_id
+        ;
+        commit;
+        exception when others then p_error := SQLERRM;
+    END;
+
+    --Функция проверки вхождения даты задания в диапазон Stage
+    FUNCTION valid_task_date(
+        p_date in DATE
+        , p_stage in NUMBER
+    ) RETURN BOOLEAN IS
+        flag NUMBER;
+    BEGIN
+        select
+            1
+        into
+            flag
+        from
+            DIPLOM.STAGES
+        where 1 = 1
+            and p_date between CREATION_DATE and INACTIVE_DATE
+        ;
+        return false;
+        exception when others then return true;
+    END;
+
+    --Получить последнюю дату Stage
+    FUNCTION get_stage_date(
+        p_stage in NUMBER
+        , p_date in NUMBER
+    ) RETURN DATE IS
+        res DATE;
+    BEGIN
+        if p_date = 1
+            then
+                begin
+                    select
+                        inactive_date
+                    into
+                        res
+                    from
+                        DIPLOM.STAGES
+                    where
+                        ID = p_stage
+                    ;
+                    exception when others then res := to_date('01012100','ddmmyyyy');
+                end;
+            else
+                begin
+                    select
+                        inactive_date
+                    into
+                        res
+                    from
+                        DIPLOM.STAGES
+                    where
+                        ID = p_stage
+                    ;
+                    exception when others then res := trunc(sysdate);
+                end;
+        end if;
         return res;
     END;
 

@@ -161,7 +161,7 @@
                 on ppi2.STUDENT_ID = ppi.STUDENT_ID
         WHERE 1 = 1
         ORDER BY
-            1, 3 desc, 6 desc, 10 desc
+            14 desc, 1 desc, 3 desc, 6 desc, 10 desc
     ";
 
     $get_active_student = "
@@ -313,6 +313,8 @@
         FROM
             DIPLOM.ALL_TASKS
         WHERE 1 = 1
+        ORDER BY
+            11 desc, 1
     ";
 
     $get_all_tasks_types = "
@@ -345,7 +347,7 @@
     ";
 
     $get_all_stages_info = "
-        SELECT * FROM DIPLOM.TASKS_INFO
+        SELECT * FROM DIPLOM.TASKS_INFO ORDER BY 15 desc, 1
     ";
 
     $get_all_stages_info_orig = "
@@ -398,6 +400,22 @@
                 , p_phone => :p_phone
                 , p_start_date => :p_start_date
                 , p_end_date => :p_end_date
+                , p_user => :p_user
+                , p_error => :p_error
+            );
+        END;
+    ";
+
+    $update_task = "
+        BEGIN
+            DIPLOM.FND_TASKS.update_task(
+                p_task_id => :p_task_id
+                , p_task_meaning => :p_task_meaning
+                , p_task_descrip => :p_task_descrip
+                , p_task_type_id => :p_task_type_id
+                , p_task_start_date => :p_task_start_date
+                , p_task_end_date => :p_task_end_date
+                , p_task_answer => :p_task_answer
                 , p_user => :p_user
                 , p_error => :p_error
             );

@@ -148,7 +148,7 @@ if ($usertype != 1 && $usertype != 2) {
 <!-- Личные данные -->
 <div class="personal-info">
     <div class = "personal-avatar">
-        <img src="img/student.jpg" alt="User Avatar">
+        <img src="img/avatar.png" alt="User Avatar">
     </div>
     <div class = 'div-personal-name'>
         <span><?php echo $user_fio?></span>
