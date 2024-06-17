@@ -111,6 +111,9 @@ if ($usertype != 1 && $usertype != 2) {
                                     <div class = "progress-bar"></div>
                                 </div>
                             </div>
+                        <?php
+                            if (!is_null($row['TASK_ID'])) {
+                        ?>
                             <div class = "tasks hidden" id = "stage<?php echo $row['STAGE_ID']?>-tasks">
                                 <div class = "task">
                                     <div class = "task-info <?php echo $status ?>">
@@ -133,8 +136,9 @@ if ($usertype != 1 && $usertype != 2) {
                                     </div>
                                 </div>
             <?php
+                            }
                     } else {
-                        if (!is_null($row['STAGE_ID'])) {
+                        if (!is_null($row['STAGE_ID']) && !is_null($row['TASK_ID'])) {
             ?>
                                 <div class = "task">
                                     <div class = "task-info <?php echo $status ?>">

@@ -109,7 +109,7 @@
                         if ($usertype != 1) {
                     ?>
                         <div class="form-group">
-                            <select id = "give_stage_id_select" class="form-control" name="give_stage_id_select" required>
+                            <select id = "give_stage_id_select" class="form-control" name="give_stage_id_select">
                                 <option value = "">--Какой этап выдать первым--</option>
                                 <?php 
                                     $all_stages = oci_parse($conn, $get_all_stages_info_orig);

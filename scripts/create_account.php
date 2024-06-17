@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             oci_bind_by_name($stmt, ":p_start_date", $p_start_date);
             oci_bind_by_name($stmt, ":p_end_date", $p_end_date);
             oci_bind_by_name($stmt, ":p_user", $p_user);
-            oci_bind_by_name($stmt, ":p_give_stage", $p_give_stage);
+            oci_bind_by_name($stmt, ":p_stage", $p_give_stage);
             oci_bind_by_name($stmt, ":p_error", $p_error, 400, SQLT_CHR);
     
             if (oci_execute($stmt)) {
