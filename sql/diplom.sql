@@ -33,3 +33,12 @@ end;
 select * from DIPLOM.users;
 
 select * from diplom.stages;
+
+/* Создать типы заданий */
+declare
+begin
+    diplom.fnd_tasks.add_task_type('Подтверждение');
+    diplom.fnd_tasks.add_task_type('Варианты');
+    diplom.fnd_tasks.add_task_type('Код');
+    diplom.fnd_tasks.add_task_type('Свободный');
+end;
