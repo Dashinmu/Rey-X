@@ -105,6 +105,34 @@
                     <div class="form-group phone">
                         <input type="text" id = "phone" class="form-control" name="phone" placeholder="Введите номер телефона пользователя">
                     </div>
+                    <?php
+                        if ($usertype != 1) {
+                    ?>
+                        <div class="form-group">
+                            <select id = "give_stage_id_select" class="form-control" name="give_stage_id_select" required>
+                                <option value = "">--Какой этап выдать первым--</option>
+                                <?php 
+                                    $all_stages = oci_parse($conn, $get_all_stages_info_orig);
+                                    oci_execute($all_stages);
+                                    while($row = oci_fetch_array($all_stages, OCI_RETURN_NULLS + OCI_ASSOC)) {
+                                ?>
+                                    <option value = "<?php echo $row['ID']?>"><?php echo $row['STAGE_NAME']?> -> <?php 
+                                        if (strlen($row['MEANING']) > 60) {
+                                            echo substr($row['MEANING'], 0, 60).'...';
+                                        } else {
+                                            echo $row['MEANING'];
+                                        }
+                                        
+                                    ?></option>
+                                <?php        
+                                    }
+                                    oci_free_statement($all_stages);
+                                ?>
+                            </select>
+                        </div>
+                    <?php
+                        }
+                    ?>
                     <div class="modal-footer">
                         <button type="submit" id="btn_create_user" class="btn btn-primary btn-block">Подтвердить</button>
                         <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>

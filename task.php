@@ -229,7 +229,7 @@ if ($usertype != 1 && $usertype != 2) {
                                     <span class = "stage-name"><?php echo $row['STAGE_NAME'] ?></span>
                                     <span class = "stage-mean"><?php echo $row['STAGE_MEANING']?></span>
                                 </div>
-                                <span class = "stage-num-task">Количество заданий: <?php echo $row['STAGE_NUM_TASKS']?></span>
+                                <span class = "stage-num-task">Количество заданий: <?php echo $row['STAGE_TASKS']?></span>
                             </div>
                         </div>
                         <div class = "stage-items-info hidden">
@@ -399,7 +399,7 @@ require_once "modal.php";
 
     var task_id;
     $(function() {
-        $(".task-answer").click(function() {
+        $(".tasks-info-block .task-info-item .item-descrip .task-answer").click(function() {
             task_id = Number(this.id.replace('task-', ''));
             var task_meaning, task_type, task_type_id, task_descrip, task_creation_date, task_inactive_date, task_author, task_answer;
             $.ajax({

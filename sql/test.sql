@@ -15,9 +15,10 @@ begin
     diplom.fnd_user.add_user_type('Студент');
 end;
 
+select * from diplom.USERS;
 /* Добавить пользователя */
 declare
-    p_error VARCHAR2(100);
+    p_error VARCHAR2(400);
 begin
     diplom.FND_USER.ADD_USER(
         P_LOGIN  => 'system',
@@ -29,7 +30,7 @@ begin
     );
     if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
 
-    p_error := null;
+    /* p_error := null;
     diplom.FND_USER.ADD_USER(
         P_LOGIN  => 'dashinmu',
         P_PASSWORD  => 'dashinmu23',
@@ -64,7 +65,7 @@ begin
         P_END_DATE => to_date('27062024','ddmmyyyy')
         , p_error => p_error
     );
-    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if;
+    if p_error is not null then DBMS_OUTPUT.PUT_LINE(p_error); end if; */
 end;
 
 SELECT * FROM DIPLOM.USERS;

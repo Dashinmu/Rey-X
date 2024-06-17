@@ -233,8 +233,11 @@
             , inactive_date DATE
             , time_period NUMBER(2)
             , CONSTRAINT stages_pk PRIMARY KEY (id)
-            , CONSTRAINT stages_uniq UNIQUE (created_by, stage_name, meaning, creation_date, inactive_date)
+            , CONSTRAINT stages_uniq UNIQUE (created_by, stage_name, creation_date, inactive_date)
         );
+
+        ALTER TABLE DIPLOM.stages DROP CONSTRAINT stages_uniq;
+        ALTER TABLE DIPLOM.stages MODIFY (CONSTRAINT stages_uniq UNIQUE (created_by, stage_name, creation_date, inactive_date));
 
         /* Создать триггер */
         CREATE OR REPLACE TRIGGER diplom.stages_trigger

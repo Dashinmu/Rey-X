@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             && !empty($_POST["p_end_date"]) */
             && !empty($_POST["p_user_type"])
             && !empty($_POST["p_user"])
+            && isset($_POST["p_give_stage"])
         ){
             $p_login = $_POST["p_login"];
             $p_password = $_POST["p_password"];
@@ -26,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $p_email = $_POST["p_email"];
             $p_phone = $_POST["p_phone"];
             $p_user = $_POST["p_user"];
+            $p_give_stage = $_POST["p_give_stage"];
             if ($_POST["p_user_type"] == 1){
                 $p_user_type = 2; /* Руководитель */
             } else {
@@ -42,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             oci_bind_by_name($stmt, ":p_start_date", $p_start_date);
             oci_bind_by_name($stmt, ":p_end_date", $p_end_date);
             oci_bind_by_name($stmt, ":p_user", $p_user);
+            oci_bind_by_name($stmt, ":p_give_stage", $p_give_stage);
             oci_bind_by_name($stmt, ":p_error", $p_error, 400, SQLT_CHR);
     
             if (oci_execute($stmt)) {

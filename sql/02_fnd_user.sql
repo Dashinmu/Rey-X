@@ -16,7 +16,8 @@ CREATE OR REPLACE PACKAGE diplom.fnd_user IS
         , p_phone in VARCHAR2 default null
         , p_start_date in VARCHAR2 default null
         , p_end_date in VARCHAR2 default null
-        , p_user in NUMBER
+        , p_user in NUMBER default null
+        , p_give_stage in NUMBER default null
         , p_error out VARCHAR2
     );
 
@@ -85,7 +86,9 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
 
     --Глобальные переменные
     no_user_type_found exception; --Не найден тип пользователя
+    userNotFound EXCEPTION; --Не найден пользователь по логину
     PRAGMA EXCEPTION_INIT(no_user_type_found, -20001); --Связать с ошибкой в триггере
+    PRAGMA EXCEPTION_INIT(userNotFound, -20006);
 
     --Получить хэш пароля
     FUNCTION get_password(
@@ -122,6 +125,25 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         commit;
     END;
 
+    --Получить ID по LOGIN
+    FUNCTION get_userID(
+        p_login in VARCHAR2
+    ) RETURN NUMBER IS
+        userID NUMBER(5);
+    BEGIN
+        SELECT
+            ID
+        INTO
+            userID
+        FROM
+            DIPLOM.USERS
+        WHERE 1 = 1
+            and LOGIN = upper(p_login)
+        ;
+        RETURN userID;
+        EXCEPTION WHEN OTHERS THEN return 0;
+    END;
+
     --Создать нового пользователя
     PROCEDURE add_user(
         p_login in VARCHAR2
@@ -132,9 +154,11 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         , p_phone in VARCHAR2 default null
         , p_start_date in VARCHAR2 default null
         , p_end_date in VARCHAR2 default null
-        , p_user in NUMBER
+        , p_user in NUMBER default null
+        , p_give_stage in NUMBER default null
         , p_error out VARCHAR2
     ) IS
+        /* p_error VARCHAR2(400); */
     BEGIN
         --Присвоить имя пользователю
         INSERT INTO DIPLOM.USERS(
@@ -159,14 +183,39 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
 
         commit;
 
-        link_user(
-            p_user => p_user
-            , p_student => p_login
-        );
+        if p_user is not null and p_user != 1 then 
+            link_user(
+                p_user => p_user
+                , p_student => p_login
+            );
+            if get_userID(p_login) != 0 
+                then
+                    if p_give_stage is not null
+                        then 
+                            DIPLOM.FND_TASKS.GIVE_STAGE(
+                                P_USER  => p_user,
+                                P_STAGE  => p_give_stage,
+                                P_STUDENT  => get_userID(p_login),
+                                P_ERROR  => p_error
+                            );
+                        else
+                            DIPLOM.FND_TASKS.GIVE_STAGE(
+                                P_USER  => p_user,
+                                P_STAGE  => 1,
+                                P_STUDENT  => get_userID(p_login),
+                                P_ERROR  => p_error
+                            );
+                    end if;
+                else
+                    raise_application_error(-20006, 'Пользователь не найден по логину.');
+            end if;
+            if p_error is not null then raise_application_error(-20006, SQLERRM); end if;
+        end if;
 
         exception 
-            when no_user_type_found then p_error := ('ERROR: Не существует тип пользователя с id = '||p_user_type);
-            when others then p_error := 'Пользовать '||p_login||' уже существует в системе';
+            when no_user_type_found then p_error := 'ERROR: Не существует тип пользователя с id = '||p_user_type;
+            when userNotFound then p_error := SQLERRM;
+            when others then p_error := SQLERRM;
     END add_user;
 
     --Обновить данные пользователя

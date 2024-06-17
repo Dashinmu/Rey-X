@@ -186,6 +186,7 @@ require_once "modal.php";
             var p_end_date = $("#enddate").val();
             var p_email = $("#email").val();
             var p_phone = $("#phone").val();
+            var student_first_stage = $("#give_stage_id_select").val();
             var p_user_type = <?php if ($userid == 1) { echo 1; } else { echo 2; }?>;
             $.ajax({
                 url:"./scripts/create_account.php"
@@ -200,6 +201,7 @@ require_once "modal.php";
                     , p_phone: p_phone
                     , p_user_type: p_user_type
                     , p_user: <?php echo $userid;?>
+                    , p_give_stage: student_first_stage
                 }
                 , success: function(response){
                     var result = JSON.parse(response);
