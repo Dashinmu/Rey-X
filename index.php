@@ -79,7 +79,7 @@ if ($usertype != 1 && $usertype != 2) {
                 oci_bind_by_name($stage_info, ":student_id", $userid);
                 oci_execute($stage_info);
                 while ( $row = oci_fetch_array($stage_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
-                    if (!is_null($row.['STAGE_ID'])) {
+                    if (!is_null($row['STAGE_ID'])) {
                         echo "
                             <div class = 'stage'>
                                 <div class = 'stage-info'>

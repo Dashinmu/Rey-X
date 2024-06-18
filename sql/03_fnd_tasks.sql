@@ -298,6 +298,43 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         exception when others then return 0;
     END;
 
+    --Проверка последнее ли это задание в этапе
+    FUNCTION is_last_task_in_stage(
+        p_task in NUMBER
+    ) RETURN NUMBER IS
+        num_task_max NUMBER(2);
+        p_stage_last NUMBER(3);
+    BEGIN
+        SELECT
+            max(num_task)
+        INTO
+            num_task_max
+        FROM
+            DIPLOM.TASK_RELATIONS
+        WHERE 1 = 1
+            AND STAGE in (
+                SELECT
+                    STAGE
+                FROM
+                    DIPLOM.TASK_RELATIONS
+                WHERE 1 = 1
+                    and TASK = p_task
+            )
+        ;
+        SELECT
+            STAGE
+        INTO
+            p_stage_last
+        FROM
+            DIPLOM.TASK_RELATIONS
+        WHERE 1 = 1
+            and TASK = p_task
+            and NUM_TASK = num_task_max
+        ;
+        RETURN p_stage_last;
+        EXCEPTION WHEN OTHERS THEN RETURN 0;
+    END;
+
     --Создать ответ
     PROCEDURE add_answer(
         p_user in NUMBER
@@ -307,6 +344,15 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         , p_status out NUMBER
     ) IS
         res VARCHAR2(4000);
+        cursor get_next_stages(p_stage in NUMBER) IS
+            select
+                CHILD
+            from
+                DIPLOM.STAGE_RELATIONS
+            where 1 = 1
+                and PARENT = p_stage
+        ;
+        r get_next_stages%ROWTYPE;
     BEGIN
         res := format_answer(p_answer, get_task_type(p_task));
         insert into DIPLOM.answer(
@@ -338,6 +384,20 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
                     and person = p_user
             )
         ;
+        if DIPLOM.FND_USER.IS_ADMIN(P_USER  => p_user) then null; else
+            if is_last_task_in_stage(p_task) != 0 then
+                begin
+                    for r in get_next_stages( is_last_task_in_stage(p_task) ) loop
+                        DIPLOM.FND_TASKS.give_stage(
+                            P_USER => 1
+                            , P_STAGE => r.CHILD
+                            , P_STUDENT => p_user
+                            , P_ERROR => p_error
+                        );
+                    end loop;
+                end;
+            end if;
+        end if;
         exception when others then p_error := SQLERRM;
     END add_answer;
 
@@ -814,7 +874,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             else
                 begin
                     select
-                        inactive_date
+                        creation_date
                     into
                         res
                     from

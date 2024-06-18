@@ -42,3 +42,17 @@ begin
     diplom.fnd_tasks.add_task_type('Код');
     diplom.fnd_tasks.add_task_type('Свободный');
 end;
+
+SELECT * FROM DIPLOM.STAGES;
+SELECT SYSDATE FROM DUAL;
+SELECT * FROM DIPLOM.TASK_RELATIONS;
+UPDATE DIPLOM.TASK_RELATIONS SET START_DATE = sysdate;
+
+select
+    count(NUM_TASK) + 1
+from
+    diplom.task_relations
+where 1 = 1
+    and stage = 1
+    and trunc(sysdate) between trunc(start_date) and trunc(end_date)
+;
