@@ -216,8 +216,8 @@
     $get_all_student = "
         SELECT
             q.STUDENT_NAME
-            , q.START_DATE
-            , q.END_DATE
+            , to_char(q.START_DATE, 'DD.MM.YYYY')
+            , to_char(q.END_DATE, 'DD.MM.YYYY')
             , q.ID
             , case when q.END_DATE < trunc(sysdate)
                 then 'inactive'
@@ -255,8 +255,8 @@
         WHERE 1 = 1
         GROUP BY
             q.STUDENT_NAME
-            , q.START_DATE
-            , q.END_DATE
+            , to_char(q.START_DATE, 'DD.MM.YYYY')
+            , to_char(q.END_DATE, 'DD.MM.YYYY')
             , q.ID
             , case when q.END_DATE < trunc(sysdate)
                 then 'INACTIVE'
