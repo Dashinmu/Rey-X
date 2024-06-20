@@ -229,7 +229,7 @@ require_once "modal.php";
         $("#giveStage").submit(function(e){
             e.preventDefault();
             var p_stage = $("#stage_id_give_select").val();
-            var p_student = $("student_id_give_select").val();
+            var p_student = $("#student_id_give_select").val();
             alert(p_stage);
             alert(p_student);
             $.ajax({
