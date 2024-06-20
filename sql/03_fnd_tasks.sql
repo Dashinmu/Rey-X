@@ -940,7 +940,7 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         , p_max_rating out NUMBER
     ) IS
     BEGIN
-
+        null;
     END;
 
 END fnd_tasks;

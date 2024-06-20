@@ -17,7 +17,7 @@ if (isset($_POST["answer"]) && isset($_POST["task"]) && isset($_POST["user"])) {
         oci_bind_by_name($stmt, ":status", $status, 2, SQLT_INT);
     
         if (oci_execute($stmt)) {
-            if (is_null($error)) {
+            if ($status != -1) {
                 if ($status != 0) {
                     echo json_encode(array("message" => 2, "error_message" => "Решено верно"));
                 } else {
