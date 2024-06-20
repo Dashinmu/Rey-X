@@ -71,12 +71,12 @@ if ($usertype == 1 || $usertype == 2) { ?>
                     $tasknum = 0;
         ?>
             <?php if ($rownum != 0 && $numstage != 0) {
-                /* echo "</div>"; */
                 echo "</div>";
                 echo "</div>";
                 echo "</div>";
-            } else if ($rownum != 0){
-                /* echo "</div>"; */
+                echo "</div>";
+            } else if ($rownum != 0) {
+                echo "</div>";
             }
             ?>
             <div class = "student-block <?php echo $row['STUDENT_STATUS']?>">
@@ -145,7 +145,7 @@ if ($usertype == 1 || $usertype == 2) { ?>
                 }
                 if (!is_null($row['ANSWER'])) $tasknum = $row['TASK_ID'];
                 $rownum = $row['STUDENT_ID'];
-                $numstage = $row['NUM_STAGES_ASSIGNED'];
+                $numstage = $row['NUM_ALL_ANSWER_TASKS'];
                 unset($row);
             }
             oci_free_statement($students_info);
