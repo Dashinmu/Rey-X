@@ -44,7 +44,7 @@ if ($usertype != 1 && $usertype != 2) {
     <!-- Личные данные и оценка -->
     <div class="personal-info">
         <div class = "personal-avatar">
-            <img src="img/student.jpg" alt="User Avatar">
+            <img src="<?php if ($usertype == 3) { echo "img/student.png"; } else { echo "img/avatar.png"; } ?>" alt="User Avatar">
         </div>
         <div class = 'div-personal-name'>
             <span><?php echo $user_fio?></span>
@@ -148,7 +148,7 @@ if ($usertype != 1 && $usertype != 2) {
 <!-- Личные данные -->
 <div class="personal-info">
     <div class = "personal-avatar">
-        <img src="img/avatar.png" alt="User Avatar">
+        <img src="<?php if ($usertype == 3) { echo "img/student.png"; } else { echo "img/avatar.png"; } ?>" alt="User Avatar">
     </div>
     <div class = 'div-personal-name'>
         <span><?php echo $user_fio?></span>

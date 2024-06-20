@@ -1,12 +1,12 @@
 <menu>
     <div class="menu">
         <div class="user-info" onclick="toggleMenu()">
-            <img src="img/student.jpg" alt="User Avatar" class="avatar">
+            <img src="<?php if ($usertype == 3) { echo "img/student.png"; } else { echo "img/avatar.png"; } ?>" alt="User Avatar" class="avatar">
             <span class="text"><?php echo $user_fio?></span>
         </div>
         <div class="menu-content" id="menuContent">
             <div class="user-info">
-                <img src="img/student.jpg" alt="User Avatar" class="avatar">
+                <img src="<?php if ($usertype == 3) { echo "img/student.png"; } else { echo "img/avatar.png"; } ?>" alt="User Avatar" class="avatar">
                 <div class = "user-detail">
                     <span class="text"><?php echo $user_fio?></span>
                     <span class="user-role"><?php echo $user_type_mean?></span>
