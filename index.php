@@ -86,10 +86,10 @@ if ($usertype != 1 && $usertype != 2) {
                                     <span class = 'stage-name'>".$row['STAGE_NAME']."</span>
                                     <span class = 'stage-desc'>".$row['STAGE_MEANING']."</span>
                                     <span class = 'stage-tasks'>Выполнено заданий: ".$row['TASK_ANSWER_IN_STAGE']."/".$row['STAGE_NUM_TASKS']."</span>
-                                    <div class = 'stage-note'>
+                                    <!-- <div class = 'stage-note'>
                                         <span class = 'note-text'>PL/SQL</span>
                                         <span class = 'note-text'>Новичок</span>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class = 'stage-progress-circle' data-correct-task = '".$row['TASK_COMPLETE_IN_STAGE']."' data-all-task = '".$row['STAGE_NUM_TASKS']."'>
                                     <span class = 'progress-circle-left'>
