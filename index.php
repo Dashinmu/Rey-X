@@ -114,7 +114,7 @@ if ($usertype != 1 && $usertype != 2) {
         <div class = "label last">
             <span>Последние задания</span>
         </div>
-        <div class = "tasks">
+        <div class = "tasks wrap">
             <!-- Запрос на получение последних 7ми заданий -->
             <?php 
                 $tasks_info = oci_parse($conn, $get_student_last_answer);

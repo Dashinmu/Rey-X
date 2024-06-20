@@ -528,6 +528,11 @@ main {
     display: grid;
 }
 
+.tasks.wrap {
+    max-height: 450px;
+    overflow: auto;
+}
+
 .task {
     display: grid;
 }

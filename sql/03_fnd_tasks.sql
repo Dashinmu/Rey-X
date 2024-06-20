@@ -335,6 +335,24 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         EXCEPTION WHEN OTHERS THEN RETURN 0;
     END;
 
+    --Проверить выдан ли этап
+    FUNCTION stage_already_gived(p_stage in NUMBER, p_student in NUMBER) RETURN BOOLEAN IS
+        flag NUMBER(1);
+    BEGIN
+        SELECT
+            1
+        INTO
+            flag
+        FROM
+            DIPLOM.GIVE_STAGES
+        WHERE 1 = 1
+            and STAGE = p_stage
+            and STUDENT_ID = p_student
+        ;
+        return false;
+        exception when others then return true;
+    END;
+
     --Создать ответ
     PROCEDURE add_answer(
         p_user in NUMBER
@@ -388,12 +406,14 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             if is_last_task_in_stage(p_task) != 0 then
                 begin
                     for r in get_next_stages( is_last_task_in_stage(p_task) ) loop
-                        DIPLOM.FND_TASKS.give_stage(
-                            P_USER => 1
-                            , P_STAGE => r.CHILD
-                            , P_STUDENT => p_user
-                            , P_ERROR => p_error
-                        );
+                        if stage_already_gived(r.CHILD, p_user) then
+                            DIPLOM.FND_TASKS.give_stage(
+                                P_USER => 1
+                                , P_STAGE => r.CHILD
+                                , P_STUDENT => p_user
+                                , P_ERROR => p_error
+                            );
+                        end if;
                     end loop;
                 end;
             end if;
