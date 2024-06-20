@@ -132,6 +132,13 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         , p_date in NUMBER
     ) RETURN DATE;
 
+    --Получить итоговую оценку
+    PROCEDURE GET_GENERAL_RATING(
+        p_user in NUMBER
+        , p_current_rating out NUMBER
+        , p_max_rating out NUMBER
+    );
+
 END fnd_tasks;
 
 CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
@@ -470,9 +477,12 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             v_res_student_clob CLOB;
             v_res_student_time TIMESTAMP;
         wrong_answer exception; --остановка проверки
+        wrong_answer_cnt_columns exception;
+        wrong_answer_column_name exception;
+        wrong_answer_cnt_rows exception;
         i integer; --столбцы
         j integer; --номер строки
-        res NUMBER(1) := 1; --соответствует верному результату
+        /* res NUMBER(1) := 1; --соответствует верному результату */
     BEGIN
         cursor_tutor := p_true_select;
         cursor_student := p_select;
@@ -486,12 +496,12 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         dbms_sql.DESCRIBE_COLUMNS(v_cur_student_id, v_col_student_cnt, v_cols_student);
 
         if v_col_tutor_cnt <> v_col_student_cnt 
-            then raise wrong_answer; --выходим если нет, дальше проверять нет смысла
+            then raise wrong_answer_cnt_columns; --выходим если нет, дальше проверять нет смысла
         end if;
 
         for i in 1 .. v_col_tutor_cnt loop
             if v_cols_tutor(i).col_name <> v_cols_student(i).col_name then -- снимаем флаг если наименования столбцов разняться
-                raise wrong_answer;
+                raise wrong_answer_column_name;
             else
                 IF v_cols_tutor(i).col_type in (1, 96, 11, 208) then --IN VARCHAR2
                     dbms_sql.DEFINE_COLUMN(v_cur_tutor_id, i, v_res_tutor_char, 1000);
@@ -559,12 +569,12 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
                         END IF;
                     end loop;
                 else
-                    raise wrong_answer;
+                    raise wrong_answer_cnt_rows;
                 end if;
             else --проверить количество строк в курсоре студента и выйти
                 j := DBMS_SQL.LAST_ROW_COUNT;
                 if j <> j + dbms_sql.FETCH_ROWS(v_cur_student_id)
-                    then raise wrong_answer;
+                    then raise wrong_answer_cnt_rows;
                 end if;
                 exit;
             end if;
@@ -573,14 +583,29 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
         dbms_sql.CLOSE_CURSOR(v_cur_student_id);
 
-        return res;
+        return 1;
         --хоть одна ошибка попадаем сюда
         exception 
-            when wrong_answer then 
-                res := 0;
+            when wrong_answer_cnt_columns then 
                 dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
                 dbms_sql.CLOSE_CURSOR(v_cur_student_id);
-                return res;
+                p_error := 'Неверное количество столбцов';
+                return 0;
+            when wrong_answer_column_name then 
+                dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
+                dbms_sql.CLOSE_CURSOR(v_cur_student_id);
+                p_error := 'Неверное наименование столбцов';
+                return 0;
+            when wrong_answer then 
+                dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
+                dbms_sql.CLOSE_CURSOR(v_cur_student_id);
+                p_error := 'Несовпадают значения в столбце';
+                return 0;
+            when wrong_answer_cnt_rows then 
+                dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
+                dbms_sql.CLOSE_CURSOR(v_cur_student_id);
+                p_error := 'Неверное количество строк';
+                return 0;
             when others then
                 if dbms_sql.IS_OPEN(v_cur_tutor_id) then
                     dbms_sql.CLOSE_CURSOR(v_cur_tutor_id); --закрыть курсоры
@@ -906,6 +931,16 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
                 end;
         end if;
         return res;
+    END;
+
+    --Получить итоговую оценку
+    PROCEDURE GET_GENERAL_RATING(
+        p_user in NUMBER
+        , p_current_rating out NUMBER
+        , p_max_rating out NUMBER
+    ) IS
+    BEGIN
+
     END;
 
 END fnd_tasks;

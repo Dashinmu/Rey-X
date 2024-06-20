@@ -18,7 +18,11 @@ if (isset($_POST["answer"]) && isset($_POST["task"]) && isset($_POST["user"])) {
     
         if (oci_execute($stmt)) {
             if (is_null($error)) {
-                echo json_encode(array("message" => 2, "error_message" => $status));
+                if ($status != 0) {
+                    echo json_encode(array("message" => 2, "error_message" => "Решено верно"));
+                } else {
+                    echo json_encode(array("message" => 2, "error_message" => $error));
+                }
             } else {
                 echo json_encode(array("message" => 1, "error_message" => $error));
             }
