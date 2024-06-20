@@ -37,7 +37,7 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
     PROCEDURE connect_task(
         p_stage in NUMBER
         , p_task in NUMBER
-        , p_num_task in NUMBER default null --последовательность задания в этапе
+        , p_num_task in NUMBER default null --последовательность задания в этапе автомат
         , p_start_date in VARCHAR2 default null
         , p_end_date in VARCHAR2 default null
         , p_error out VARCHAR2

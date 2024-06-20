@@ -48,5 +48,5 @@ require_once "header.php"; // Подключаем header.php
 </div>
 
 <?php
-require_once "footer.php"; // Подключаем footer.php
+require_once "footer.php"; // Подключаем  footer.php
 ?>

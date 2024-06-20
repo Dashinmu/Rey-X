@@ -85,7 +85,7 @@ END FND_USER;
 CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
 
     --Глобальные переменные
-    no_user_type_found exception; --Не найден тип пользователя
+    no_user_type_found exception; --Не найден тип пользователя?
     userNotFound EXCEPTION; --Не найден пользователь по логину
     PRAGMA EXCEPTION_INIT(no_user_type_found, -20001); --Связать с ошибкой в триггере
     PRAGMA EXCEPTION_INIT(userNotFound, -20006);

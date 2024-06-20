@@ -47,6 +47,7 @@
 </menu>
 
 <script>
+
     function toggleMenu() {
         var menuContent = document.getElementById("menuContent");
         menuContent.classList.toggle("show-menu");
@@ -67,4 +68,5 @@
             menuContent.classList.remove("show-menu");
         }
     });
+    
 </script>

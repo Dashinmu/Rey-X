@@ -2,6 +2,7 @@
     <span class = "message"></span>
     <button onclick = "closeNotification()">OK</button>
 </div>
+
 <script>
     function showNotification(message, status) {
         document.querySelector('.notification .message').innerText = message;

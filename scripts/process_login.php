@@ -1,8 +1,6 @@
 <?php
 require_once "db_connect.php";
-?>
 
-<?php
 // Проверяем, была ли отправлена форма
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Проверяем, есть ли данные в полях

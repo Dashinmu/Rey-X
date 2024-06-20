@@ -14,6 +14,7 @@ $sql = "BEGIN diplom.fnd_user.get_personal_data(
     , p_tutor_type => :tutor_type_mean
     , p_tutor_phone => :tutor_phone
 ); END;";
+
 $stmt = oci_parse($conn, $sql);
 oci_bind_by_name($stmt, ":userlogin", $userlogin);
 oci_bind_by_name($stmt, ":user_fio", $user_fio, 50, SQLT_CHR);

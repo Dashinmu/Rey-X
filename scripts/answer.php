@@ -1,7 +1,6 @@
 <?php
 require_once "db_connect.php";
 
-
 if (isset($_POST["answer"]) && isset($_POST["task"]) && isset($_POST["user"])) {
     $user = (int)$_POST["user"];
     $answer = $_POST["answer"];

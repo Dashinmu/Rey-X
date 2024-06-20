@@ -1,7 +1,5 @@
 set SERVEROUTPUT on;
 
-select chr(39) from dual;
-
 declare
 begin
     dbms_output.put_line('Hi');

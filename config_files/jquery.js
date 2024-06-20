@@ -1,7 +1,7 @@
 /*!
  * jQuery JavaScript Library v3.7.1
  * https://jquery.com/
- *
+ * 
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.org/license

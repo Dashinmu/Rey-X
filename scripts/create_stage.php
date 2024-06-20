@@ -1,5 +1,4 @@
 <?php
-/* session_start(); */
 require_once "sessions.php";
 require_once "db_connect.php";
 require_once "cursors.php";
