@@ -64,6 +64,7 @@ if ($usertype == 1 || $usertype == 2) { ?>
             $rownum = 0;
             $tasknum = 0;
             $numstage = 1;
+            $numtask = 1;
             $flag = 0;
             while ( $row = oci_fetch_array($students_info, OCI_RETURN_NULLS + OCI_ASSOC) ) {
                 if ($rownum != $row['STUDENT_ID']) {
@@ -73,6 +74,9 @@ if ($usertype == 1 || $usertype == 2) { ?>
             <?php if ($rownum != 0 && $numstage != 0) {
                 echo "</div>";
                 echo "</div>";
+                echo "</div>";
+                echo "</div>";
+            } else if ($rownum != 0 && $numtask == 0) {
                 echo "</div>";
                 echo "</div>";
             } else if ($rownum != 0) {
@@ -145,7 +149,8 @@ if ($usertype == 1 || $usertype == 2) { ?>
                 }
                 if (!is_null($row['ANSWER'])) $tasknum = $row['TASK_ID'];
                 $rownum = $row['STUDENT_ID'];
-                $numstage = $row['NUM_ALL_ANSWER_TASKS'];
+                $numstage = $row['NUM_STAGES_ASSIGNED'];
+                $numtask = $row['NUM_ALL_ANSWER_TASKS'];
                 unset($row);
             }
             oci_free_statement($students_info);
