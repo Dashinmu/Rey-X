@@ -74,7 +74,7 @@ if ($usertype != 1 && $usertype != 2) {
                 if (oci_execute($get_rating_score)) {
             ?>
             <div class="rating-ellipse">
-                <span>$p_string</span>
+                <span><?php echo $p_string ?></span>
             </div>
             <?php
                 }
