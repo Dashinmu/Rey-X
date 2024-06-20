@@ -232,30 +232,34 @@ CREATE OR REPLACE PACKAGE BODY diplom.fnd_user IS
         , p_error out VARCHAR2
     ) IS
     BEGIN
-        UPDATE
-            DIPLOM.USERS
-        SET
-            LOGIN = p_login
-            , NAME = p_username
-            , PASSWORD = p_password
-            , CONTACT_INFO1 = p_email
-            , CONTACT_INFO2 = p_phone
-            , START_DATE = to_date(p_start_date, 'YYYY-MM-DD')
-            , END_DATE = to_date(p_end_date, 'YYYY-MM-DD')
-        WHERE 1 = 1
-            and ID = p_user
-        ;
-        commit;
-        UPDATE
-            DIPLOM.PERSON_RELATIONS
-        SET
-            START_DATE = to_date(p_start_date, 'YYYY-MM-DD')
-            , END_DATE = to_date(p_end_date, 'YYYY-MM-DD')
-        WHERE
-            CHILD = p_user
-            and PARENT = p_tutor
-        ;
-        commit;
+        BEGIN
+            UPDATE
+                DIPLOM.USERS
+            SET
+                LOGIN = p_login
+                , NAME = p_username
+                , PASSWORD = p_password
+                , CONTACT_INFO1 = p_email
+                , CONTACT_INFO2 = p_phone
+                , START_DATE = to_date(p_start_date, 'YYYY-MM-DD')
+                , END_DATE = to_date(p_end_date, 'YYYY-MM-DD')
+            WHERE 1 = 1
+                and ID = p_user
+            ;
+            commit;
+        END;
+        BEGIN
+            UPDATE
+                DIPLOM.PERSON_RELATIONS
+            SET
+                START_DATE = to_date(p_start_date, 'YYYY-MM-DD')
+                , END_DATE = to_date(p_end_date, 'YYYY-MM-DD')
+            WHERE
+                CHILD = p_user
+                and PARENT = p_tutor
+            ;
+            commit;
+        END;
 
         exception when others then p_error := SQLERRM;
     END;
