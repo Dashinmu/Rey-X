@@ -55,7 +55,7 @@ if ($usertype == 1 || $usertype == 2) { ?>
     <div class = "label">
         <span>Практиканты</span>
         <div>
-            <a href="#" class="create-account-btn" data-toggle="modal" data-target="#giveStage">Выдать этап</a>
+            <a href="#" class="give-stage-btn" data-toggle="modal" data-target="#giveStage">Выдать этап</a>
             <a href="#" class="create-account-btn" data-toggle="modal" data-target="#createAccountModal">Создать учётную запись</a>
         </div>
     </div>

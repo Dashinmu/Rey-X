@@ -845,9 +845,26 @@ main {
     align-items: center;
 }
 
-.students-activity .label .create-account-btn {
+.students-activity .label .give-stage-btn {
     font-size: 20px;
     margin-left: 140px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 2px solid #27925b;
+    background: #27925b;
+    transition: background-color 0.3s ease;
+    color: #FFFFFF;
+}
+
+.students-activity .label .give-stage-btn:hover {
+    background: #2F4C58;
+    text-decoration: none;
+}
+
+.students-activity .label .create-account-btn {
+    font-size: 20px;
+    margin-left: 20px;
     padding: 5px;
     cursor: pointer;
     border-radius: 10px;
