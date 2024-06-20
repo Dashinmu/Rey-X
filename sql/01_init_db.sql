@@ -99,10 +99,10 @@
                 then :new.password := DIPLOM.FND_USER.GET_PASSWORD(P_PASSWORD  => :new.password); 
                 else :new.password := :old.password;
             end if;
-            if :new.start_date < :old.start_date or :new.start_date is null then raise_application_error(-20001, 'Дата начала обучения не может быть указана меньше текущей'); 
+            if :new.start_date < :old.start_date and :new.type not in (1, 2) then raise_application_error(-20001, 'Дата начала обучения не может быть указана меньше текущей'); 
                 elsif :new.start_date is null then :new.start_date := :old.start_date;
             end if;
-            if :new.end_date <= :old.start_date then raise_application_error(-20001, 'Дата окончания обучения не может быть меньше даты начала обучения'); 
+            if :new.end_date <= :new.start_date then raise_application_error(-20001, 'Дата окончания обучения не может быть меньше даты начала обучения'); 
                 elsif :new.end_date is null then :new.end_date := :old.end_date;
             end if;
             if :new.name is null or :new.name like :old.name then :new.name := :old.name; end if;
