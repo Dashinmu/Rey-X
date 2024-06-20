@@ -93,9 +93,9 @@ if ($usertype != 1 && $usertype != 2) {
             ?>
                             <div class = "stage" id = "stage<?php echo $row['STAGE_ID']?>" onclick="toggleStage('stage<?php echo $row['STAGE_ID']?>', 'stage<?php echo $row['STAGE_ID']?>-tasks')">
                                 <div class = "stage-info">
-                                    <div class = "stage-note-2">
+                                    <!-- <div class = "stage-note-2">
                                         <span class = "note-text"><?php echo "Ознакомление" ?></span>
-                                    </div>
+                                    </div> -->
                                     <div class = "stage-info-2">
                                         <span class = "stage-name"><?php echo $row['STAGE_NAME'] ?></span>
                                         <span class = "stage-desc"><?php echo $row['STAGE_MEANING'] ?></span>
