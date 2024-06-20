@@ -72,7 +72,7 @@ if ($usertype == 1 || $usertype == 2) { ?>
         ?>
             <?php if ($rownum != 0 && $numstage != 0) {
                 /* echo "</div>"; */
-                echo "</div>";
+                /* echo "</div>"; */
                 echo "</div>";
                 echo "</div>";
             } else if ($rownum != 0){
