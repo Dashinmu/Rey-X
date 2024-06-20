@@ -224,6 +224,39 @@ require_once "modal.php";
             });
         })
     });
+
+    $(function() {
+        $("#giveStage").submit(function(e){
+            e.preventDefault();
+            var p_stage = $("#stage_id_give_select").val();
+            var p_student = $("student_id_give_select").val();
+            $.ajax({
+                url:"./scripts/give_stages.php"
+                , type: "POST"
+                , data: {
+                    p_stage: p_stage
+                    , p_student: p_student
+                    , p_user: <?php echo $userid ?>
+                }
+                , success: function(response){
+                    var result = JSON.parse(response);
+                    if (result.message != 0){
+                        if (result.message != 1){
+                            showNotification(result.error_message, 'accept');
+                        } else {
+                            alert(result.error_message);
+                        }
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function(){
+                    alert("Не удалось отправить запрос на создание...");
+                }
+                , async: false
+            });
+        })
+    });
 </script>
 <?php
 require_once "footer.php"; // Подключаем footer.php

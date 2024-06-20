@@ -463,12 +463,6 @@
                             ?>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <input type="text" id = "link_enddate"class="form-control" name="link_enddate" placeholder="Введите дату окончания DD.MM.YYYY"
-                            onfocus="(this.type='date')"
-                            onblur="(this.type='text')"
-                        >
-                    </div>
                     <div class="modal-footer">
                         <button type="submit" id="btn_link_task_to_stage" class="btn btn-primary btn-block">Подтвердить</button>
                         <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>
