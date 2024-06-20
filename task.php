@@ -130,7 +130,7 @@ if ($usertype != 1 && $usertype != 2) {
                                             <span class = "task-answer-span"><?php echo $row['TASK_DESC'] ?></span>
                                         </div>
                                         <div class = "task-answer-area">
-                                            <textarea class = "textarea" placeholder = "Введите решение" value = "<?php echo $row['LAST_ANSWER'] ?>"></textarea>
+                                            <textarea class = "textarea" placeholder = "Введите решение" text = "<?php echo $row['LAST_ANSWER'] ?>"></textarea>
                                         </div>
                                         <button type="button" class="btn answer btn-primary btn-block <?php echo $status ?>">Отправить на проверку</button>
                                     </div>
