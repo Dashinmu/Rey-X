@@ -95,7 +95,7 @@
                 then :new.login := upper(:new.login); 
                 else :new.login := :old.login;
             end if;
-            if :new.password is not null 
+            if :new.password is not null and :new.password not like ''
                 then :new.password := DIPLOM.FND_USER.GET_PASSWORD(P_PASSWORD  => :new.password); 
                 else :new.password := :old.password;
             end if;
