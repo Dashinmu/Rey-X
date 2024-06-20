@@ -145,7 +145,7 @@ if ($usertype == 1 || $usertype == 2) { ?>
                 }
                 if (!is_null($row['ANSWER'])) $tasknum = $row['TASK_ID'];
                 $rownum = $row['STUDENT_ID'];
-                $numstage = $row['NUM_ALL_TASKS_STAGES'];
+                $numstage = $row['NUM_ALL_ANSWER_TASKS'];
                 unset($row);
             }
             oci_free_statement($students_info);
