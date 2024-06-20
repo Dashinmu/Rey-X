@@ -412,3 +412,69 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Give Stage -->
+<div class="modal fade" id="giveStage" tabindex="-1" role="dialog" aria-labelledby="giveStage" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="giveStage">Создать этап</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method = "post">
+                    <div class="form-group">
+                        <select id = "stage_id_give_select" class="form-control" name="stage_id_give_select" required>
+                            <option value = "">--Выберите с каким этапом связать--</option>
+                            <?php 
+                                $all_stages = oci_parse($conn, $get_all_stages_info_orig);
+                                oci_execute($all_stages);
+                                while($row = oci_fetch_array($all_stages, OCI_RETURN_NULLS + OCI_ASSOC)) {
+                            ?>
+                                <option value = "<?php echo $row['ID']?>"><?php echo $row['STAGE_NAME']?> -> <?php 
+                                    if (strlen($row['MEANING']) > 60) {
+                                        echo substr($row['MEANING'], 0, 60).'...';
+                                    } else {
+                                        echo $row['MEANING'];
+                                    }
+                                    
+                                ?></option>
+                            <?php        
+                                }
+                                oci_free_statement($all_stages);
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id = "student_id_give_select" class="form-control" name="student_id_give_select" required>
+                            <option value = "">--Выберите студента--</option>
+                            <?php 
+                                $all_student = oci_parse($conn, $get_all_student);
+                                oci_bind_by_name($all_student, ":user_id", $userid);
+                                oci_execute($all_student);
+                                while($row = oci_fetch_array($all_student, OCI_RETURN_NULLS + OCI_ASSOC)) {
+                            ?>
+                                <option value = "<?php echo $row['ID']?>"><?php echo $row['STUDENT_NAME']?></option>
+                            <?php
+                                }
+                                oci_free_statement($all_student);
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id = "link_enddate"class="form-control" name="link_enddate" placeholder="Введите дату окончания DD.MM.YYYY"
+                            onfocus="(this.type='date')"
+                            onblur="(this.type='text')"
+                        >
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="btn_link_task_to_stage" class="btn btn-primary btn-block">Подтвердить</button>
+                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
