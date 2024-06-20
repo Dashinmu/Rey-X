@@ -137,6 +137,7 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         p_user in NUMBER
         , p_current_rating out NUMBER
         , p_max_rating out NUMBER
+        , p_string out VARCHAR2
     );
 
 END fnd_tasks;
@@ -392,8 +393,10 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         commit;
         select
             rating
+            , answer_error
         into
             p_status
+            , p_error
         from
             DIPLOM.ANSWER
         where 1 = 1
@@ -938,9 +941,60 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         p_user in NUMBER
         , p_current_rating out NUMBER
         , p_max_rating out NUMBER
+        , p_string out VARCHAR2
     ) IS
+        current_complete_task NUMBER(3);
+        max_task NUMBER(3);
+        cursor q1 (p_user in NUMBER) is
+            SELECT
+                stage_id
+                , max(STAGE_NUM_TASKS) snt
+                , max(TASK_COMPLETE_IN_STAGE) tcis
+            FROM
+                DIPLOM.PRACTICE_PROGRESS_INFO
+            WHERE 1 = 1
+                and STUDENT_ID = p_user
+            GROUP BY
+                stage_id
+        ;
+        r q1%ROWTYPE;
+        rating NUMBER(3) := 0;
+        rating1 NUMBER(3) := 0;
+        rating2 NUMBER(3) := 0;
+        i NUMBER(2) := 1;
     BEGIN
-        null;
+        for r in q1(p_user) loop
+            if r.stage_id = 1 then 
+                rating := rating + round(r.tcis / r.snt, 1);
+            elsif r.stage_id = 2 then
+                rating := rating + round(r.tcis / r.snt, 1);
+            elsif r.stage_id = 3 then
+                rating := rating + (round(r.tcis / r.snt, 1) * 3);
+            elsif rating1 = 0 then
+                rating1 := rating1 + (round(r.tcis / r.snt, 1) * 5);
+            else
+                rating2 := (round(r.tcis / r.snt, 1) * 5);
+                i := i + 1;
+                rating1 := round( round(rating1 + rating2 / i) / 5, 1 ) * 5;
+            end if;
+        end loop;
+        if rating is null and rating1 is null then
+            p_current_rating := 0;
+            p_max_rating := 0;
+            p_string := 'N/A';
+        elsif rating is null and rating1 is not null then
+            p_current_rating := rating1;
+            p_max_rating := 5;
+            p_string := to_char(rating1)||'/'||to_char(p_max_rating);
+        elsif rating is not null and rating1 is null then
+            p_current_rating := rating;
+            p_max_rating := 5;
+            p_string := to_char(rating1)||'/'||to_char(p_max_rating);
+        else
+            p_current_rating := greatest(rating, rating1);
+            p_max_rating := 5;
+            p_string := to_char(p_current_rating)||'/'||to_char(p_max_rating);
+        end if;
     END;
 
 END fnd_tasks;

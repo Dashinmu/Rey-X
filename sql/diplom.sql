@@ -57,6 +57,23 @@ SELECT SYSDATE FROM DUAL;
 SELECT * FROM DIPLOM.TASK_RELATIONS;
 UPDATE DIPLOM.TASK_RELATIONS SET START_DATE = sysdate;
 
+SELECT * FROM DIPLOM.PRACTICE_PROGRESS_INFO WHERE STUDENT_ID = 44;
+
+DECLARE
+    p_user NUMBER(5) := 44;
+    p_current_rating NUMBER(3);
+    p_max_rating NUMBER(3);
+    p_string VARCHAR2(50);
+BEGIN
+    DIPLOM.FND_TASKS.GET_GENERAL_RATING(
+        p_user => p_user
+        , p_current_rating => p_current_rating
+        , p_max_rating => p_max_rating
+        , p_string => p_string
+    );
+    DBMS_OUTPUT.PUT_LINE(p_string);
+END;
+
 select
     count(NUM_TASK) + 1
 from

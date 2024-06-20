@@ -483,6 +483,8 @@
             , CONSTRAINT answer_pk PRIMARY KEY (id)
         );
 
+        ALTER TABLE DIPLOM.ANSWER add answer_error VARCHAR2(100);
+
         /* Создать триггер */
         CREATE OR REPLACE TRIGGER diplom.answer_trigger
         BEFORE INSERT ON diplom.answer FOR EACH ROW
@@ -505,6 +507,8 @@
                 :new.rating := DIPLOM.fnd_tasks.get_rating(:new.answer, :new.task, p_error);
                 if :new.rating < 0 then
                     raise_application_error(-20006, p_error);
+                elsif :new.rating = 0 then
+                    :new.answer_error := p_error;
                 end if;
             end if;
         END;
