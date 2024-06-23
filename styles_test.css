@@ -1325,17 +1325,17 @@ main {
 }
 
 span.task-stage-name {
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
 span.task-raring {
-    margin-right: 10px;
-}
-
-span.task-name {
     margin-left: 10px;
 }
 
-span.task-date {
+span.task-name {
     margin-right: 10px;
+}
+
+span.task-date {
+    margin-left: 10px;
 }
