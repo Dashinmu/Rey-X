@@ -74,13 +74,17 @@ if ($usertype != 1 && $usertype != 2) {
                     if (oci_execute($get_rating_score)) {
                 ?>
                 <div class="rating-ellipse">
-                    <span><?php echo $p_string ?></span>
+                    <span class = "rating-ellipse3">
+                        <span class = "rating-ellipse2 <?php if ($p_current_rating < 4) { echo "bad"; }?>"><?php echo $p_current_rating?></span>
+                        /<?php echo $p_max_rating?>
+                    </span>
                 </div>
                 <?php
                     }
                     oci_free_statement($get_rating_score);
                 ?>
             </div>
+            
         </div>
 
         <!-- Этапы и история заданий -->
