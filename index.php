@@ -76,7 +76,7 @@ if ($usertype != 1 && $usertype != 2) {
             ?>
             <div class="rating-ellipse">
                 <span class = "rating-ellipse3">
-                    <span class = "rating-ellipse2"><?php echo $p_current_rating?></span>
+                    <span class = "rating-ellipse2 <?php if ($p_current_rating < 4) { echo "bad"; }?>"><?php echo $p_current_rating?></span>
                     /<?php echo $p_max_rating?>
                 </span>
             </div>

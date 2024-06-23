@@ -309,9 +309,13 @@ menu {
 }
 
 .rating-ellipse2 {
-    color: #b8b8b8;
+    color: #3BB273;
     font-size: 32px;
     font-weight: bold;
+}
+
+.rating-ellipse2.bad {
+    color: #d66e6e;
 }
 
 .rating-ellipse3 {
