@@ -474,7 +474,7 @@ require_once "modal.php";
             stage_id = Number($(this).closest(".stage-info-item").attr('id').replace('stage-', ''));
             var stage_mean, task_mean, startdate, enddate;
             $.ajax({
-                url:"./scripts/gettaskinfo.php"
+                url:"./scripts/getstagetaskinfo.php"
                 , type: "POST"
                 , data: {
                     task_id: task_id
