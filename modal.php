@@ -504,7 +504,7 @@
                         >
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" id="btn_update_task_info" class="btn btn-primary btn-block">Подтвердить</button>
+                        <button type="submit" id="btn_update_task_stage_info" class="btn btn-primary btn-block">Подтвердить</button>
                         <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>
                     </div>
                 </form>
