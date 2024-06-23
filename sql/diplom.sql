@@ -29,7 +29,7 @@ begin
 end;
 
 select * from DIPLOM.users;
-
+SELECT * FROM DIPLOM.TASKS_INFO;
 select * from diplom.stages;
 
 /* Создать типы заданий */

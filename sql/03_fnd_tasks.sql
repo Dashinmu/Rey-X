@@ -902,8 +902,8 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
         where 1 = 1
             and p_date between CREATION_DATE and INACTIVE_DATE
         ;
-        return false;
-        exception when others then return true;
+        return true;
+        exception when others then return false;
     END;
 
     --Получить последнюю дату Stage

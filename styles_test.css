@@ -966,6 +966,11 @@ main {
     background: #6e92d654;
 }
 
+.tasks-info-block .task-info-item .item-info.inactive {
+    border: 2px solid #FFFFFF;
+    opacity: 50%;
+}
+
 .tasks-info-block .task-info-item .item-descrip {
     display: grid;
     padding: 10px;

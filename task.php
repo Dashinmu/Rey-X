@@ -265,7 +265,7 @@ if ($usertype != 1 && $usertype != 2) {
                             }
                         if (!is_null($row['TASK_NUM_IN_STAGE'])) {
                     ?>
-                            <div class = "item-info">
+                            <div class = "item-info <?php echo $row['TASK_STATUS']?>">
                                 <div class = "item-name">
                                     <div>
                                         <span class = "task-num"><?php echo $row['TASK_NUM_IN_STAGE'] ?></span>
