@@ -469,9 +469,9 @@ require_once "modal.php";
     $(function() {
         $(".stage-info-item .stage-items-info .item-info .item-descrip .task-answer").click(function() {
             task_id = Number(this.id.replace('task-', ''));
-            var stageid = $(this).closest(".stage-info-item").id;
-            alert(stageid);
-            $("#taskInfoModal").modal('toggle');
+            var stage_id = Number($(this).closest(".stage-info-item").attr('id').replace('stage-', ''));
+            alert(stage_id);
+            /* $("#taskInfoModal").modal('toggle'); */
         })
     });
 
