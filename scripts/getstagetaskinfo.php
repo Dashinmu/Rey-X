@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $getstageinfo = "
                 SELECT 
-                    ti.STAGE_MEANING
+                    ti.STAGE_NAME
                     , ti.TASK_NAME
                     , tr.START_DATE
                     , tr.END_DATE
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         array(
                             "message" => 2
                             , "error_message" => "Данные получены"
-                            , "stage_mean" => $row['STAGE_MEANING']
+                            , "stage_mean" => $row['STAGE_NAME']
                             , "task_mean" => $row['TASK_NAME']
                             , "start_date" => $row['START_DATE']
                             , "end_date" => $row['END_DATE']
