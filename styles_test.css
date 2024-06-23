@@ -1097,7 +1097,6 @@ main {
 }
 
 .stages-info-block .stage-info-item .stage-items-info .item-info.inactive {
-    border: 2px solid #FFFFFF;
     opacity: 50%;
 }
 
