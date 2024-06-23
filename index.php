@@ -232,7 +232,7 @@ if ($usertype != 1 && $usertype != 2) {
                             <span class = 'task-num'>: <?php echo $row['STAGE_NAME']?>
                                 <span class = 'task-descrip'> - <?php 
                                     if (strlen($row['TASK_NAME']) > 50) {
-                                        echo substr($row['TASK_NAME'], 0, 50).'...';
+                                        echo substr($row['TASK_NAME'], 0, 49).'...';
                                     } else {
                                         echo $row['TASK_NAME'];
                                     }
