@@ -14,14 +14,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stage_id = $_POST["stage_id"];
 
             $getstageinfo = "
-                UPDATE
                 SELECT 
-                    *
+                    ti.STAGE_MEANING
+                    , ti.TASK_NAME
+                    , tr.START_DATE
+                    , tr.END_DATE
                 FROM
-                    DIPLOM.TASKS_INFO
+                    DIPLOM.TASKS_INFO ti
+                    join DIPLOM.TASK_RELATIONS tr
+                        on tr.STAGE = ti.STAGE_ID
+                        and tr.STAGE = :stage_id
+                        and tr.TASK = ti.TASK_ID
+                        and tr.TASK = :task_id
                 WHERE 1 = 1
-                    and TASK_ID = :task_id
-                    and STAGE_ID = :stage_id
             ";
     
             $stmt = oci_parse($conn, $getstageinfo);
@@ -34,14 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         array(
                             "message" => 2
                             , "error_message" => "Данные получены"
-                            , "stage_id" => $row['STAGE_ID']
-                            , "task_id" => $row['TASK_TYPE']
-                            , "task_meaning" => $row['TASK_MEANING']
-                            , "task_description" => $row['TASK_DESCRIPTION']
-                            , "task_creation_date" => $row['TASK_CREATION_DATE']
-                            , "task_inactive_date" => $row['TASK_INACTIVE_DATE']
-                            , "author" => $row['AUTHOR_ID']
-                            , "answer" => $row['ANSWER']
+                            , "stage_mean" => $row['STAGE_MEANING']
+                            , "task_mean" => $row['TASK_NAME']
+                            , "start_date" => $row['START_DATE']
+                            , "end_date" => $row['END_DATE']
                         )
                     );
                     unset($row);

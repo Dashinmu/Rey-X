@@ -472,12 +472,36 @@ require_once "modal.php";
         $(".stage-info-item .stage-items-info .item-info .item-descrip .task-answer").click(function() {
             task_id = Number(this.id.replace('task-', ''));
             stage_id = Number($(this).closest(".stage-info-item").attr('id').replace('stage-', ''));
-            var task_mean = $(this).closest(".item-info").children(".item-name").children("div").children(".task-name").text();
-            var stage_mean = $(this).closest(".stage-info-item").children(".stage-info").children(".stage-subinfo").children("div").children(".stage-name").text();
+            var stage_mean, task_mean, startdate, enddate;
+            $.ajax({
+                url:"./scripts/gettaskinfo.php"
+                , type: "POST"
+                , data: {
+                    task_id: task_id
+                    , stage_id: stage_id
+                }
+                , success: function(response) {
+                    result = JSON.parse(response);
+                    if (result.message == 2) {
+                        stage_mean = result.stage_mean;
+                        task_mean = result.task_mean;
+                        startdate = result.start_date;
+                        enddate = result.end_date;
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function() {
+                    alert("Ошибка AJAX");
+                }
+                , async: false
+            });
             $("#task_stage_stageid").val(stage_mean);
             $("#task_stage_stageid").prop('readonly', true);
             $("#task_stage_taskid").val(task_mean);
             $("#task_stage_taskid").prop('readonly', true);
+            $("#task_stage_startdate").val(startdate);
+            $("#task_stage_enddate").val(enddate);
             $("#taskStageInfoModal").modal('toggle');
         })
     });

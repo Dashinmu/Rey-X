@@ -100,6 +100,20 @@ select to_date(null, 'YYYY-MM-DDDD') from dual;
 delete from DIPLOM.USERS where id > 81;
 SELECT * FROM DIPLOM.TASKS_INFO;
 
+SELECT 
+    ti.STAGE_MEANING
+    , ti.TASK_NAME
+    , tr.START_DATE
+    , tr.END_DATE
+FROM
+    DIPLOM.TASKS_INFO ti
+    join DIPLOM.TASK_RELATIONS tr
+        on tr.STAGE = ti.STAGE_ID
+        and tr.STAGE = :stage_id
+        and tr.TASK = ti.TASK_ID
+        and tr.TASK = :task_id
+WHERE 1 = 1
+
 /* Проверить пользователя */
 declare
     p_error NUMBER(1);
