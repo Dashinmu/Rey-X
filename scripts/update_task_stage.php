@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $query = "
                 BEGIN
-                    DIPLOM.FND_TASK.UPDATE_CONNECT_STAGE_TASK(
+                    DIPLOM.FND_TASKS.UPDATE_CONNECT_STAGE_TASK(
                         p_task => :p_task
                         , p_stage => :p_stage
                         , p_start_date => :p_start_date
