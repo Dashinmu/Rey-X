@@ -426,6 +426,8 @@ require_once "modal.php";
     });
 
     var task_id;
+    var stage_id;
+
     $(function() {
         $(".tasks-info-block .task-info-item .item-descrip .task-answer").click(function() {
             task_id = Number(this.id.replace('task-', ''));
@@ -469,9 +471,13 @@ require_once "modal.php";
     $(function() {
         $(".stage-info-item .stage-items-info .item-info .item-descrip .task-answer").click(function() {
             task_id = Number(this.id.replace('task-', ''));
-            var stage_id = Number($(this).closest(".stage-info-item").attr('id').replace('stage-', ''));
+            stage_id = Number($(this).closest(".stage-info-item").attr('id').replace('stage-', ''));
             var task_mean = $(this).closest(".item-info").children(".item-name").children("div").children(".task-name").text();
-            alert(task_mean);
+            var stage_mean = $(this).closest(".stage-info-item").children(".stage-info").children(".stage-subinfo").children("div").children(".stage-name").text();
+            $("#task_stage_stageid").val(stage_mean);
+            $("#task_stage_stageid").prop('readonly', true);
+            $("#task_stage_taskid").val(task_mean);
+            $("#task_stage_taskid").prop('readonly', true);
             $("#taskStageInfoModal").modal('toggle');
         })
     });
