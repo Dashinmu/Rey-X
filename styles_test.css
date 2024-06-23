@@ -1324,6 +1324,18 @@ main {
     overflow: auto;
 }
 
-.personal-history .tasks.wrap .task-info {
-    min-width: 600px;
+span .task-stage-name {
+    margin-left: 10px;
+}
+
+span .task-raring {
+    margin-right: 10px;
+}
+
+span .task-name {
+    margin-left: 10px;
+}
+
+span .task-date {
+    margin-right: 10px;
 }
