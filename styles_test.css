@@ -1324,18 +1324,18 @@ main {
     overflow: auto;
 }
 
-span .task-stage-name {
+span.task-stage-name {
     margin-left: 10px;
 }
 
-span .task-raring {
+span.task-raring {
     margin-right: 10px;
 }
 
-span .task-name {
+span.task-name {
     margin-left: 10px;
 }
 
-span .task-date {
+span.task-date {
     margin-right: 10px;
 }
