@@ -58,9 +58,28 @@ if ($usertype != 1 && $usertype != 2) {
             <!-- ДОРАБОТАТЬ -->
             <div class="user-rating">
                 <span class="rating-label">Текущая оценка</span>
+                <?php
+                    $get_rating_score = oci_parse($conn, "
+                        BEGIN DIPLOM.FND_TASKS.GET_GENERAL_RATING(
+                            p_user => :p_user
+                            , p_current_rating => :p_current_rating
+                            , p_max_rating => :p_max_rating
+                            , p_string => :p_string
+                        ); END;
+                    ");
+                    oci_bind_by_name($get_rating_score, ":p_user", $userid);
+                    oci_bind_by_name($get_rating_score, ":p_current_rating", $p_current_rating, 3, SQLT_INT);
+                    oci_bind_by_name($get_rating_score, ":p_max_rating", $p_max_rating, 3, SQLT_INT);
+                    oci_bind_by_name($get_rating_score, ":p_string", $p_string, 50, SQLT_CHR);
+                    if (oci_execute($get_rating_score)) {
+                ?>
                 <div class="rating-ellipse">
-                    <span>N/A</span>
+                    <span><?php echo $p_string ?></span>
                 </div>
+                <?php
+                    }
+                    oci_free_statement($get_rating_score);
+                ?>
             </div>
         </div>
 
