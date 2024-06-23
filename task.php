@@ -76,7 +76,7 @@ if ($usertype != 1 && $usertype != 2) {
                 <div class="rating-ellipse">
                     <span class = "rating-ellipse3">
                         <span class = "rating-ellipse2 <?php if ($p_current_rating < 4) { echo "bad"; }?>"><?php echo $p_current_rating?></span>
-                        /<?php echo $p_max_rating?>
+                        / <?php echo $p_max_rating?>
                     </span>
                 </div>
                 <?php
@@ -84,7 +84,7 @@ if ($usertype != 1 && $usertype != 2) {
                     oci_free_statement($get_rating_score);
                 ?>
             </div>
-            
+
         </div>
 
         <!-- Этапы и история заданий -->
@@ -226,7 +226,7 @@ if ($usertype != 1 && $usertype != 2) {
                 </div>
             </div>
             <div class = "stages-info-block">
-                <div class = "stage-info-item">
+                <div class = "stage-info-item" id = "stage-<?php echo $row['STAGE_ID']?>">
                     <?php
                         $lastrow = 0;
                         while ($row = oci_fetch_array($all_stages_info, OCI_RETURN_NULLS + OCI_ASSOC)) {
@@ -265,7 +265,7 @@ if ($usertype != 1 && $usertype != 2) {
                             }
                         if (!is_null($row['TASK_NUM_IN_STAGE'])) {
                     ?>
-                            <div class = "item-info">
+                            <div class = "item-info" id = "task-<?php echo $row['TASK_ID']?>">
                                 <div class = "item-name">
                                     <div>
                                         <span class = "task-num"><?php echo $row['TASK_NUM_IN_STAGE'] ?></span>
