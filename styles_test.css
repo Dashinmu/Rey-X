@@ -1324,6 +1324,6 @@ main {
     overflow: auto;
 }
 
-.personal-history .task.wrap .task-info {
+.personal-history .tasks.wrap .task-info {
     min-width: 600px;
 }
