@@ -1323,3 +1323,7 @@ main {
 .students-activity .students-history .student-block2 .student-history-block .student-task-block .answer-task-info .answer-answer .answer-code.wrap {
     overflow: auto;
 }
+
+.personal-history .task.wrap .task-info {
+    min-width: 600px;
+}
