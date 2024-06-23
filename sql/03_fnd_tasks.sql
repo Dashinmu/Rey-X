@@ -140,6 +140,14 @@ CREATE OR REPLACE PACKAGE DIPLOM.fnd_tasks IS
         , p_string out VARCHAR2
     );
 
+    PROCEDURE UPDATE_CONNECT_STAGE_TASK(
+        p_task in NUMBER
+        , p_stage in NUMBER
+        , p_start_date in VARCHAR2
+        , p_end_date in VARCHAR2
+        , p_error out VARCHAR2
+    );
+
 END fnd_tasks;
 
 CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
@@ -995,6 +1003,27 @@ CREATE OR REPLACE PACKAGE BODY DIPLOM.fnd_tasks IS
             p_max_rating := 5;
             p_string := to_char(p_current_rating)||'/'||to_char(p_max_rating);
         end if;
+    END;
+
+    PROCEDURE UPDATE_CONNECT_STAGE_TASK(
+        p_task in NUMBER
+        , p_stage in NUMBER
+        , p_start_date in VARCHAR2
+        , p_end_date in VARCHAR2
+        , p_error out VARCHAR2
+    ) IS
+        v_start_date DATE := to_date(p_start_date, 'YYYY-MM-DD');
+        v_end_date DATE := to_date(p_end_date, 'YYYY-MM-DD');
+    BEGIN
+        UPDATE DIPLOM.TASK_RELATIONS
+        SET START_DATE = v_start_date
+            , END_DATE = v_end_date
+        WHERE 1 = 1
+            and TASK = p_task
+            and STAGE = p_stage
+        ;
+        commit;
+        exception when others then p_error := SQLERRM;
     END;
 
 END fnd_tasks;

@@ -507,6 +507,40 @@ require_once "modal.php";
     });
 
     $(function() {
+        $("#taskStageInfoModal").submit(function(e){
+            e.preventDefault();
+            var startdate = $("#task_stage_startdate").val();
+            var enddate = $("#task_stage_enddate").val();
+            $.ajax({
+                url:"./scripts/update_task_stage.php"
+                , type: "POST"
+                , data: {
+                    task_id: task_id
+                    , stage_id: stage_id
+                    , start_date: startdate
+                    , end_date: enddate
+                }
+                , success: function(response) {
+                    var result = JSON.parse(response);
+                    if (result.message != 0) {
+                        if (result.message != 1) {
+                            showNotification(result.error_message, "accept");
+                        } else {
+                            alert(result.error_message);
+                        }
+                    } else {
+                        alert(result.error_message);
+                    }
+                }
+                , error: function() {
+                    alert("AJAX ERROR");
+                }
+                /* , async: false */
+            });
+        })
+    });
+
+    $(function() {
         $("#taskInfoModal").submit(function(e){
             e.preventDefault();
             var task_meaning = $("#task_meaning_get").val();
@@ -544,7 +578,7 @@ require_once "modal.php";
                     alert("AJAX ERROR");
                 }
                 /* , async: false */
-            })
+            });
         })
     });
 

@@ -17,8 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 SELECT 
                     ti.STAGE_NAME
                     , ti.TASK_NAME
-                    , to_char(tr.START_DATE, 'YYYY-MM-DD')
-                    , to_char(tr.END_DATE, 'YYYY-MM-DD')
+                    , to_char(tr.START_DATE, 'YYYY-MM-DD') as START_DATE
+                    , to_char(tr.END_DATE, 'YYYY-MM-DD') as END_DATE
                 FROM
                     DIPLOM.TASKS_INFO ti
                     join DIPLOM.TASK_RELATIONS tr
