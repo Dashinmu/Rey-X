@@ -32,7 +32,7 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , t.MEANING as TASK_NAME
         , st.NUM_TASK as TASK_NUM_IN_STAGE
         , t.DESCRIP as TASK_DESC
-        , t.INACTIVE_DATE as TASK_INACTIVE_DATE
+        , st.END_DATE as TASK_INACTIVE_DATE
         , a.ANSWER as TRUE_ANSWER
         , case when s.INACTIVE_DATE < trunc(sysdate) then 'inactive' end STAGE_STATUS
         , listagg(s2.STAGE_NAME, ';') WITHIN GROUP (ORDER BY s2.ID desc) as LINKS_TO_STAGES
@@ -83,7 +83,7 @@ CREATE OR REPLACE VIEW DIPLOM.TASKS_INFO AS
         , t.MEANING
         , st.NUM_TASK
         , t.DESCRIP
-        , t.INACTIVE_DATE
+        , st.END_DATE
         , a.ANSWER
         , case when s.INACTIVE_DATE < trunc(sysdate) then 'inactive' end
         , q.STAGE_TASKS
