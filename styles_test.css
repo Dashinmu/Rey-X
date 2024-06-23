@@ -298,14 +298,20 @@ menu {
 }
 
 .rating-ellipse {
-    width: 155px;
+    /* width: 155px;
     height: 155px;
-    border: 12px solid #FFFFFF;
-    opacity: 50%;
-    border-radius: 50%;
+    border: 12px solid #FFFFFF; */
+    /* opacity: 50%; */
+    /* border-radius: 50%; */
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.rating-ellipse2 {
+    color: #b8b8b8;
+    font-size: 32px;
+    font-weight: bold;
 }
 
 .rating-ellipse span {
