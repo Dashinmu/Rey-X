@@ -470,8 +470,9 @@ require_once "modal.php";
         $(".stage-info-item .stage-items-info .item-info .item-descrip .task-answer").click(function() {
             task_id = Number(this.id.replace('task-', ''));
             var stage_id = Number($(this).closest(".stage-info-item").attr('id').replace('stage-', ''));
-            alert(stage_id);
-            /* $("#taskInfoModal").modal('toggle'); */
+            var task_mean = $(this).closest(".item-name").children(".task-name").text();
+            alert(task_mean);
+            $("#taskStageInfoModal").modal('toggle');
         })
     });
 

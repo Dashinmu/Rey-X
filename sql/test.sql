@@ -94,6 +94,7 @@ BEGIN
 end;
 
 select * from DIPLOM.USERS;
+select * from DIPLOM.TASK_RELATIONS;
 select * from DIPLOM.PERSON_RELATIONS;
 select to_date(null, 'YYYY-MM-DDDD') from dual;
 delete from DIPLOM.USERS where id > 81;

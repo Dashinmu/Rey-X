@@ -473,3 +473,42 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="taskStageInfoModal" tabindex="-1" role="dialog" aria-labelledby="taskStageInfoModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskStageInfoModal">Обновить связь</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method = "post">
+                    <div class = "form-group">
+                        <input type="text" id = "task_stage_stageid" class="form-control" name="task_meaning" placeholder="Введите наименование" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id = "task_stage_taskid" class="form-control" name="task_desc" placeholder="Введите описание" required>
+                    </div>
+                    <div class = "form-group">
+                        <input type="text" id = "task_stage_startdate" class="form-control" name="startdate" placeholder="Введите дату начала DD.MM.YYYY"
+                            onfocus="(this.type='date')"
+                            onblur="(this.type='text')"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id = "task_stage_enddate" class="form-control" name="startdate" placeholder="Введите дату начала DD.MM.YYYY"
+                            onfocus="(this.type='date')"
+                            onblur="(this.type='text')"
+                        >
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="btn_update_task_info" class="btn btn-primary btn-block">Подтвердить</button>
+                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
