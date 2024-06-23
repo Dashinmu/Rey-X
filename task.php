@@ -226,7 +226,7 @@ if ($usertype != 1 && $usertype != 2) {
                 </div>
             </div>
             <div class = "stages-info-block">
-                <div class = "stage-info-item" id = "stage-<?php echo $row['STAGE_ID']?>">
+                <div class = "stage-info-item">
                     <?php
                         $lastrow = 0;
                         while ($row = oci_fetch_array($all_stages_info, OCI_RETURN_NULLS + OCI_ASSOC)) {
